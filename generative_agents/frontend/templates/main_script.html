@@ -1,442 +1,525 @@
-<script type="text/javascript">
-	// Initialize variables from Flask context
-	let step = {{ step|tojson }};
-	let step_size = {{ sec_per_step|tojson }} * 1000; // Convert to milliseconds
-	let zoom = {{ zoom|tojson }};
-	if (zoom <= 0) zoom = document.documentElement.clientWidth / 4400;
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Generative Agents Replay</title>
+    
+    <style>
+        body { margin: 0; padding: 0; overflow: hidden; background-color: #222; }
+        
+        /* 遊戲容器 */
+        #game-container {
+            width: 100vw;
+            height: 100vh;
+        }
 
-	let tile_width = 32;
-	let movement_speed = {{ play_speed|tojson }};
-	let execute_count_max = tile_width / movement_speed;
-	let execute_count = execute_count_max;
-	let all_movement = {{ all_movement|tojson }};
+        /* UI 懸浮層 - 固定左上角 */
+        #ui-layer {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-family: 'Microsoft YaHei', '黑体', sans-serif;
+            pointer-events: none; /* 容器不阻擋鼠標 */
+        }
 
-	let datetime_options = { weekday: "long", year: "numeric", month: "long", day: "numeric" };
-	let start_datetime = new Date(Date.parse({{ start_datetime|tojson }}));
+        /* UI 行容器 */
+        .ui-row {
+            display: flex;
+            gap: 10px;
+            pointer-events: auto; /* 按鈕可點擊 */
+        }
 
-	// Persona related variables
-	let persona_names = {{ persona_init_pos|tojson }};
-	var spawn_tile_loc = {};
-	for (var key in persona_names) {
-		spawn_tile_loc[key] = persona_names[key];
-	}
+        /* 按鈕樣式 */
+        .game-btn {
+            background-color: #ffffcc;
+            border: 2px solid #666;
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            transition: all 0.2s ease;
+        }
 
-	var personas = {};
-	var pronunciatios = {};
-	let anims_direction;
-	let pre_anims_direction;
-	let pre_anims_direction_dict = {};
+        .game-btn:hover { background-color: #ffffaa; transform: scale(1.05); }
+        .game-btn:active { transform: scale(0.95); }
 
-	let movement_target = {};
+        /* 時間顯示樣式 */
+        #time-display {
+            background-color: rgba(0, 0, 0, 0.6);
+            color: #ccffcc;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 18px;
+            pointer-events: auto;
+            border: 1px solid #ccffcc;
+        }
 
-	let finished = false;
-	let paused = false;
+        /* 對話框樣式 */
+        #conversation-box {
+            background-color: rgba(0, 0, 0, 0.85);
+            color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            max-width: 500px;
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+            font-size: 14px;
+            line-height: 1.6;
+            pointer-events: auto;
+            border: 1px solid #aaa;
+        }
+    </style>
+</head>
+<body>
 
-	// Phaser configuration
-	const config = {
-		type: Phaser.AUTO,
-		// width: 4480,
-		// height: 3200,
-        width: document.documentElement.clientWidth / zoom,
-        height: document.documentElement.clientHeight / zoom,
-		parent: "game-container",
-        mode: Phaser.Scale.FIT,
-		pixelArt: true,
-		physics: {
-			default: "arcade",
-			arcade: {
-				gravity: { y: 0 }
-			}
-		},
-		scene: {
-			preload: preload,
-			create: create,
-			update: update
-		},
-		scale: {
-			zoom: zoom
-		}
-	};
+    <div id="ui-layer">
+        <div class="ui-row">
+            <button id="btn-play" class="game-btn">▶ 運行</button>
+            <button id="btn-conversation" class="game-btn">💬 显示对话</button>
+        </div>
+        <div class="ui-row">
+            <div id="time-display">加载中...</div>
+        </div>
+        <div id="conversation-box">暂无对话记录</div>
+    </div>
 
-	// Create Phaser game instance
-	const game = new Phaser.Game(config);
-	let cursors;
-	let player;
+    <div id="game-container"></div>
 
-	// Preload function
-	function preload() {
-		this.load.crossOrigin = "";
+    <div id="temp_focus" style="display:none;"></div>
 
-		// Load images
-		this.load.image("blocks_1", "static/assets/village/tilemap/blocks_1.png");
-		this.load.image("walls", "static/assets/village/tilemap/Room_Builder_32x32.png");
-		this.load.image("interiors_pt1", "static/assets/village/tilemap/interiors_pt1.png");
-		this.load.image("interiors_pt2", "static/assets/village/tilemap/interiors_pt2.png");
-		this.load.image("interiors_pt3", "static/assets/village/tilemap/interiors_pt3.png");
-		this.load.image("interiors_pt4", "static/assets/village/tilemap/interiors_pt4.png");
-		this.load.image("interiors_pt5", "static/assets/village/tilemap/interiors_pt5.png");
-		this.load.image("CuteRPG_Field_B", "static/assets/village/tilemap/CuteRPG_Field_B.png");
-		this.load.image("CuteRPG_Field_C", "static/assets/village/tilemap/CuteRPG_Field_C.png");
-		this.load.image("CuteRPG_Harbor_C", "static/assets/village/tilemap/CuteRPG_Harbor_C.png");
-		this.load.image("CuteRPG_Village_B", "static/assets/village/tilemap/CuteRPG_Village_B.png");
-		this.load.image("CuteRPG_Forest_B", "static/assets/village/tilemap/CuteRPG_Forest_B.png");
-		this.load.image("CuteRPG_Desert_C", "static/assets/village/tilemap/CuteRPG_Desert_C.png");
-		this.load.image("CuteRPG_Mountains_B", "static/assets/village/tilemap/CuteRPG_Mountains_B.png");
-		this.load.image("CuteRPG_Desert_B", "static/assets/village/tilemap/CuteRPG_Desert_B.png");
-		this.load.image("CuteRPG_Forest_C", "static/assets/village/tilemap/CuteRPG_Forest_C.png");
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
 
-		// Load tilemap JSON
-		this.load.tilemapTiledJSON("map", "static/assets/village/tilemap/tilemap.json");
+    <script type="text/javascript">
+        // --- 初始化 Flask 变量 ---
+        let step = {{ step|tojson }};
+        let step_size = {{ sec_per_step|tojson }} * 1000; 
+        let zoom = {{ zoom|tojson }};
+        if (zoom <= 0) zoom = 0.5;
 
-		this.load.atlas("atlas", "static/assets/village/agents/伊莎贝拉/texture.png", filename="static/assets/village/agents/sprite.json");
+        let tile_width = 32;
+        let movement_speed = {{ play_speed|tojson }};
+        let execute_count_max = tile_width / movement_speed;
+        let execute_count = execute_count_max;
+        let all_movement = {{ all_movement|tojson }};
 
-		// Load persona atlases
-		for (var p in persona_names) {
-			image_static = "static/assets/village/agents/" + p + "/texture.png";
-			this.load.atlas(p, image_static, filename="static/assets/village/agents/sprite.json");
-		}
-	}
+        let datetime_options = { weekday: "long", year: "numeric", month: "long", day: "numeric" };
+        let start_datetime = new Date(Date.parse({{ start_datetime|tojson }}));
 
-	// Create function
-	function create() {
-		const map = this.make.tilemap({ key: "map" });
+        // 角色数据
+        let persona_names = {{ persona_init_pos|tojson }};
+        var spawn_tile_loc = {};
+        for (var key in persona_names) {
+            spawn_tile_loc[key] = persona_names[key];
+        }
 
-		// Add tilesets and layers
-		const collisions = map.addTilesetImage("blocks", "blocks_1");
-		const walls = map.addTilesetImage("Room_Builder_32x32", "walls");
-		const interiors_pt1 = map.addTilesetImage("interiors_pt1", "interiors_pt1");
-		const interiors_pt2 = map.addTilesetImage("interiors_pt2", "interiors_pt2");
-		const interiors_pt3 = map.addTilesetImage("interiors_pt3", "interiors_pt3");
-		const interiors_pt4 = map.addTilesetImage("interiors_pt4", "interiors_pt4");
-		const interiors_pt5 = map.addTilesetImage("interiors_pt5", "interiors_pt5");
-		const CuteRPG_Field_B = map.addTilesetImage("CuteRPG_Field_B", "CuteRPG_Field_B");
-		const CuteRPG_Field_C = map.addTilesetImage("CuteRPG_Field_C", "CuteRPG_Field_C");
-		const CuteRPG_Harbor_C = map.addTilesetImage("CuteRPG_Harbor_C", "CuteRPG_Harbor_C");
-		const CuteRPG_Village_B = map.addTilesetImage("CuteRPG_Village_B", "CuteRPG_Village_B");
-		const CuteRPG_Forest_B = map.addTilesetImage("CuteRPG_Forest_B", "CuteRPG_Forest_B");
-		const CuteRPG_Desert_C = map.addTilesetImage("CuteRPG_Desert_C", "CuteRPG_Desert_C");
-		const CuteRPG_Mountains_B = map.addTilesetImage("CuteRPG_Mountains_B", "CuteRPG_Mountains_B");
-		const CuteRPG_Desert_B = map.addTilesetImage("CuteRPG_Desert_B", "CuteRPG_Desert_B");
-		const CuteRPG_Forest_C = map.addTilesetImage("CuteRPG_Forest_C", "CuteRPG_Forest_C");
+        var personas = {};
+        var pronunciatios = {};
+        let anims_direction;
+        let pre_anims_direction;
+        let pre_anims_direction_dict = {};
+        let movement_target = {};
 
-		let tileset_group_1 = [CuteRPG_Field_B, CuteRPG_Field_C, CuteRPG_Harbor_C, CuteRPG_Village_B,
-			CuteRPG_Forest_B, CuteRPG_Desert_C, CuteRPG_Mountains_B, CuteRPG_Desert_B, CuteRPG_Forest_C,
-			interiors_pt1, interiors_pt2, interiors_pt3, interiors_pt4, interiors_pt5, walls];
-		const bottomGroundLayer = map.createLayer("Bottom Ground", tileset_group_1, 0, 0);
-		const exteriorGroundLayer = map.createLayer("Exterior Ground", tileset_group_1, 0, 0);
-		const exteriorDecorationL1Layer = map.createLayer("Exterior Decoration L1", tileset_group_1, 0, 0);
-		const exteriorDecorationL2Layer = map.createLayer("Exterior Decoration L2", tileset_group_1, 0, 0);
-		const interiorGroundLayer = map.createLayer("Interior Ground", tileset_group_1, 0, 0);
-		const wallLayer = map.createLayer("Wall", [CuteRPG_Field_C, walls], 0, 0);
-		const interiorFurnitureL1Layer = map.createLayer("Interior Furniture L1", tileset_group_1, 0, 0);
-		const interiorFurnitureL2Layer = map.createLayer("Interior Furniture L2 ", tileset_group_1, 0, 0);
-		const foregroundL1Layer = map.createLayer("Foreground L1", tileset_group_1, 0, 0);
-		const foregroundL2Layer = map.createLayer("Foreground L2", tileset_group_1, 0, 0);
+        // 状态变量
+        let finished = false;
+        let paused = true; 
+        let camera_locked = false;
+        let focused_persona = null;
 
-		const collisionsLayer = map.createLayer("Collisions", collisions, 0, 0);
+        // UI 元素
+        const btnPlay = document.getElementById('btn-play');
+        const btnConv = document.getElementById('btn-conversation');
+        const txtTime = document.getElementById('time-display');
+        const boxConv = document.getElementById('conversation-box');
 
-		collisionsLayer.setCollisionByProperty({ collide: true });
+        // 地图尺寸变量
+        let mapWidth = 0;
+        let mapHeight = 0;
 
-		collisionsLayer.setDepth(-1);
-		foregroundL1Layer.setDepth(2);
-		foregroundL2Layer.setDepth(2);
+        // --- Phaser 配置 ---
+        const config = {
+            type: Phaser.AUTO,
+            width: window.innerWidth,
+            height: window.innerHeight,
+            parent: "game-container",
+            mode: Phaser.Scale.RESIZE,
+            pixelArt: true,
+            physics: {
+                default: "arcade",
+                arcade: { gravity: { y: 0 } }
+            },
+            scene: {
+                preload: preload,
+                create: create,
+                update: update
+            }
+        };
 
-		const canvas = game.canvas;
-		canvas.addEventListener("wheel", (event) => {
-			event.stopPropagation();
-		}, { passive: false, capture: true });
+        const game = new Phaser.Game(config);
+        let cursors;
+        let player; // 相机跟随锚点 (隐藏的精灵)
+        let mainCamera;
+        let map; // 地图引用
 
-		function add_text(game, x, y, text, background) {
-			res = game.add.text(
-				x,
-				y,
-				text,
-				{
-					font: "24px 黑体",
-					fontWeight: "normal",
-					fill: "#000000",
-					backgroundColor: background,
-					padding: { x: 20, y: 4},
-					align: "left",
-					wordWrap: { width: 1200/zoom, useAdvancedWrap: true },
-				}
-			);
+        // --- 1. Preload ---
+        function preload() {
+            this.load.crossOrigin = "";
+            this.load.image("forestmap", "static/assets/village/tilemap/forestmap.png");
+            this.load.tilemapTiledJSON("map", "static/assets/village/tilemap/tilemap.json");
 
-			res.setDepth(10);
-			res.alpha = 0.8;
-			res.setScrollFactor(0);
+            this.load.atlas("atlas", "static/assets/village/agents/小烏龜/texture.png", "static/assets/village/agents/sprite.json");
+            for (var p in persona_names) {
+                let image_static = "static/assets/village/agents/" + p + "/texture.png";
+                this.load.atlas(p, image_static, "static/assets/village/agents/sprite.json");
+            }
+        }
 
-			return res;
-		}
+        // --- 2. Create ---
+        function create() {
+            map = this.make.tilemap({ key: "map" });
+            const forestmapTileset = map.addTilesetImage("forestmap", "forestmap");
+            let tileset_group = [forestmapTileset]; 
 
-		posX = 20;
-		posY = 20;
+            mapWidth = map.widthInPixels;
+            mapHeight = map.heightInPixels;
 
-		// Add button: play, pause ...
-		buttonPlay = add_text(this, posX, posY, "[运行]", "#ffffcc");
-		buttonPlay.setInteractive();
-		posX += buttonPlay.width + 10;
+            // --- 创建地图图层 ---
+            map.createLayer("mainmap", tileset_group, 0, 0);
+            map.createLayer("1人類區域", tileset_group, 0, 0);
+            map.createLayer("1河流下游", tileset_group, 0, 0);
+            map.createLayer("1河流上游", tileset_group, 0, 0);
+            map.createLayer("1道路", tileset_group, 0, 0);
+            
+            const houseLayers = [
+                "1小熊家", "1小兔子家", "1小松鼠家", "1小烏龜家", "1小羊家", "1小貓家",
+                "2小熊家客廳", "2小熊家臥室", "2小兔子家客廳", "2小兔子家臥室", "2小兔子家菜園",
+                "2小松鼠家客廳", "2小松鼠家臥室", "2小烏龜家客廳", "2小烏龜家臥室", "2小烏龜家菜園",
+                "2小羊家客廳", "2小羊家臥室", "2小貓家客廳", "2小貓家臥室", "2神秘領域"
+            ];
+            houseLayers.forEach(name => {
+                const layer = map.createLayer(name, tileset_group, 0, 0);
+                if (!layer) console.log(`图层 ${name} 创建失败`);
+            });
 
-		buttonPause = add_text(this, posX, posY, " 暂停 ", "#ffffcc");
-		buttonPause.setInteractive();
-		posX += buttonPause.width + 10;
+            const furnitureLayers = [
+                "3小熊家沙發", "3床", "3小兔子家沙發", "3小松鼠家沙發", "3小烏龜家凳子",
+                "3小羊家沙發", "3小貓家凳子", "3光之源"
+            ];
+            furnitureLayers.forEach(name => {
+                const l = map.createLayer(name, tileset_group, 0, 0);
+                if(l) l.setDepth(2);
+            });
 
-		buttonShowConversation = add_text(this, posX, posY, "[显示对话]", "#ffffcc");
-		buttonShowConversation.setInteractive();
-		posX += buttonShowConversation.width + 10;
+            // --- 相机设置 ---
+            player = this.physics.add.sprite(mapWidth / 2, mapHeight / 2, "atlas", "down").setSize(30, 40);
+            player.setVisible(false);
 
-		buttonHideConversation = add_text(this, posX, posY, " 隐藏对话 ", "#ffffcc");
-		buttonHideConversation.setInteractive();
-		posX += buttonHideConversation.width + 10;
+            mainCamera = this.cameras.main;
+            mainCamera.startFollow(player);
+            mainCamera.setBounds(0, 0, mapWidth, mapHeight);
+            mainCamera.setZoom(zoom);
 
-		// Show current time
-		currentTime = add_text(this, posX, posY, "", "#ccffcc");
+            cursors = this.input.keyboard.createCursorKeys();
 
-		// Show conversation content
-		textConversation = add_text(this, 20, posY + currentTime.height + 10, " —— ", "#ccffcc");
+            // --- 角色生成 ---
+            for (let i=0; i<Object.keys(spawn_tile_loc).length; i++) {
+                let p_name = Object.keys(spawn_tile_loc)[i];
+                let start_pos = [spawn_tile_loc[p_name][0] * tile_width + tile_width / 2, spawn_tile_loc[p_name][1] * tile_width + tile_width];
+                
+                let new_sprite = this.physics.add.sprite(start_pos[0], start_pos[1], p_name, "down").setSize(30, 40).setOffset(0, 0);
+                new_sprite.displayWidth = 40;
+                new_sprite.scaleY = new_sprite.scaleX;
+                
+                personas[p_name] = new_sprite;
+                pronunciatios[p_name] = this.add.text(
+                    new_sprite.body.x - 15, new_sprite.body.y - 40, "", 
+                    { font: "18px monospace", fill: "#000000", backgroundColor: "#ffffcc", padding: { x: 4, y: 4}, borderRadius:"10px" }
+                ).setDepth(3).setAlpha(0.7);
+            }
 
-		// Setup camera
-		player = this.physics.add.sprite(2440, 500, "atlas", "down").setSize(30, 40).setOffset(0, 0);
-		player.setDepth(-1);
-		const camera = this.cameras.main;
-		camera.startFollow(player);
-		camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
-		cursors = this.input.keyboard.createCursorKeys();
+            // --- 动画 ---
+            const anims = this.anims;
+            for (let i = 0; i < Object.keys(persona_names).length; i++) {
+                let p_name = Object.keys(persona_names)[i];
+                let fr = movement_speed > 1 ? 8 : 4;
+                ['left', 'right', 'down', 'up'].forEach(dir => {
+                    anims.create({
+                        key: `${p_name}-${dir}-walk`,
+                        frames: anims.generateFrameNames(p_name, { prefix: `${dir}-walk.`, start: 0, end: 3, zeroPad: 3 }),
+                        frameRate: fr,
+                        repeat: -1
+                    });
+                });
+            }
 
-		// Setup personas
-		// We start by creating the game sprite objects.
-		for (let i=0; i<Object.keys(spawn_tile_loc).length; i++) {
-			let persona_name = Object.keys(spawn_tile_loc)[i];
-			let start_pos = [spawn_tile_loc[persona_name][0] * tile_width + tile_width / 2, spawn_tile_loc[persona_name][1] * tile_width + tile_width];
-			let new_sprite = this.physics.add.sprite(start_pos[0], start_pos[1], persona_name, "down").setSize(30, 40).setOffset(0, 0);
-			// Scale up the sprite
-			new_sprite.displayWidth = 40;
-			new_sprite.scaleY = new_sprite.scaleX;
+            // --- 鼠标拖拽逻辑 ---
+            let isDragging = false;
+            let lastDragPoint = null;
+            
+            this.input.on('pointerdown', (pointer) => {
+                if (pointer.middleButtonDown()) {
+                    isDragging = true;
+                    lastDragPoint = { x: pointer.x, y: pointer.y };
+                    camera_locked = false;
+                    focused_persona = null;
+                    mainCamera.stopFollow();
+                }
+            });
+            
+            this.input.on('pointermove', (pointer) => {
+                if (isDragging && lastDragPoint) {
+                    const dx = (pointer.x - lastDragPoint.x) / mainCamera.zoom;
+                    const dy = (pointer.y - lastDragPoint.y) / mainCamera.zoom;
+                    mainCamera.scrollX -= dx;
+                    mainCamera.scrollY -= dy;
+                    lastDragPoint.x = pointer.x;
+                    lastDragPoint.y = pointer.y;
+                    
+                    // 拖拽时如果不更新 player 位置，缩放或键盘移动会跳回去
+                    // 我们在 Update 中动态同步，这里暂时不需要显式设置
+                }
+            });
+            
+            this.input.on('pointerup', (pointer) => {
+                if (pointer.middleButtonReleased()) {
+                    isDragging = false;
+                    lastDragPoint = null;
+                    // 拖拽结束后，让 player 瞬移到相机中心，并重新开始跟随
+                    // 这样缩放时就会以当前屏幕中心为基准
+                    if (!camera_locked) {
+                        player.setPosition(mainCamera.worldView.centerX, mainCamera.worldView.centerY);
+                        mainCamera.startFollow(player);
+                    }
+                }
+            });
+            
+            this.input.on('gameout', () => {
+                isDragging = false;
+                lastDragPoint = null;
+            });
 
-			// Here, we are creating the persona and its pronunciatio sprites.
-			personas[persona_name] = new_sprite;
-			pronunciatios[persona_name] = this.add.text(
-				new_sprite.body.x - 15,
-				new_sprite.body.y - 15 - 25,
-				"",
-				{
-					font: "18px monospace",
-					fill: "#000000",
-					backgroundColor: "#ffffcc",
-					padding: { x: 4, y: 4},
-					border:"solid",
-					borderRadius:"10px"
-				}
-			).setDepth(3);
-			pronunciatios[persona_name].alpha = 0.7;
-		}
+            // ==========================================
+            //       最终修复版：无缝缩放 & 动态边界
+            // ==========================================
+            this.input.on('wheel', (pointer, gameObjects, deltaX, deltaY, deltaZ) => {
+                // 1. 计算当前窗口下的最小缩放 (填满屏幕)
+                const viewportW = mainCamera.width;
+                const viewportH = mainCamera.height;
+                const minZoom = Math.min(viewportW / mapWidth, viewportH / mapHeight);
 
-		// Create animations
-		const anims = this.anims;
-		for (let i = 0; i < Object.keys(persona_names).length; i++) {
-			let persona_name = Object.keys(persona_names)[i];
-			let left_walk_name = persona_name + "-left-walk";
-			let right_walk_name = persona_name + "-right-walk";
-			let down_walk_name = persona_name + "-down-walk";
-			let up_walk_name = persona_name + "-up-walk";
+                // 2. 计算目标缩放
+                let currentZoom = mainCamera.zoom;
+                if (deltaY > 0) currentZoom *= 0.9; 
+                else currentZoom *= 1.1;
 
-			frameRate = 4;
-			if (movement_speed > 1) frameRate = 8;
+                // 3. 限制缩放 (这里可以稍微允许缩得更小一点点，或者就卡在minZoom)
+                if (currentZoom < minZoom) currentZoom = minZoom; 
+                if (currentZoom > 4) currentZoom = 4;
 
-			anims.create({
-				key: left_walk_name,
-				frames: anims.generateFrameNames(persona_name, { prefix: "left-walk.", start: 0, end: 3, zeroPad: 3 }),
-				frameRate: frameRate,
-				repeat: -1
-			});
+                // 4. 应用缩放
+                mainCamera.setZoom(currentZoom);
 
-			anims.create({
-				key: right_walk_name,
-				frames: anims.generateFrameNames(persona_name, { prefix: "right-walk.", start: 0, end: 3, zeroPad: 3 }),
-				frameRate: frameRate,
-				repeat: -1
-			});
+                // 5. 关键逻辑：动态边界检查
+                // 检查缩放后的地图是否比屏幕小
+                checkAndApplyBounds();
+            });
 
-			anims.create({
-				key: down_walk_name,
-				frames: anims.generateFrameNames(persona_name, { prefix: "down-walk.", start: 0, end: 3, zeroPad: 3 }),
-				frameRate: frameRate,
-				repeat: -1
-			});
+            setupUI();
+        }
 
-			anims.create({
-				key: up_walk_name,
-				frames: anims.generateFrameNames(persona_name, { prefix: "up-walk.", start: 0, end: 3, zeroPad: 3 }),
-				frameRate: frameRate,
-				repeat: -1
-			});
-		}
-	}
+        /**
+         * 核心辅助函数：动态边界控制
+         * 如果地图看起来比屏幕小，移除边界（允许居中）；否则应用边界（防止黑边）。
+         */
+        function checkAndApplyBounds() {
+            const viewportW = mainCamera.width;
+            const viewportH = mainCamera.height;
+            const scaledMapW = mapWidth * mainCamera.zoom;
+            const scaledMapH = mapHeight * mainCamera.zoom;
 
-	// Update function
-	function update(time, delta) {
-		// Setup play and pause button
-		buttonPlay.on("pointerdown", function() {
-			if (finished) return;
-			buttonPlay.text = "[运行]";
-			buttonPause.text = " 暂停 ";
-			paused = false;
-		});
+            // 使用一个小的容差值 (1px) 避免浮点数计算导致的闪烁
+            if (scaledMapW < viewportW + 1 || scaledMapH < viewportH + 1) {
+                // 地图比屏幕小：移除边界限制
+                // 此时 startFollow 会自动把目标放在屏幕正中间，地图也就居中了
+                if (mainCamera.useBounds) {
+                    mainCamera.removeBounds();
+                }
+            } else {
+                // 地图比屏幕大：加上边界限制
+                // 此时防止玩家把视野移出地图外
+                if (!mainCamera.useBounds) {
+                    mainCamera.setBounds(0, 0, mapWidth, mapHeight);
+                }
+            }
+        }
 
-		buttonPause.on("pointerdown", function() {
-			if (finished) return;
-			buttonPlay.text = " 运行 ";
-			buttonPause.text = "[暂停]";
-			paused = true;
-		});
+        function setupUI() {
+            btnPlay.onclick = () => {
+                if (finished) {
+                    window.location.reload(); 
+                } else {
+                    paused = !paused;
+                    updateBtnState();
+                }
+            };
+            btnConv.onclick = () => {
+                if (boxConv.style.display === 'none') {
+                    boxConv.style.display = 'block';
+                    btnConv.innerText = '💬 隐藏对话';
+                } else {
+                    boxConv.style.display = 'none';
+                    btnConv.innerText = '💬 显示对话';
+                }
+            };
+            updateBtnState();
+        }
 
-		buttonShowConversation.on("pointerdown", function() {
-			buttonShowConversation.text = "[显示对话]";
-			buttonHideConversation.text = " 隐藏对话 ";
-			textConversation.setVisible(true);
-		});
+        function updateBtnState() {
+            if (finished) {
+                btnPlay.innerText = "↻ 重播";
+                btnPlay.style.backgroundColor = "#ff9999";
+            } else if (paused) {
+                btnPlay.innerText = "▶ 运行";
+                btnPlay.style.backgroundColor = "#ffffcc";
+            } else {
+                btnPlay.innerText = "⏸ 暂停";
+                btnPlay.style.backgroundColor = "#ccffcc";
+            }
+        }
 
-		buttonHideConversation.on("pointerdown", function() {
-			buttonShowConversation.text = " 显示对话 ";
-			buttonHideConversation.text = "[隐藏对话]";
-			textConversation.setVisible(false);
-		});
+        // --- 3. Update ---
+        function update(time, delta) {
+            // 每帧检查一次边界，以防窗口大小改变或缩放变化
+            checkAndApplyBounds();
 
-		// Move camera
-		const camera_speed = 400;
-		player.body.setVelocity(0);
-		if (cursors.left.isDown) {
-			player.body.setVelocityX(-camera_speed);
-		}
-		if (cursors.right.isDown) {
-			player.body.setVelocityX(camera_speed);
-		}
-		if (cursors.up.isDown) {
-			player.body.setVelocityY(-camera_speed);
-		}
-		if (cursors.down.isDown) {
-			player.body.setVelocityY(camera_speed);
-		}
+            // 外部点击锁定逻辑
+            let dom_focus = document.getElementById("temp_focus").textContent;
+            if (dom_focus !== "") {
+                focused_persona = dom_focus;
+                camera_locked = true;
+                document.getElementById("temp_focus").innerHTML = ""; 
+                if (personas[focused_persona]) {
+                    mainCamera.startFollow(personas[focused_persona], true, 0.08, 0.08);
+                    mainCamera.zoomTo(2, 1000, 'Power2'); 
+                }
+            }
 
-		let curr_focused_persona = document.getElementById("temp_focus").textContent;
-		if (curr_focused_persona != "") {
-			player.body.x = personas[curr_focused_persona].body.x;
-			player.body.y = personas[curr_focused_persona].body.y;
-			document.getElementById("temp_focus").innerHTML = "";
-		}
+            // 键盘移动相机
+            const camSpeed = 500 / mainCamera.zoom;
+            if (!camera_locked) {
+                player.body.setVelocity(0);
+                if (cursors.left.isDown) player.body.setVelocityX(-camSpeed);
+                else if (cursors.right.isDown) player.body.setVelocityX(camSpeed);
+                if (cursors.up.isDown) player.body.setVelocityY(-camSpeed);
+                else if (cursors.down.isDown) player.body.setVelocityY(camSpeed);
 
-		if (finished || paused) {
-			return;
-		}
+                // 如果按键，确保跟随的是 player 锚点
+                if (cursors.left.isDown || cursors.right.isDown || cursors.up.isDown || cursors.down.isDown) {
+                     mainCamera.startFollow(player);
+                }
+            } else {
+                if (cursors.left.isDown || cursors.right.isDown || cursors.up.isDown || cursors.down.isDown) {
+                    camera_locked = false;
+                    focused_persona = null;
+                    player.body.x = mainCamera.worldView.centerX;
+                    player.body.y = mainCamera.worldView.centerY;
+                    mainCamera.startFollow(player);
+                }
+            }
 
-		curr_datetime = new Date(start_datetime.getTime());
-		curr_year = curr_datetime.getFullYear().toString().padStart(4, "0");
-		curr_month = (curr_datetime.getMonth() + 1).toString().padStart(2, "0");
-		curr_day = curr_datetime.getDate().toString().padStart(2, "0");
-		curr_hour = curr_datetime.getHours().toString().padStart(2, "0");
-		curr_minute = curr_datetime.getMinutes().toString().padStart(2, "0");
-		conversation_key = `${curr_year}${curr_month}${curr_day}-${curr_hour}:${curr_minute}`;
-		conversation_key_text = all_movement["conversation"][conversation_key];
-		if (conversation_key_text && conversation_key_text != "") {
-			textConversation.setText(`\n${conversation_key} 对话记录：\n` + conversation_key_text);
-		}
+            if (finished || paused) return;
 
-		// Moving personas
-		for (let i = 0; i < Object.keys(personas).length; i++) {
-			let curr_persona_name = Object.keys(personas)[i];
-			let curr_persona = personas[curr_persona_name];
-			let curr_pronunciatio = pronunciatios[Object.keys(personas)[i]];
+            // 更新数据
+            curr_datetime = new Date(start_datetime.getTime());
+            txtTime.innerText = curr_datetime.toLocaleTimeString("zh-CN", datetime_options);
 
-			if (step in all_movement) {
-				if (curr_persona_name.replace("_", " ") in all_movement[step]) {
-					if (execute_count == execute_count_max) {
-						let curr_x = all_movement[step][curr_persona_name.replace("_", " ")]["movement"][0];
-						let curr_y = all_movement[step][curr_persona_name.replace("_", " ")]["movement"][1];
-						movement_target[curr_persona_name] = [curr_x * tile_width, curr_y * tile_width];
+            let key = `${curr_datetime.getFullYear()}${(curr_datetime.getMonth()+1).toString().padStart(2,"0")}${curr_datetime.getDate().toString().padStart(2,"0")}-${curr_datetime.getHours().toString().padStart(2,"0")}:${curr_datetime.getMinutes().toString().padStart(2,"0")}`;
+            if (all_movement["conversation"] && all_movement["conversation"][key]) {
+                boxConv.innerHTML = `<strong>${key}</strong><br>${all_movement["conversation"][key]}`;
+            }
 
-						let action = all_movement[step][curr_persona_name.replace("_", " ")]["action"];
+            // 移动逻辑
+            for (let i = 0; i < Object.keys(personas).length; i++) {
+                let p_name = Object.keys(personas)[i];
+                let curr_persona = personas[p_name];
+                let curr_pronun = pronunciatios[p_name];
 
-						let act = action;
-						act = act.length > 25 ? act.substring(0, 20)+"..." : act;
-						pronunciatios[curr_persona_name].setText(curr_persona_name + ": " + act);
+                if (step in all_movement && p_name.replace("_", " ") in all_movement[step]) {
+                    if (execute_count == execute_count_max) {
+                        let data = all_movement[step][p_name.replace("_", " ")];
+                        movement_target[p_name] = [
+                            data["movement"][0] * tile_width + tile_width / 2, 
+                            data["movement"][1] * tile_width + tile_width
+                        ];
+                        let act = data["action"];
+                        curr_pronun.setText(`${p_name}: ${act.length > 15 ? act.substring(0,12)+"..." : act}`);
+                        
+                        let descEl = document.getElementById("agent_desc__"+p_name);
+                        if(descEl) descEl.innerHTML = all_movement["description"][p_name]["currently"];
+                        let actEl = document.getElementById("current_action__"+p_name);
+                        if(actEl) actEl.innerHTML = act;
+                        let locEl = document.getElementById("target_address__"+p_name);
+                        if(locEl) locEl.innerHTML = data["location"];
+                    }
 
-						// Updating the status of each personas
-						document.getElementById("agent_desc__"+curr_persona_name).innerHTML = all_movement["description"][curr_persona_name]["currently"];
-						document.getElementById("current_action__"+curr_persona_name).innerHTML = action;
-						document.getElementById("target_address__"+curr_persona_name).innerHTML = all_movement[step][curr_persona_name.replace("_", " ")]["location"];
-					}
+                    if (execute_count > 0 && movement_target[p_name]) {
+                        let tx = movement_target[p_name][0];
+                        let ty = movement_target[p_name][1];
+                        let dx = tx - curr_persona.x;
+                        let dy = ty - curr_persona.y;
+                        
+                        let isMoving = false;
+                        if (Math.abs(dx) > 0.5) {
+                            curr_persona.x += dx > 0 ? movement_speed : -movement_speed;
+                            anims_direction = dx > 0 ? 'r' : 'l';
+                            isMoving = true;
+                        } else if (Math.abs(dy) > 0.5) {
+                            curr_persona.y += dy > 0 ? movement_speed : -movement_speed;
+                            anims_direction = dy > 0 ? 'd' : 'u';
+                            isMoving = true;
+                        }
 
-					if (execute_count > 0) {
-						if (curr_persona.body.x < movement_target[curr_persona_name][0]) {
-							curr_persona.body.x += movement_speed;
-							anims_direction = "r";
-							pre_anims_direction = "r";
-							pre_anims_direction_dict[curr_persona_name] = "r";
-						} else if (curr_persona.body.x > movement_target[curr_persona_name][0]) {
-							curr_persona.body.x -= movement_speed;
-							anims_direction = "l";
-							pre_anims_direction = "l";
-							pre_anims_direction_dict[curr_persona_name] = "l";
-						} else if (curr_persona.body.y < movement_target[curr_persona_name][1]) {
-							curr_persona.body.y += movement_speed;
-							anims_direction = "d";
-							pre_anims_direction = "d";
-							pre_anims_direction_dict[curr_persona_name] = "d";
-						} else if (curr_persona.body.y > movement_target[curr_persona_name][1]) {
-							curr_persona.body.y -= movement_speed;
-							anims_direction = "u";
-							pre_anims_direction = "u";
-							pre_anims_direction_dict[curr_persona_name] = "u";
-						} else {
-							anims_direction = "";
-						}
+                        if (isMoving) {
+                            let dirName = anims_direction === 'l' ? 'left' : anims_direction === 'r' ? 'right' : anims_direction === 'u' ? 'up' : 'down';
+                            curr_persona.anims.play(`${p_name}-${dirName}-walk`, true);
+                            pre_anims_direction_dict[p_name] = dirName;
+                        } else {
+                            let lastDir = pre_anims_direction_dict[p_name] || 'down';
+                            curr_persona.anims.stop();
+                            curr_persona.setTexture(p_name, `${lastDir}-walk.000`);
+                        }
+                        
+                        curr_pronun.x = curr_persona.x - 15;
+                        curr_pronun.y = curr_persona.y - 40;
+                    }
+                }
+            }
 
-						curr_pronunciatio.x = curr_persona.body.x - 15;
-						curr_pronunciatio.y = curr_persona.body.y - 15 - 25;
-
-						let left_walk_name = curr_persona_name + "-left-walk";
-						let right_walk_name = curr_persona_name + "-right-walk";
-						let down_walk_name = curr_persona_name + "-down-walk";
-						let up_walk_name = curr_persona_name + "-up-walk";
-
-						if (anims_direction == "l") {
-							curr_persona.anims.play(left_walk_name, true);
-						} else if (anims_direction == "r") {
-							curr_persona.anims.play(right_walk_name, true);
-						} else if (anims_direction == "u") {
-							curr_persona.anims.play(up_walk_name, true);
-						} else if (anims_direction == "d") {
-							curr_persona.anims.play(down_walk_name, true);
-						}
-					}
-				}
-			} else {
-				if (pre_anims_direction_dict[curr_persona_name] == "l") curr_persona.setTexture(curr_persona_name, "left");
-				else if (pre_anims_direction_dict[curr_persona_name] == "r") curr_persona.setTexture(curr_persona_name, "right");
-				else if (pre_anims_direction_dict[curr_persona_name] == "u") curr_persona.setTexture(curr_persona_name, "up");
-				else if (pre_anims_direction_dict[curr_persona_name] == "d") curr_persona.setTexture(curr_persona_name, "down");
-				curr_persona.anims.stop();
-
-				finished = true;
-				buttonPlay.text = "[回放结束]";
-				buttonPause.setVisible(false);
-			}
-		}
-
-		if (execute_count == 0) {
-			for (let i = 0; i < Object.keys(personas).length; i++) {
-				let curr_persona_name = Object.keys(personas)[i];
-				let curr_persona = personas[curr_persona_name];
-				curr_persona.body.x = movement_target[curr_persona_name][0];
-				curr_persona.body.y = movement_target[curr_persona_name][1];
-			}
-			execute_count = execute_count_max + 1;
-			step = step + 1;
-
-			start_datetime = new Date(start_datetime.getTime() + step_size);
-			currentTime.setText(start_datetime.toLocaleTimeString("zh-CN", datetime_options));
-		}
-
-		execute_count -= 1;
-	}
-</script>
+            if (execute_count == 0) {
+                for (let p in personas) {
+                    if (movement_target[p]) {
+                        personas[p].x = movement_target[p][0];
+                        personas[p].y = movement_target[p][1];
+                    }
+                }
+                execute_count = execute_count_max + 1;
+                step++;
+                start_datetime = new Date(start_datetime.getTime() + step_size);
+                
+                if (!(step in all_movement)) {
+                    finished = true;
+                    updateBtnState();
+                }
+            }
+            execute_count--;
+        }
+    </script>
+</body>
+</html>
