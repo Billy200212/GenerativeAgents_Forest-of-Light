@@ -7,10 +7,24 @@
     <style>
         body { margin: 0; padding: 0; overflow: hidden; background-color: #222; }
         
-        /* 遊戲容器 */
+        /* --- 修改处 1: 调整游戏容器高度 (Billy2025/12/13)--- */
         #game-container {
             width: 100vw;
-            height: 100vh;
+            height: 75vh; /* 只占用屏幕高度的 75%，下方留出空间 */
+            border-bottom: 2px solid #444; /* 添加一条底部分割线 */
+            box-sizing: border-box;
+        }
+
+        /* 底部留白区域的占位符（可选，用于视觉确认） */
+        #bottom-panel-placeholder {
+            width: 100vw;
+            height: 25vh;
+            background-color: #1a1a1a;
+            color: #555;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: monospace;
         }
 
         /* UI 懸浮層 - 固定左上角 */
@@ -91,7 +105,13 @@
         <div id="conversation-box">暂无对话记录</div>
     </div>
 
+    <!-- 游戏区域 -->
     <div id="game-container"></div>
+
+    <!-- 这里的 div 只是为了占据空间，实际项目中你的 Flask 模板可能会在这里渲染角色栏 -->
+    <div id="bottom-panel-placeholder">
+        <!-- 可以在这里放置你的角色信息栏 -->
+    </div>
 
     <div id="temp_focus" style="display:none;"></div>
 
@@ -143,13 +163,16 @@
         let mapWidth = 0;
         let mapHeight = 0;
 
-        // --- Phaser 配置 ---
+        // --- 修改处 2: Phaser 配置适配容器尺寸 (Billy2025/12/13) ---
+        const gameContainer = document.getElementById('game-container');
+        
         const config = {
             type: Phaser.AUTO,
-            width: window.innerWidth,
-            height: window.innerHeight,
+            // 使用容器的实际宽阔，而不是窗口的宽度
+            width: gameContainer.clientWidth,
+            height: gameContainer.clientHeight,
             parent: "game-container",
-            mode: Phaser.Scale.RESIZE,
+            mode: Phaser.Scale.RESIZE, // 允许随容器大小改变
             pixelArt: true,
             physics: {
                 default: "arcade",
@@ -223,6 +246,7 @@
 
             mainCamera = this.cameras.main;
             mainCamera.startFollow(player);
+            // 初始时使用边界限制
             mainCamera.setBounds(0, 0, mapWidth, mapHeight);
             mainCamera.setZoom(zoom);
 
@@ -281,9 +305,6 @@
                     mainCamera.scrollY -= dy;
                     lastDragPoint.x = pointer.x;
                     lastDragPoint.y = pointer.y;
-                    
-                    // 拖拽时如果不更新 player 位置，缩放或键盘移动会跳回去
-                    // 我们在 Update 中动态同步，这里暂时不需要显式设置
                 }
             });
             
@@ -291,8 +312,6 @@
                 if (pointer.middleButtonReleased()) {
                     isDragging = false;
                     lastDragPoint = null;
-                    // 拖拽结束后，让 player 瞬移到相机中心，并重新开始跟随
-                    // 这样缩放时就会以当前屏幕中心为基准
                     if (!camera_locked) {
                         player.setPosition(mainCamera.worldView.centerX, mainCamera.worldView.centerY);
                         mainCamera.startFollow(player);
@@ -309,27 +328,23 @@
             //       最终修复版：无缝缩放 & 动态边界
             // ==========================================
             this.input.on('wheel', (pointer, gameObjects, deltaX, deltaY, deltaZ) => {
-                // 1. 计算当前窗口下的最小缩放 (填满屏幕)
                 const viewportW = mainCamera.width;
                 const viewportH = mainCamera.height;
                 const minZoom = Math.min(viewportW / mapWidth, viewportH / mapHeight);
 
-                // 2. 计算目标缩放
                 let currentZoom = mainCamera.zoom;
                 if (deltaY > 0) currentZoom *= 0.9; 
                 else currentZoom *= 1.1;
 
-                // 3. 限制缩放 (这里可以稍微允许缩得更小一点点，或者就卡在minZoom)
                 if (currentZoom < minZoom) currentZoom = minZoom; 
                 if (currentZoom > 4) currentZoom = 4;
 
-                // 4. 应用缩放
                 mainCamera.setZoom(currentZoom);
-
-                // 5. 关键逻辑：动态边界检查
-                // 检查缩放后的地图是否比屏幕小
                 checkAndApplyBounds();
             });
+
+            // 初始运行一次边界检查，确保一开始若地图较小能居中
+            checkAndApplyBounds();
 
             setupUI();
         }
@@ -346,14 +361,10 @@
 
             // 使用一个小的容差值 (1px) 避免浮点数计算导致的闪烁
             if (scaledMapW < viewportW + 1 || scaledMapH < viewportH + 1) {
-                // 地图比屏幕小：移除边界限制
-                // 此时 startFollow 会自动把目标放在屏幕正中间，地图也就居中了
                 if (mainCamera.useBounds) {
                     mainCamera.removeBounds();
                 }
             } else {
-                // 地图比屏幕大：加上边界限制
-                // 此时防止玩家把视野移出地图外
                 if (!mainCamera.useBounds) {
                     mainCamera.setBounds(0, 0, mapWidth, mapHeight);
                 }
@@ -396,7 +407,6 @@
 
         // --- 3. Update ---
         function update(time, delta) {
-            // 每帧检查一次边界，以防窗口大小改变或缩放变化
             checkAndApplyBounds();
 
             // 外部点击锁定逻辑
