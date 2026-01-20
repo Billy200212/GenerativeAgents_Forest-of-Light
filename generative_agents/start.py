@@ -10,7 +10,7 @@ from modules.game import create_game, get_game
 from modules import utils
 
 personas = [
-    "小兔子", "小松鼠", "小烏龜", "小熊", "小羊", "小貓",
+    "Brian", "小兔子", "小松鼠", "小烏龜", "小熊", "小羊", "小貓",
 ]
 
 

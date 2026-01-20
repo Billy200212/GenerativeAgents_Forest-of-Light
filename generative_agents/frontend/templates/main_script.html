@@ -1,202 +1,89 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Generative Agents Replay</title>
-    
     <style>
         body { margin: 0; padding: 0; overflow: hidden; background-color: #222; }
-        
-        /* --- 修改处 1: 调整游戏容器高度 (Billy2025/12/13)--- */
-        #game-container {
-            width: 100vw;
-            height: 75vh; /* 只占用屏幕高度的 75%，下方留出空间 */
-            border-bottom: 2px solid #444; /* 添加一条底部分割线 */
-            box-sizing: border-box;
-        }
-
-        /* 底部留白区域的占位符（可选，用于视觉确认） */
-        #bottom-panel-placeholder {
-            width: 100vw;
-            height: 25vh;
-            background-color: #1a1a1a;
-            color: #555;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: monospace;
-        }
-
-        /* UI 懸浮層 - 固定左上角 */
-        #ui-layer {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            font-family: 'Microsoft YaHei', '黑体', sans-serif;
-            pointer-events: none; /* 容器不阻擋鼠標 */
-        }
-
-        /* UI 行容器 */
-        .ui-row {
-            display: flex;
-            gap: 10px;
-            pointer-events: auto; /* 按鈕可點擊 */
-        }
-
-        /* 按鈕樣式 */
-        .game-btn {
-            background-color: #ffffcc;
-            border: 2px solid #666;
-            border-radius: 8px;
-            padding: 8px 16px;
-            font-size: 16px;
-            font-weight: bold;
-            color: #333;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-            transition: all 0.2s ease;
-        }
-
+        #game-container { width: 100vw; height: 75vh; border-bottom: 2px solid #444; box-sizing: border-box; }
+        #bottom-panel-placeholder { width: 100vw; height: 25vh; background-color: #1a1a1a; color: #555; display: flex; align-items: center; justify-content: center; font-family: monospace; }
+        #ui-layer { position: fixed; top: 20px; left: 20px; z-index: 1000; display: flex; flex-direction: column; gap: 10px; font-family: 'Segoe UI', sans-serif; pointer-events: none; }
+        .ui-row { display: flex; gap: 10px; pointer-events: auto; }
+        .game-btn { background-color: #ffffcc; border: 2px solid #666; border-radius: 8px; padding: 8px 16px; font-size: 16px; font-weight: bold; color: #333; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.3); transition: all 0.2s ease; }
         .game-btn:hover { background-color: #ffffaa; transform: scale(1.05); }
-        .game-btn:active { transform: scale(0.95); }
-
-        /* 時間顯示樣式 */
-        #time-display {
-            background-color: rgba(0, 0, 0, 0.6);
-            color: #ccffcc;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 18px;
-            pointer-events: auto;
-            border: 1px solid #ccffcc;
-        }
-
-        /* 對話框樣式 */
-        #conversation-box {
-            background-color: rgba(0, 0, 0, 0.85);
-            color: #fff;
-            padding: 15px;
-            border-radius: 8px;
-            max-width: 500px;
-            max-height: 300px;
-            overflow-y: auto;
-            display: none;
-            font-size: 14px;
-            line-height: 1.6;
-            pointer-events: auto;
-            border: 1px solid #aaa;
-        }
+        #time-display { background-color: rgba(0, 0, 0, 0.6); color: #ccffcc; padding: 8px 12px; border-radius: 6px; font-size: 18px; pointer-events: auto; border: 1px solid #ccffcc; }
+        #conversation-box { background-color: rgba(0, 0, 0, 0.85); color: #fff; padding: 15px; border-radius: 8px; max-width: 500px; max-height: 300px; overflow-y: auto; display: none; font-size: 14px; line-height: 1.6; pointer-events: auto; border: 1px solid #aaa; }
     </style>
 </head>
 <body>
-
     <div id="ui-layer">
         <div class="ui-row">
-            <button id="btn-play" class="game-btn">▶ 運行</button>
-            <button id="btn-conversation" class="game-btn">💬 显示对话</button>
+            <button id="btn-play" class="game-btn">▶ Run</button>
+            <button id="btn-conversation" class="game-btn">💬 Show Chat</button>
         </div>
-        <div class="ui-row">
-            <div id="time-display">加载中...</div>
-        </div>
-        <div id="conversation-box">暂无对话记录</div>
+        <div class="ui-row"><div id="time-display">Loading...</div></div>
+        <div id="conversation-box">No conversation history</div>
     </div>
-
-    <!-- 游戏区域 -->
     <div id="game-container"></div>
-
-    <!-- 这里的 div 只是为了占据空间，实际项目中你的 Flask 模板可能会在这里渲染角色栏 -->
-    <div id="bottom-panel-placeholder">
-        <!-- 可以在这里放置你的角色信息栏 -->
-    </div>
-
+    <div id="bottom-panel-placeholder"></div>
     <div id="temp_focus" style="display:none;"></div>
-
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
-
     <script type="text/javascript">
-        // --- 初始化 Flask 变量 ---
+        // --- Backend Data Injection ---
         let step = {{ step|tojson }};
         let step_size = {{ sec_per_step|tojson }} * 1000; 
         let zoom = {{ zoom|tojson }};
         if (zoom <= 0) zoom = 0.5;
-
         let tile_width = 32;
         let movement_speed = {{ play_speed|tojson }};
         let execute_count_max = tile_width / movement_speed;
         let execute_count = execute_count_max;
         let all_movement = {{ all_movement|tojson }};
-
         let datetime_options = { weekday: "long", year: "numeric", month: "long", day: "numeric" };
         let start_datetime = new Date(Date.parse({{ start_datetime|tojson }}));
-
-        // 角色数据
         let persona_names = {{ persona_init_pos|tojson }};
         var spawn_tile_loc = {};
-        for (var key in persona_names) {
-            spawn_tile_loc[key] = persona_names[key];
-        }
-
+        for (var key in persona_names) { spawn_tile_loc[key] = persona_names[key]; }
         var personas = {};
         var pronunciatios = {};
         let anims_direction;
-        let pre_anims_direction;
         let pre_anims_direction_dict = {};
         let movement_target = {};
-
-        // 状态变量
         let finished = false;
         let paused = true; 
         let camera_locked = false;
         let focused_persona = null;
-
-        // UI 元素
         const btnPlay = document.getElementById('btn-play');
         const btnConv = document.getElementById('btn-conversation');
         const txtTime = document.getElementById('time-display');
         const boxConv = document.getElementById('conversation-box');
-
-        // 地图尺寸变量
         let mapWidth = 0;
         let mapHeight = 0;
-
-        // --- 修改处 2: Phaser 配置适配容器尺寸 (Billy2025/12/13) ---
         const gameContainer = document.getElementById('game-container');
-        
         const config = {
             type: Phaser.AUTO,
-            // 使用容器的实际宽阔，而不是窗口的宽度
             width: gameContainer.clientWidth,
             height: gameContainer.clientHeight,
             parent: "game-container",
-            mode: Phaser.Scale.RESIZE, // 允许随容器大小改变
+            mode: Phaser.Scale.RESIZE,
             pixelArt: true,
-            physics: {
-                default: "arcade",
-                arcade: { gravity: { y: 0 } }
-            },
-            scene: {
-                preload: preload,
-                create: create,
-                update: update
-            }
+            physics: { default: "arcade", arcade: { gravity: { y: 0 } } },
+            scene: { preload: preload, create: create, update: update }
         };
-
         const game = new Phaser.Game(config);
-        let cursors;
-        let player; // 相机跟随锚点 (隐藏的精灵)
-        let mainCamera;
-        let map; // 地图引用
+        let cursors, player, mainCamera, map;
 
-        // --- 1. Preload ---
         function preload() {
             this.load.crossOrigin = "";
-            this.load.image("forestmap", "static/assets/village/tilemap/forestmap.png");
+            // Load Map JSON using the dynamic prefix
             this.load.tilemapTiledJSON("map", "static/assets/village/tilemap/tilemap.json");
 
+            // [AUTO-GENERATED] Load Tileset Images
+            this.load.image("tileset_forestmap", "static/assets/village/tilemap/forestmap.png");
+            this.load.image("tileset_blocks", "static/assets/village/tilemap/blocks.png");
+
+
+            // Load Agents
             this.load.atlas("atlas", "static/assets/village/agents/小烏龜/texture.png", "static/assets/village/agents/sprite.json");
             for (var p in persona_names) {
                 let image_static = "static/assets/village/agents/" + p + "/texture.png";
@@ -204,329 +91,157 @@
             }
         }
 
-        // --- 2. Create ---
         function create() {
             map = this.make.tilemap({ key: "map" });
-            const forestmapTileset = map.addTilesetImage("forestmap", "forestmap");
-            let tileset_group = [forestmapTileset]; 
-
             mapWidth = map.widthInPixels;
             mapHeight = map.heightInPixels;
+            let tileset_group = [];
 
-            // --- 创建地图图层 ---
-            map.createLayer("mainmap", tileset_group, 0, 0);
-            map.createLayer("1人類區域", tileset_group, 0, 0);
-            map.createLayer("1河流下游", tileset_group, 0, 0);
-            map.createLayer("1河流上游", tileset_group, 0, 0);
-            map.createLayer("1道路", tileset_group, 0, 0);
-            
-            const houseLayers = [
-                "1小熊家", "1小兔子家", "1小松鼠家", "1小烏龜家", "1小羊家", "1小貓家",
-                "2小熊家客廳", "2小熊家臥室", "2小兔子家客廳", "2小兔子家臥室", "2小兔子家菜園",
-                "2小松鼠家客廳", "2小松鼠家臥室", "2小烏龜家客廳", "2小烏龜家臥室", "2小烏龜家菜園",
-                "2小羊家客廳", "2小羊家臥室", "2小貓家客廳", "2小貓家臥室", "2神秘領域"
-            ];
-            houseLayers.forEach(name => {
-                const layer = map.createLayer(name, tileset_group, 0, 0);
-                if (!layer) console.log(`图层 ${name} 创建失败`);
+            // [AUTO-GENERATED] Link Tilesets
+            const ts_forestmap = map.addTilesetImage("forestmap", "tileset_forestmap");
+            if (ts_forestmap) tileset_group.push(ts_forestmap);
+            const ts_blocks = map.addTilesetImage("blocks", "tileset_blocks");
+            // Hidden by user setting: blocks.png (Not added to tileset_group)
+
+
+            // [AUTO-GENERATED] Create Layers
+
+            const all_layers = ["mainmap","1人類區域","1河流下游","1河流上游","1小熊家","1小兔子家","1小松鼠家","1小烏龜家","1小羊家","1小貓家","1道路","2小熊家客廳","2小熊家臥室","2小兔子家客廳","2小兔子家臥室","2小兔子家菜園","2小松鼠家客廳","2小松鼠家臥室","2小烏龜家客廳","2小烏龜家臥室","2小烏龜家菜園","2小羊家客廳","2小羊家臥室","2小貓家客廳","2小貓家臥室","2神秘領域","3小熊家沙發","3床","3小兔子家沙發","3床","3小松鼠家沙發","3床","3小烏龜家凳子","3床","3小羊家沙發","3床","3小貓家凳子","3床","3光之源","collisions"];
+
+            all_layers.forEach(layerName => {
+                // Create layer using the group of all (non-hidden) tilesets
+                const layer = map.createLayer(layerName, tileset_group, 0, 0);
+                
+                if (layer) {
+                    // Smart Depth: Layers starting with "3" are high
+                    if (layerName.startsWith("3")) {
+                        layer.setDepth(2);
+                    }
+                    // Hide collisions layer specifically if named "collisions"
+                    if (layerName === "collisions") {
+                        layer.setVisible(false); 
+                    }
+                } else {
+                    // This warning is expected for layers using hidden tilesets
+                    // console.warn("Layer not rendered (possibly hidden): " + layerName);
+                }
             });
 
-            const furnitureLayers = [
-                "3小熊家沙發", "3床", "3小兔子家沙發", "3小松鼠家沙發", "3小烏龜家凳子",
-                "3小羊家沙發", "3小貓家凳子", "3光之源"
-            ];
-            furnitureLayers.forEach(name => {
-                const l = map.createLayer(name, tileset_group, 0, 0);
-                if(l) l.setDepth(2);
-            });
-
-            // --- 相机设置 ---
             player = this.physics.add.sprite(mapWidth / 2, mapHeight / 2, "atlas", "down").setSize(30, 40);
             player.setVisible(false);
-
             mainCamera = this.cameras.main;
             mainCamera.startFollow(player);
-            // 初始时使用边界限制
             mainCamera.setBounds(0, 0, mapWidth, mapHeight);
             mainCamera.setZoom(zoom);
-
             cursors = this.input.keyboard.createCursorKeys();
 
-            // --- 角色生成 ---
             for (let i=0; i<Object.keys(spawn_tile_loc).length; i++) {
                 let p_name = Object.keys(spawn_tile_loc)[i];
                 let start_pos = [spawn_tile_loc[p_name][0] * tile_width + tile_width / 2, spawn_tile_loc[p_name][1] * tile_width + tile_width];
-                
                 let new_sprite = this.physics.add.sprite(start_pos[0], start_pos[1], p_name, "down").setSize(30, 40).setOffset(0, 0);
                 new_sprite.displayWidth = 40;
                 new_sprite.scaleY = new_sprite.scaleX;
-                
                 personas[p_name] = new_sprite;
-                pronunciatios[p_name] = this.add.text(
-                    new_sprite.body.x - 15, new_sprite.body.y - 40, "", 
-                    { font: "18px monospace", fill: "#000000", backgroundColor: "#ffffcc", padding: { x: 4, y: 4}, borderRadius:"10px" }
-                ).setDepth(3).setAlpha(0.7);
+                pronunciatios[p_name] = this.add.text(new_sprite.body.x - 15, new_sprite.body.y - 40, "", { font: "18px monospace", fill: "#000000", backgroundColor: "#ffffcc", padding: { x: 4, y: 4}, borderRadius:"10px" }).setDepth(3).setAlpha(0.7);
             }
 
-            // --- 动画 ---
             const anims = this.anims;
             for (let i = 0; i < Object.keys(persona_names).length; i++) {
                 let p_name = Object.keys(persona_names)[i];
                 let fr = movement_speed > 1 ? 8 : 4;
                 ['left', 'right', 'down', 'up'].forEach(dir => {
-                    anims.create({
-                        key: `${p_name}-${dir}-walk`,
-                        frames: anims.generateFrameNames(p_name, { prefix: `${dir}-walk.`, start: 0, end: 3, zeroPad: 3 }),
-                        frameRate: fr,
-                        repeat: -1
-                    });
+                    anims.create({ key: `${p_name}-${dir}-walk`, frames: anims.generateFrameNames(p_name, { prefix: `${dir}-walk.`, start: 0, end: 3, zeroPad: 3 }), frameRate: fr, repeat: -1 });
                 });
             }
 
-            // --- 鼠标拖拽逻辑 ---
+            // Input handling
             let isDragging = false;
             let lastDragPoint = null;
-            
-            this.input.on('pointerdown', (pointer) => {
-                if (pointer.middleButtonDown()) {
-                    isDragging = true;
-                    lastDragPoint = { x: pointer.x, y: pointer.y };
-                    camera_locked = false;
-                    focused_persona = null;
-                    mainCamera.stopFollow();
-                }
-            });
-            
-            this.input.on('pointermove', (pointer) => {
-                if (isDragging && lastDragPoint) {
-                    const dx = (pointer.x - lastDragPoint.x) / mainCamera.zoom;
-                    const dy = (pointer.y - lastDragPoint.y) / mainCamera.zoom;
-                    mainCamera.scrollX -= dx;
-                    mainCamera.scrollY -= dy;
-                    lastDragPoint.x = pointer.x;
-                    lastDragPoint.y = pointer.y;
-                }
-            });
-            
-            this.input.on('pointerup', (pointer) => {
-                if (pointer.middleButtonReleased()) {
-                    isDragging = false;
-                    lastDragPoint = null;
-                    if (!camera_locked) {
-                        player.setPosition(mainCamera.worldView.centerX, mainCamera.worldView.centerY);
-                        mainCamera.startFollow(player);
-                    }
-                }
-            });
-            
-            this.input.on('gameout', () => {
-                isDragging = false;
-                lastDragPoint = null;
-            });
-
-            // ==========================================
-            //       最终修复版：无缝缩放 & 动态边界
-            // ==========================================
+            this.input.on('pointerdown', (pointer) => { if (pointer.middleButtonDown()) { isDragging = true; lastDragPoint = { x: pointer.x, y: pointer.y }; camera_locked = false; focused_persona = null; mainCamera.stopFollow(); } });
+            this.input.on('pointermove', (pointer) => { if (isDragging && lastDragPoint) { const dx = (pointer.x - lastDragPoint.x) / mainCamera.zoom; const dy = (pointer.y - lastDragPoint.y) / mainCamera.zoom; mainCamera.scrollX -= dx; mainCamera.scrollY -= dy; lastDragPoint.x = pointer.x; lastDragPoint.y = pointer.y; } });
+            this.input.on('pointerup', (pointer) => { if (pointer.middleButtonReleased()) { isDragging = false; lastDragPoint = null; if (!camera_locked) { player.setPosition(mainCamera.worldView.centerX, mainCamera.worldView.centerY); mainCamera.startFollow(player); } } });
             this.input.on('wheel', (pointer, gameObjects, deltaX, deltaY, deltaZ) => {
-                const viewportW = mainCamera.width;
-                const viewportH = mainCamera.height;
-                const minZoom = Math.min(viewportW / mapWidth, viewportH / mapHeight);
-
+                const minZoom = Math.min(mainCamera.width / mapWidth, mainCamera.height / mapHeight);
                 let currentZoom = mainCamera.zoom;
-                if (deltaY > 0) currentZoom *= 0.9; 
-                else currentZoom *= 1.1;
-
-                if (currentZoom < minZoom) currentZoom = minZoom; 
-                if (currentZoom > 4) currentZoom = 4;
-
-                mainCamera.setZoom(currentZoom);
-                checkAndApplyBounds();
+                if (deltaY > 0) currentZoom *= 0.9; else currentZoom *= 1.1;
+                if (currentZoom < minZoom) currentZoom = minZoom; if (currentZoom > 4) currentZoom = 4;
+                mainCamera.setZoom(currentZoom); checkAndApplyBounds();
             });
 
-            // 初始运行一次边界检查，确保一开始若地图较小能居中
             checkAndApplyBounds();
-
             setupUI();
         }
 
-        /**
-         * 核心辅助函数：动态边界控制
-         * 如果地图看起来比屏幕小，移除边界（允许居中）；否则应用边界（防止黑边）。
-         */
         function checkAndApplyBounds() {
-            const viewportW = mainCamera.width;
-            const viewportH = mainCamera.height;
             const scaledMapW = mapWidth * mainCamera.zoom;
             const scaledMapH = mapHeight * mainCamera.zoom;
-
-            // 使用一个小的容差值 (1px) 避免浮点数计算导致的闪烁
-            if (scaledMapW < viewportW + 1 || scaledMapH < viewportH + 1) {
-                if (mainCamera.useBounds) {
-                    mainCamera.removeBounds();
-                }
-            } else {
-                if (!mainCamera.useBounds) {
-                    mainCamera.setBounds(0, 0, mapWidth, mapHeight);
-                }
-            }
+            if (scaledMapW < mainCamera.width + 1 || scaledMapH < mainCamera.height + 1) { if (mainCamera.useBounds) mainCamera.removeBounds(); } 
+            else { if (!mainCamera.useBounds) mainCamera.setBounds(0, 0, mapWidth, mapHeight); }
         }
 
         function setupUI() {
-            btnPlay.onclick = () => {
-                if (finished) {
-                    window.location.reload(); 
-                } else {
-                    paused = !paused;
-                    updateBtnState();
-                }
-            };
-            btnConv.onclick = () => {
-                if (boxConv.style.display === 'none') {
-                    boxConv.style.display = 'block';
-                    btnConv.innerText = '💬 隐藏对话';
-                } else {
-                    boxConv.style.display = 'none';
-                    btnConv.innerText = '💬 显示对话';
-                }
-            };
+            btnPlay.onclick = () => { if (finished) window.location.reload(); else { paused = !paused; updateBtnState(); } };
+            btnConv.onclick = () => { if (boxConv.style.display === 'none') { boxConv.style.display = 'block'; btnConv.innerText = '💬 Hide Chat'; } else { boxConv.style.display = 'none'; btnConv.innerText = '💬 Show Chat'; } };
             updateBtnState();
         }
 
         function updateBtnState() {
-            if (finished) {
-                btnPlay.innerText = "↻ 重播";
-                btnPlay.style.backgroundColor = "#ff9999";
-            } else if (paused) {
-                btnPlay.innerText = "▶ 运行";
-                btnPlay.style.backgroundColor = "#ffffcc";
-            } else {
-                btnPlay.innerText = "⏸ 暂停";
-                btnPlay.style.backgroundColor = "#ccffcc";
-            }
+            if (finished) { btnPlay.innerText = "↻ Replay"; btnPlay.style.backgroundColor = "#ff9999"; } 
+            else if (paused) { btnPlay.innerText = "▶ Run"; btnPlay.style.backgroundColor = "#ffffcc"; } 
+            else { btnPlay.innerText = "⏸ Pause"; btnPlay.style.backgroundColor = "#ccffcc"; }
         }
 
-        // --- 3. Update ---
         function update(time, delta) {
             checkAndApplyBounds();
-
-            // 外部点击锁定逻辑
             let dom_focus = document.getElementById("temp_focus").textContent;
-            if (dom_focus !== "") {
-                focused_persona = dom_focus;
-                camera_locked = true;
-                document.getElementById("temp_focus").innerHTML = ""; 
-                if (personas[focused_persona]) {
-                    mainCamera.startFollow(personas[focused_persona], true, 0.08, 0.08);
-                    mainCamera.zoomTo(2, 1000, 'Power2'); 
-                }
-            }
-
-            // 键盘移动相机
+            if (dom_focus !== "") { focused_persona = dom_focus; camera_locked = true; document.getElementById("temp_focus").innerHTML = ""; if (personas[focused_persona]) { mainCamera.startFollow(personas[focused_persona], true, 0.08, 0.08); mainCamera.zoomTo(2, 1000, 'Power2'); } }
+            
             const camSpeed = 500 / mainCamera.zoom;
             if (!camera_locked) {
                 player.body.setVelocity(0);
-                if (cursors.left.isDown) player.body.setVelocityX(-camSpeed);
-                else if (cursors.right.isDown) player.body.setVelocityX(camSpeed);
-                if (cursors.up.isDown) player.body.setVelocityY(-camSpeed);
-                else if (cursors.down.isDown) player.body.setVelocityY(camSpeed);
-
-                // 如果按键，确保跟随的是 player 锚点
-                if (cursors.left.isDown || cursors.right.isDown || cursors.up.isDown || cursors.down.isDown) {
-                     mainCamera.startFollow(player);
-                }
+                if (cursors.left.isDown) player.body.setVelocityX(-camSpeed); else if (cursors.right.isDown) player.body.setVelocityX(camSpeed);
+                if (cursors.up.isDown) player.body.setVelocityY(-camSpeed); else if (cursors.down.isDown) player.body.setVelocityY(camSpeed);
+                if (cursors.left.isDown || cursors.right.isDown || cursors.up.isDown || cursors.down.isDown) mainCamera.startFollow(player);
             } else {
-                if (cursors.left.isDown || cursors.right.isDown || cursors.up.isDown || cursors.down.isDown) {
-                    camera_locked = false;
-                    focused_persona = null;
-                    player.body.x = mainCamera.worldView.centerX;
-                    player.body.y = mainCamera.worldView.centerY;
-                    mainCamera.startFollow(player);
-                }
+                if (cursors.left.isDown || cursors.right.isDown || cursors.up.isDown || cursors.down.isDown) { camera_locked = false; focused_persona = null; player.body.x = mainCamera.worldView.centerX; player.body.y = mainCamera.worldView.centerY; mainCamera.startFollow(player); }
             }
 
             if (finished || paused) return;
-
-            // 更新数据
             curr_datetime = new Date(start_datetime.getTime());
-            txtTime.innerText = curr_datetime.toLocaleTimeString("zh-CN", datetime_options);
-
+            txtTime.innerText = curr_datetime.toLocaleTimeString("en-US", datetime_options);
             let key = `${curr_datetime.getFullYear()}${(curr_datetime.getMonth()+1).toString().padStart(2,"0")}${curr_datetime.getDate().toString().padStart(2,"0")}-${curr_datetime.getHours().toString().padStart(2,"0")}:${curr_datetime.getMinutes().toString().padStart(2,"0")}`;
-            if (all_movement["conversation"] && all_movement["conversation"][key]) {
-                boxConv.innerHTML = `<strong>${key}</strong><br>${all_movement["conversation"][key]}`;
-            }
+            if (all_movement["conversation"] && all_movement["conversation"][key]) boxConv.innerHTML = `<strong>${key}</strong><br>${all_movement["conversation"][key]}`;
 
-            // 移动逻辑
             for (let i = 0; i < Object.keys(personas).length; i++) {
                 let p_name = Object.keys(personas)[i];
                 let curr_persona = personas[p_name];
                 let curr_pronun = pronunciatios[p_name];
-
                 if (step in all_movement && p_name.replace("_", " ") in all_movement[step]) {
                     if (execute_count == execute_count_max) {
                         let data = all_movement[step][p_name.replace("_", " ")];
-                        movement_target[p_name] = [
-                            data["movement"][0] * tile_width + tile_width / 2, 
-                            data["movement"][1] * tile_width + tile_width
-                        ];
+                        movement_target[p_name] = [ data["movement"][0] * tile_width + tile_width / 2, data["movement"][1] * tile_width + tile_width ];
                         let act = data["action"];
                         curr_pronun.setText(`${p_name}: ${act.length > 15 ? act.substring(0,12)+"..." : act}`);
-                        
-                        let descEl = document.getElementById("agent_desc__"+p_name);
-                        if(descEl) descEl.innerHTML = all_movement["description"][p_name]["currently"];
-                        let actEl = document.getElementById("current_action__"+p_name);
-                        if(actEl) actEl.innerHTML = act;
-                        let locEl = document.getElementById("target_address__"+p_name);
-                        if(locEl) locEl.innerHTML = data["location"];
+                        let descEl = document.getElementById("agent_desc__"+p_name); if(descEl) descEl.innerHTML = all_movement["description"][p_name]["currently"];
+                        let actEl = document.getElementById("current_action__"+p_name); if(actEl) actEl.innerHTML = act;
+                        let locEl = document.getElementById("target_address__"+p_name); if(locEl) locEl.innerHTML = data["location"];
                     }
-
                     if (execute_count > 0 && movement_target[p_name]) {
-                        let tx = movement_target[p_name][0];
-                        let ty = movement_target[p_name][1];
-                        let dx = tx - curr_persona.x;
-                        let dy = ty - curr_persona.y;
-                        
+                        let tx = movement_target[p_name][0]; let ty = movement_target[p_name][1];
+                        let dx = tx - curr_persona.x; let dy = ty - curr_persona.y;
                         let isMoving = false;
-                        if (Math.abs(dx) > 0.5) {
-                            curr_persona.x += dx > 0 ? movement_speed : -movement_speed;
-                            anims_direction = dx > 0 ? 'r' : 'l';
-                            isMoving = true;
-                        } else if (Math.abs(dy) > 0.5) {
-                            curr_persona.y += dy > 0 ? movement_speed : -movement_speed;
-                            anims_direction = dy > 0 ? 'd' : 'u';
-                            isMoving = true;
-                        }
-
-                        if (isMoving) {
-                            let dirName = anims_direction === 'l' ? 'left' : anims_direction === 'r' ? 'right' : anims_direction === 'u' ? 'up' : 'down';
-                            curr_persona.anims.play(`${p_name}-${dirName}-walk`, true);
-                            pre_anims_direction_dict[p_name] = dirName;
-                        } else {
-                            let lastDir = pre_anims_direction_dict[p_name] || 'down';
-                            curr_persona.anims.stop();
-                            curr_persona.setTexture(p_name, `${lastDir}-walk.000`);
-                        }
-                        
-                        curr_pronun.x = curr_persona.x - 15;
-                        curr_pronun.y = curr_persona.y - 40;
+                        if (Math.abs(dx) > 0.5) { curr_persona.x += dx > 0 ? movement_speed : -movement_speed; anims_direction = dx > 0 ? 'r' : 'l'; isMoving = true; } 
+                        else if (Math.abs(dy) > 0.5) { curr_persona.y += dy > 0 ? movement_speed : -movement_speed; anims_direction = dy > 0 ? 'd' : 'u'; isMoving = true; }
+                        if (isMoving) { let dirName = anims_direction === 'l' ? 'left' : anims_direction === 'r' ? 'right' : anims_direction === 'u' ? 'up' : 'down'; curr_persona.anims.play(`${p_name}-${dirName}-walk`, true); pre_anims_direction_dict[p_name] = dirName; } 
+                        else { let lastDir = pre_anims_direction_dict[p_name] || 'down'; curr_persona.anims.stop(); curr_persona.setTexture(p_name, `${lastDir}-walk.000`); }
+                        curr_pronun.x = curr_persona.x - 15; curr_pronun.y = curr_persona.y - 40;
                     }
                 }
             }
-
             if (execute_count == 0) {
-                for (let p in personas) {
-                    if (movement_target[p]) {
-                        personas[p].x = movement_target[p][0];
-                        personas[p].y = movement_target[p][1];
-                    }
-                }
-                execute_count = execute_count_max + 1;
-                step++;
-                start_datetime = new Date(start_datetime.getTime() + step_size);
-                
-                if (!(step in all_movement)) {
-                    finished = true;
-                    updateBtnState();
-                }
+                for (let p in personas) { if (movement_target[p]) { personas[p].x = movement_target[p][0]; personas[p].y = movement_target[p][1]; } }
+                execute_count = execute_count_max + 1; step++; start_datetime = new Date(start_datetime.getTime() + step_size);
+                if (!(step in all_movement)) { finished = true; updateBtnState(); }
             }
             execute_count--;
         }
