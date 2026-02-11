@@ -1,0 +1,2952 @@
+{
+  "stride": 10,
+  "time": "20250213-12:50",
+  "maze": {
+    "path": "assets\\village\\maze.json"
+  },
+  "agent_base": {
+    "percept": {
+      "mode": "box",
+      "vision_r": 8,
+      "att_bandwidth": 8
+    },
+    "schedule": {
+      "max_try": 5,
+      "diversity": 5
+    },
+    "think": {
+      "llm": {
+        "provider": "ollama",
+        "model": "qwen3:8b-q4_K_M",
+        "base_url": "http://127.0.0.1:11434/v1",
+        "api_key": ""
+      },
+      "interval": 1000,
+      "poignancy_max": 150
+    },
+    "chat_iter": 4,
+    "associate": {
+      "embedding": {
+        "provider": "ollama",
+        "model": "bge-m3:latest",
+        "base_url": "http://127.0.0.1:11434",
+        "api_key": ""
+      },
+      "retention": 8
+    }
+  },
+  "agents": {
+    "Brian": {
+      "config_path": "assets\\village\\agents\\Brian\\agent.json",
+      "status": {
+        "poignancy": 131
+      },
+      "schedule": {
+        "create": "20250213-09:30:00",
+        "daily_schedule": [
+          {
+            "idx": 0,
+            "describe": "睡觉",
+            "start": 0,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 1,
+            "describe": "睡觉",
+            "start": 60,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 2,
+            "describe": "睡觉",
+            "start": 120,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 3,
+            "describe": "睡觉",
+            "start": 180,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 4,
+            "describe": "睡觉",
+            "start": 240,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 5,
+            "describe": "睡觉",
+            "start": 300,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 6,
+            "describe": "睡觉",
+            "start": 360,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 7,
+            "describe": "起床",
+            "start": 420,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 8,
+            "describe": "巡逻森林并跟踪野兔",
+            "start": 480,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 9,
+            "describe": "休息",
+            "start": 540,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "检查猎枪和弹药",
+                "start": 540,
+                "duration": 15
+              },
+              {
+                "idx": 1,
+                "describe": "整理捕兽夹工具",
+                "start": 555,
+                "duration": 15
+              },
+              {
+                "idx": 2,
+                "describe": "观察周围环境",
+                "start": 570,
+                "duration": 15
+              },
+              {
+                "idx": 3,
+                "describe": "记录今日猎物踪迹",
+                "start": 585,
+                "duration": 15
+              }
+            ]
+          },
+          {
+            "idx": 10,
+            "describe": "布置捕兽夹于松树林",
+            "start": 600,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "检查工具包",
+                "start": 600,
+                "duration": 10
+              },
+              {
+                "idx": 1,
+                "describe": "选择松树林区域",
+                "start": 610,
+                "duration": 15
+              },
+              {
+                "idx": 2,
+                "describe": "安装捕兽夹",
+                "start": 625,
+                "duration": 20
+              },
+              {
+                "idx": 3,
+                "describe": "测试陷阱有效性",
+                "start": 645,
+                "duration": 5
+              },
+              {
+                "idx": 4,
+                "describe": "标记陷阱位置",
+                "start": 650,
+                "duration": 5
+              },
+              {
+                "idx": 5,
+                "describe": "清理周围环境",
+                "start": 655,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 11,
+            "describe": "休息",
+            "start": 660,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "检查捕兽夹设置",
+                "start": 660,
+                "duration": 15
+              },
+              {
+                "idx": 1,
+                "describe": "补充弹药和物资",
+                "start": 675,
+                "duration": 10
+              },
+              {
+                "idx": 2,
+                "describe": "整理工具和装备",
+                "start": 685,
+                "duration": 10
+              },
+              {
+                "idx": 3,
+                "describe": "观察森林环境",
+                "start": 695,
+                "duration": 10
+              },
+              {
+                "idx": 4,
+                "describe": "记录捕猎计划",
+                "start": 705,
+                "duration": 10
+              },
+              {
+                "idx": 5,
+                "describe": "休息和放松",
+                "start": 715,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 12,
+            "describe": "进食并检查陷阱",
+            "start": 720,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "准备午餐",
+                "start": 720,
+                "duration": 15
+              },
+              {
+                "idx": 1,
+                "describe": "用餐",
+                "start": 735,
+                "duration": 15
+              },
+              {
+                "idx": 2,
+                "describe": "清理餐具并整理装备",
+                "start": 750,
+                "duration": 10
+              },
+              {
+                "idx": 3,
+                "describe": "检查捕兽夹位置",
+                "start": 760,
+                "duration": 10
+              },
+              {
+                "idx": 4,
+                "describe": "调整捕兽夹触发机制",
+                "start": 770,
+                "duration": 10
+              },
+              {
+                "idx": 5,
+                "describe": "记录陷阱状态",
+                "start": 780,
+                "duration": 5
+              },
+              {
+                "idx": 6,
+                "describe": "检查猎枪弹药",
+                "start": 785,
+                "duration": 5
+              },
+              {
+                "idx": 7,
+                "describe": "整理巡逻路线标记",
+                "start": 790,
+                "duration": 5
+              },
+              {
+                "idx": 8,
+                "describe": "检查伐木工具状态",
+                "start": 795,
+                "duration": 5
+              },
+              {
+                "idx": 9,
+                "describe": "观察森林动态",
+                "start": 800,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 13,
+            "describe": "休息",
+            "start": 780,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 14,
+            "describe": "持猎枪伏击鹿群",
+            "start": 840,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 15,
+            "describe": "休息",
+            "start": 900,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 16,
+            "describe": "休息",
+            "start": 960,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 17,
+            "describe": "追踪狐狸脚印至溪边",
+            "start": 1020,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 18,
+            "describe": "休息",
+            "start": 1080,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 19,
+            "describe": "休息",
+            "start": 1140,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 20,
+            "describe": "休息",
+            "start": 1200,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 21,
+            "describe": "休息",
+            "start": 1260,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 22,
+            "describe": "清理陷阱并砍伐古树",
+            "start": 1320,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 23,
+            "describe": "休息",
+            "start": 1380,
+            "duration": 60,
+            "decompose": {}
+          }
+        ]
+      },
+      "associate": {
+        "memory": {
+          "event": [
+            "node_36",
+            "node_35",
+            "node_34",
+            "node_33",
+            "node_32",
+            "node_31",
+            "node_30",
+            "node_29",
+            "node_28",
+            "node_27",
+            "node_26",
+            "node_25",
+            "node_24",
+            "node_23",
+            "node_22",
+            "node_21",
+            "node_20",
+            "node_19",
+            "node_18",
+            "node_17",
+            "node_16",
+            "node_15",
+            "node_14",
+            "node_13",
+            "node_12",
+            "node_11",
+            "node_10",
+            "node_9",
+            "node_8",
+            "node_7",
+            "node_6",
+            "node_5",
+            "node_4",
+            "node_3",
+            "node_2",
+            "node_1"
+          ],
+          "thought": [
+            "node_0"
+          ],
+          "chat": []
+        }
+      },
+      "chats": [],
+      "currently": "Brian作爲伐木工以及捕獵愛好者正在森林中設下捕獸夾等待獵物上鈎，同時他手持獵槍正在森林中巡邏",
+      "action": {
+        "event": {
+          "subject": "Brian",
+          "predicate": "此时",
+          "object": "检查捕兽夹位置",
+          "describe": "检查捕兽夹位置",
+          "address": [
+            "the Ville",
+            "小松鼠家",
+            "小松鼠家客廳",
+            "小松鼠家沙發"
+          ],
+          "emoji": "检查捕兽夹位置"
+        },
+        "obj_event": {
+          "subject": "小松鼠家沙發",
+          "predicate": "此时",
+          "object": "空着",
+          "describe": "空着",
+          "address": [
+            "the Ville",
+            "小松鼠家",
+            "小松鼠家客廳",
+            "小松鼠家沙發"
+          ],
+          "emoji": ""
+        },
+        "start": "20250213-12:40:00",
+        "duration": 10
+      },
+      "coord": [
+        65,
+        205
+      ]
+    },
+    "小兔子": {
+      "config_path": "assets\\village\\agents\\小兔子\\agent.json",
+      "status": {
+        "poignancy": 53
+      },
+      "schedule": {
+        "create": "20250213-09:30:00",
+        "daily_schedule": [
+          {
+            "idx": 0,
+            "describe": "睡觉",
+            "start": 0,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 1,
+            "describe": "睡觉",
+            "start": 60,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 2,
+            "describe": "睡觉",
+            "start": 120,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 3,
+            "describe": "睡觉",
+            "start": 180,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 4,
+            "describe": "睡觉",
+            "start": 240,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 5,
+            "describe": "睡觉",
+            "start": 300,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 6,
+            "describe": "睡觉",
+            "start": 360,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 7,
+            "describe": "起床并整理侦查装备",
+            "start": 420,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 8,
+            "describe": "拜访小熊，讨论森林安全",
+            "start": 480,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 9,
+            "describe": "跟踪小羊，观察其行为",
+            "start": 540,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "通过加密信号向总部汇报：光之源线索指向废弃钻井平台，建议优先排查金属反光物与破坏痕迹关联性",
+                "start": 590,
+                "duration": 5
+              },
+              {
+                "idx": 1,
+                "describe": "与小熊同步排查结果，确认警戒点安全，等待进一步指令",
+                "start": 595,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 10,
+            "describe": "与小松鼠秘密会合，交换情报",
+            "start": 600,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "与小松鼠会合",
+                "start": 600,
+                "duration": 0
+              },
+              {
+                "idx": 1,
+                "describe": "小乌龟询问Brian踪迹，小兔子发现其在东北灌木丛活动，电锯反光。光之源与小羊背包金属反光有关。小乌龟守西入口，小兔子追查小羊行踪，保持联络。",
+                "start": 600,
+                "duration": 0
+              },
+              {
+                "idx": 2,
+                "describe": "跟踪小羊至东北灌木丛，确认电锯反光来源",
+                "start": 600,
+                "duration": 15
+              },
+              {
+                "idx": 3,
+                "describe": "检查森林东侧边界异常痕迹（调整原计划时间）",
+                "start": 615,
+                "duration": 10
+              },
+              {
+                "idx": 4,
+                "describe": "与小松鼠同步情报（压缩原计划时间）",
+                "start": 625,
+                "duration": 10
+              },
+              {
+                "idx": 5,
+                "describe": "观察小松鼠背包金属反光（新增任务）",
+                "start": 635,
+                "duration": 10
+              },
+              {
+                "idx": 6,
+                "describe": "伪装成落叶躲避Brian，同步向小乌龟汇报位置",
+                "start": 645,
+                "duration": 15
+              }
+            ]
+          },
+          {
+            "idx": 11,
+            "describe": "检查森林东侧边界是否有异常痕迹",
+            "start": 660,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "绕至陷阱后方隐蔽观察Brian动向（发现其携带发光矿石）",
+                "start": 700,
+                "duration": 5
+              },
+              {
+                "idx": 1,
+                "describe": "用爪子破坏陷阱机关并设置绊索警报（电锯声逼近）",
+                "start": 705,
+                "duration": 10
+              },
+              {
+                "idx": 2,
+                "describe": "用萤火虫粉标记逃生路线并触发远距离求救信号（同时向溪流方向传递光之源坐标）",
+                "start": 715,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 12,
+            "describe": "巡逻森林，寻找光之源",
+            "start": 720,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "联合小熊设置陷阱阻断电锯路径（利用铁锈痕迹定位陷阱位置）",
+                "start": 750,
+                "duration": 15
+              },
+              {
+                "idx": 1,
+                "describe": "协助小羊调整背包反光角度以干扰电锯定位系统",
+                "start": 765,
+                "duration": 10
+              },
+              {
+                "idx": 2,
+                "describe": "通过溪流反光定位光之源线索隐藏点（同步观察小猫异常行为变化）",
+                "start": 775,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 13,
+            "describe": "伪装成落叶混入溪流，暗中观察人类踪迹",
+            "start": 780,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 14,
+            "describe": "与小乌龟见面，确认彼此安危",
+            "start": 840,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 15,
+            "describe": "分析小羊的行动轨迹，记录可疑细节",
+            "start": 900,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 16,
+            "describe": "检查小猫的活动范围，留意其与人类接触的痕迹",
+            "start": 960,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 17,
+            "describe": "跟踪小羊，观察其行为",
+            "start": 1020,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 18,
+            "describe": "伪装成树影潜伏，等待Brian现身",
+            "start": 1080,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 19,
+            "describe": "再次巡逻，继续寻找光之源",
+            "start": 1140,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 20,
+            "describe": "用树叶信号与小熊传递暗号",
+            "start": 1200,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 21,
+            "describe": "监视Brian的动向，准备撤离路线",
+            "start": 1260,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 22,
+            "describe": "整理今日证据，标记可疑地点",
+            "start": 1320,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 23,
+            "describe": "睡觉前用月光加密记录，隐藏在树洞",
+            "start": 1380,
+            "duration": 60,
+            "decompose": {}
+          }
+        ]
+      },
+      "associate": {
+        "memory": {
+          "event": [
+            "node_80",
+            "node_79",
+            "node_77",
+            "node_76",
+            "node_75",
+            "node_57",
+            "node_56",
+            "node_55",
+            "node_54",
+            "node_51",
+            "node_50",
+            "node_49",
+            "node_48",
+            "node_47",
+            "node_46",
+            "node_45",
+            "node_44",
+            "node_43",
+            "node_42",
+            "node_41",
+            "node_40",
+            "node_22",
+            "node_21",
+            "node_20",
+            "node_19",
+            "node_18",
+            "node_17",
+            "node_16",
+            "node_15",
+            "node_14",
+            "node_13",
+            "node_12",
+            "node_11",
+            "node_10",
+            "node_9",
+            "node_8",
+            "node_7",
+            "node_6",
+            "node_3",
+            "node_2"
+          ],
+          "thought": [
+            "node_74",
+            "node_73",
+            "node_72",
+            "node_71",
+            "node_70",
+            "node_69",
+            "node_68",
+            "node_67",
+            "node_66",
+            "node_65",
+            "node_64",
+            "node_63",
+            "node_62",
+            "node_61",
+            "node_60",
+            "node_59",
+            "node_58",
+            "node_39",
+            "node_38",
+            "node_37",
+            "node_36",
+            "node_35",
+            "node_34",
+            "node_33",
+            "node_32",
+            "node_31",
+            "node_30",
+            "node_29",
+            "node_28",
+            "node_27",
+            "node_26",
+            "node_25",
+            "node_24",
+            "node_23",
+            "node_0"
+          ],
+          "chat": [
+            "node_78",
+            "node_53",
+            "node_52",
+            "node_5",
+            "node_4",
+            "node_1"
+          ]
+        }
+      },
+      "chats": [
+        [
+          "小熊",
+          "小兔子！你这边安全吗？Brian的电锯声越来越近了，东北方向灌木丛有陷阱，我们得赶快找到光之源线索！小羊背包的反光是不是和光之源有关？你那边有没有发现什么异常？"
+        ],
+        [
+          "小兔子",
+          "小熊，我这边暂时安全，但东北方向的灌木丛有陷阱，电锯声越来越近了！小羊背包的金属反光确实和Brian的电锯反光有关，我刚刚在东侧巡逻时发现铁锈味的痕迹，光之源的线索可能藏在陷阱后方。我们得立刻合作，否则Brian的陷阱会吞噬整个山谷！"
+        ]
+      ],
+      "currently": "小兔子意識到人類的逼近會破壞森林，因此最近正在評估是否跟隨小熊尋找光之源守護森林。此外對於新鄰居小羊與小貓非常警惕，正在暗中調查他們是否是人類的間諜。與小烏龜以及小熊是好朋友",
+      "action": {
+        "event": {
+          "subject": "小兔子",
+          "predicate": "此时",
+          "object": "协助小羊调整背包反光角度以干扰电锯定位系统",
+          "describe": "协助小羊调整背包反光角度以干扰电锯定位系统",
+          "address": [
+            "the Ville",
+            "小羊家",
+            "小羊家客廳",
+            "小羊家沙發"
+          ],
+          "emoji": "协助小羊调整背包反光角度以干扰电锯定位系统"
+        },
+        "obj_event": {
+          "subject": "小羊家沙發",
+          "predicate": "此时",
+          "object": "放置着背包",
+          "describe": "放置着背包",
+          "address": [
+            "the Ville",
+            "小羊家",
+            "小羊家客廳",
+            "小羊家沙發"
+          ],
+          "emoji": ""
+        },
+        "start": "20250213-12:45:00",
+        "duration": 10
+      },
+      "coord": [
+        7,
+        177
+      ]
+    },
+    "小松鼠": {
+      "config_path": "assets\\village\\agents\\小松鼠\\agent.json",
+      "status": {
+        "poignancy": 31
+      },
+      "schedule": {
+        "create": "20250213-09:30:00",
+        "daily_schedule": [
+          {
+            "idx": 0,
+            "describe": "睡觉",
+            "start": 0,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 1,
+            "describe": "睡觉",
+            "start": 60,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 2,
+            "describe": "睡觉",
+            "start": 120,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 3,
+            "describe": "睡觉",
+            "start": 180,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 4,
+            "describe": "睡觉",
+            "start": 240,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 5,
+            "describe": "睡觉",
+            "start": 300,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 6,
+            "describe": "睡觉",
+            "start": 360,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 7,
+            "describe": "起床",
+            "start": 420,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 8,
+            "describe": "拜访小兔子，散布「小猫是人类间谍」的谣言",
+            "start": 480,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 9,
+            "describe": "睡觉",
+            "start": 540,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "整理「小猫是人类间谍」的谣言细节",
+                "start": 540,
+                "duration": 5
+              },
+              {
+                "idx": 1,
+                "describe": "检查Brian的踪迹",
+                "start": 545,
+                "duration": 5
+              },
+              {
+                "idx": 2,
+                "describe": "策划如何干扰小熊的行动",
+                "start": 550,
+                "duration": 10
+              },
+              {
+                "idx": 3,
+                "describe": "散布关于光之源的误导信息",
+                "start": 560,
+                "duration": 10
+              },
+              {
+                "idx": 4,
+                "describe": "检查尾巴是否被追踪",
+                "start": 570,
+                "duration": 5
+              },
+              {
+                "idx": 5,
+                "describe": "睡觉",
+                "start": 575,
+                "duration": 15
+              },
+              {
+                "idx": 6,
+                "describe": "预备逃跑路线",
+                "start": 590,
+                "duration": 5
+              },
+              {
+                "idx": 7,
+                "describe": "散布「小兔子背叛光之源」的谣言",
+                "start": 595,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 10,
+            "describe": "睡觉",
+            "start": 600,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "假装睡觉以躲避Brian",
+                "start": 600,
+                "duration": 15
+              },
+              {
+                "idx": 1,
+                "describe": "在梦中策划人类灭绝计划",
+                "start": 615,
+                "duration": 15
+              },
+              {
+                "idx": 2,
+                "describe": "散布小猫是人类间谍的谣言",
+                "start": 630,
+                "duration": 15
+              },
+              {
+                "idx": 3,
+                "describe": "检查周围是否有危险",
+                "start": 645,
+                "duration": 10
+              },
+              {
+                "idx": 4,
+                "describe": "调整姿势以保持伪装",
+                "start": 655,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 11,
+            "describe": "睡觉",
+            "start": 660,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "假装睡觉",
+                "start": 660,
+                "duration": 5
+              },
+              {
+                "idx": 1,
+                "describe": "突然警觉观察周围",
+                "start": 665,
+                "duration": 5
+              },
+              {
+                "idx": 2,
+                "describe": "散播「小猫是人类间谍」的谣言",
+                "start": 670,
+                "duration": 10
+              },
+              {
+                "idx": 3,
+                "describe": "检查树洞是否有人跟踪",
+                "start": 680,
+                "duration": 5
+              },
+              {
+                "idx": 4,
+                "describe": "暗中记录小熊的对话",
+                "start": 685,
+                "duration": 10
+              },
+              {
+                "idx": 5,
+                "describe": "短暂闭目养神",
+                "start": 695,
+                "duration": 5
+              },
+              {
+                "idx": 6,
+                "describe": "散播光之源的虚假位置",
+                "start": 700,
+                "duration": 10
+              },
+              {
+                "idx": 7,
+                "describe": "检查Brian的踪迹",
+                "start": 710,
+                "duration": 5
+              },
+              {
+                "idx": 8,
+                "describe": "确保尾巴安全",
+                "start": 715,
+                "duration": 5
+              },
+              {
+                "idx": 9,
+                "describe": "假寐中暗中观察",
+                "start": 720,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 12,
+            "describe": "在树洞与小熊假意叙旧，暗中套话光之源线索",
+            "start": 720,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "检查树洞周围环境",
+                "start": 720,
+                "duration": 10
+              },
+              {
+                "idx": 1,
+                "describe": "与小熊假意叙旧",
+                "start": 730,
+                "duration": 20
+              },
+              {
+                "idx": 2,
+                "describe": "散播小猫是人类间谍的谣言",
+                "start": 750,
+                "duration": 15
+              },
+              {
+                "idx": 3,
+                "describe": "躲避Brian的追踪",
+                "start": 765,
+                "duration": 10
+              },
+              {
+                "idx": 4,
+                "describe": "记录光之源线索并整理策略",
+                "start": 775,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 13,
+            "describe": "睡觉",
+            "start": 780,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 14,
+            "describe": "伪装成巡逻队，误导小乌龟「光之源在北边沼泽」",
+            "start": 840,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 15,
+            "describe": "睡觉",
+            "start": 900,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 16,
+            "describe": "睡觉",
+            "start": 960,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 17,
+            "describe": "睡觉",
+            "start": 1020,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 18,
+            "describe": "躲藏于灌木丛，监视Brian的追踪路线",
+            "start": 1080,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 19,
+            "describe": "与小羊密谈，谎称「小熊已找到光之源」挑拨矛盾",
+            "start": 1140,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 20,
+            "describe": "睡觉",
+            "start": 1200,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 21,
+            "describe": "睡觉",
+            "start": 1260,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 22,
+            "describe": "潜入废弃木屋，准备抢夺小熊可能发现的光之源",
+            "start": 1320,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 23,
+            "describe": "睡觉",
+            "start": 1380,
+            "duration": 60,
+            "decompose": {}
+          }
+        ]
+      },
+      "associate": {
+        "memory": {
+          "event": [
+            "node_4",
+            "node_3",
+            "node_2",
+            "node_1"
+          ],
+          "thought": [
+            "node_0"
+          ],
+          "chat": []
+        }
+      },
+      "chats": [],
+      "currently": "小松鼠表面上響應并支持小熊尋找光之園的號召，實則計劃藉助小熊找到光之源后搶先許願讓人類滅絕。并且會散播小貓是人類間諜的謠言，以及誤導其他小動物關於尋找光之源的信息。假意與小熊是好朋友",
+      "action": {
+        "event": {
+          "subject": "小松鼠",
+          "predicate": "此时",
+          "object": "躲避Brian的追踪",
+          "describe": "躲避Brian的追踪",
+          "address": [
+            "the Ville",
+            "小松鼠家",
+            "小松鼠家臥室",
+            "床"
+          ],
+          "emoji": "躲避Brian的追踪"
+        },
+        "obj_event": {
+          "subject": "床",
+          "predicate": "此时",
+          "object": "正在空置",
+          "describe": "正在空置",
+          "address": [
+            "the Ville",
+            "小松鼠家",
+            "小松鼠家臥室",
+            "床"
+          ],
+          "emoji": ""
+        },
+        "start": "20250213-12:45:00",
+        "duration": 10
+      },
+      "coord": [
+        67,
+        202
+      ]
+    },
+    "小烏龜": {
+      "config_path": "assets\\village\\agents\\小烏龜\\agent.json",
+      "status": {
+        "poignancy": 86
+      },
+      "schedule": {
+        "create": "20250213-09:30:00",
+        "daily_schedule": [
+          {
+            "idx": 0,
+            "describe": "睡觉",
+            "start": 0,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 1,
+            "describe": "睡觉",
+            "start": 60,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 2,
+            "describe": "睡觉",
+            "start": 120,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 3,
+            "describe": "睡觉",
+            "start": 180,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 4,
+            "describe": "睡觉",
+            "start": 240,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 5,
+            "describe": "睡觉",
+            "start": 300,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 6,
+            "describe": "睡觉",
+            "start": 360,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 7,
+            "describe": "起床并整理行囊准备出门",
+            "start": 420,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 8,
+            "describe": "与小熊会面讨论寻找光之源的计划",
+            "start": 480,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 9,
+            "describe": "巡逻森林边缘，观察周围环境",
+            "start": 540,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "巡逻森林边缘",
+                "start": 540,
+                "duration": 20
+              },
+              {
+                "idx": 1,
+                "describe": "观察周围环境",
+                "start": 560,
+                "duration": 15
+              },
+              {
+                "idx": 2,
+                "describe": "检查安全区域",
+                "start": 575,
+                "duration": 10
+              },
+              {
+                "idx": 3,
+                "describe": "帮助小兔子",
+                "start": 585,
+                "duration": 10
+              },
+              {
+                "idx": 4,
+                "describe": "与小松鼠交流",
+                "start": 595,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 10,
+            "describe": "在溪边与小松鼠短暂交谈，确认安全",
+            "start": 600,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "小乌龟询问Brian踪迹，小兔子发现其在东北灌木丛活动，电锯反光。光之源与小羊背包金属反光有关。小乌龟守西入口，小兔子追查小羊行踪，保持联络。",
+                "start": 600,
+                "duration": 5
+              },
+              {
+                "idx": 1,
+                "describe": "与小松鼠对视致意（同步通报Brian踪迹异常）",
+                "start": 605,
+                "duration": 5
+              },
+              {
+                "idx": 2,
+                "describe": "询问小松鼠近期动向（补充说明东北灌木丛风险）",
+                "start": 610,
+                "duration": 5
+              },
+              {
+                "idx": 3,
+                "describe": "检查溪边是否有异常痕迹（重点排查电锯反光方向）",
+                "start": 615,
+                "duration": 5
+              },
+              {
+                "idx": 4,
+                "describe": "用树叶记录观察结果（标注东北灌木丛与光之源关联）",
+                "start": 620,
+                "duration": 5
+              },
+              {
+                "idx": 5,
+                "describe": "分享森林安全注意事项（强调金属反光可能的危险性）",
+                "start": 625,
+                "duration": 5
+              },
+              {
+                "idx": 6,
+                "describe": "倾听小松鼠的担忧（确认其对Brian踪迹的疑虑）",
+                "start": 630,
+                "duration": 5
+              },
+              {
+                "idx": 7,
+                "describe": "确认小松鼠无危险（同步通报小兔子已锁定小羊位置）",
+                "start": 635,
+                "duration": 5
+              },
+              {
+                "idx": 8,
+                "describe": "用藤蔓标记安全区域（划定东北灌木丛警戒线）",
+                "start": 640,
+                "duration": 5
+              },
+              {
+                "idx": 9,
+                "describe": "返回巡逻路线（优先排查电锯反光源头）",
+                "start": 645,
+                "duration": 5
+              },
+              {
+                "idx": 10,
+                "describe": "在溪边与小松鼠短暂交谈，确认安全（同步汇报小兔子追查进展）",
+                "start": 650,
+                "duration": 10
+              }
+            ]
+          },
+          {
+            "idx": 11,
+            "describe": "为小兔子梳理毛发并安抚情绪",
+            "start": 660,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "梳理小兔子的毛发",
+                "start": 680,
+                "duration": 15
+              },
+              {
+                "idx": 1,
+                "describe": "检查毛发是否打结",
+                "start": 695,
+                "duration": 10
+              },
+              {
+                "idx": 2,
+                "describe": "为小兔子梳理毛发并安抚情绪",
+                "start": 705,
+                "duration": 15
+              }
+            ]
+          },
+          {
+            "idx": 12,
+            "describe": "巡逻森林，偶遇小兔子并确认其安全",
+            "start": 720,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "巡逻森林，观察周围环境",
+                "start": 720,
+                "duration": 15
+              },
+              {
+                "idx": 1,
+                "describe": "检查是否有潜在危险",
+                "start": 735,
+                "duration": 10
+              },
+              {
+                "idx": 2,
+                "describe": "偶遇小兔子并安抚情绪",
+                "start": 745,
+                "duration": 10
+              },
+              {
+                "idx": 3,
+                "describe": "确认小兔子的安全",
+                "start": 755,
+                "duration": 10
+              },
+              {
+                "idx": 4,
+                "describe": "检查其他小动物是否需要帮助",
+                "start": 765,
+                "duration": 10
+              },
+              {
+                "idx": 5,
+                "describe": "回到安全区域休息",
+                "start": 775,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 13,
+            "describe": "在树荫下休息，观察小动物动态",
+            "start": 780,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 14,
+            "describe": "为小羊检查伤口并提供草药",
+            "start": 840,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 15,
+            "describe": "在溪边与小松鼠碰面，商讨躲避Brian的策略",
+            "start": 900,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 16,
+            "describe": "偶遇小猫，为其梳理毛发并分享食物",
+            "start": 960,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 17,
+            "describe": "检查山洞附近是否有异常动静",
+            "start": 1020,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 18,
+            "describe": "前往山洞与小羊、小猫汇合检查陷阱痕迹",
+            "start": 1080,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 19,
+            "describe": "在树洞秘密集会，与小熊等人商议团队行动方案",
+            "start": 1140,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 20,
+            "describe": "为小兔子讲述森林传说以安抚其恐惧",
+            "start": 1200,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 21,
+            "describe": "在洞穴内整理地图，标记安全路线",
+            "start": 1260,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 22,
+            "describe": "与小熊共用火堆，讨论下一步行动",
+            "start": 1320,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 23,
+            "describe": "睡觉前为所有盟友留下食物和水",
+            "start": 1380,
+            "duration": 60,
+            "decompose": {}
+          }
+        ]
+      },
+      "associate": {
+        "memory": {
+          "event": [
+            "node_57",
+            "node_56",
+            "node_55",
+            "node_54",
+            "node_53",
+            "node_52",
+            "node_51",
+            "node_50",
+            "node_49",
+            "node_48",
+            "node_46",
+            "node_45",
+            "node_44",
+            "node_43",
+            "node_42",
+            "node_41",
+            "node_23",
+            "node_22",
+            "node_21",
+            "node_20",
+            "node_19",
+            "node_18",
+            "node_17",
+            "node_16",
+            "node_15",
+            "node_14",
+            "node_13",
+            "node_12",
+            "node_11",
+            "node_10",
+            "node_9",
+            "node_8",
+            "node_6",
+            "node_5",
+            "node_4",
+            "node_3",
+            "node_2",
+            "node_1"
+          ],
+          "thought": [
+            "node_40",
+            "node_39",
+            "node_38",
+            "node_37",
+            "node_36",
+            "node_35",
+            "node_34",
+            "node_33",
+            "node_32",
+            "node_31",
+            "node_30",
+            "node_29",
+            "node_28",
+            "node_27",
+            "node_26",
+            "node_25",
+            "node_24",
+            "node_0"
+          ],
+          "chat": [
+            "node_47",
+            "node_7"
+          ]
+        }
+      },
+      "chats": [
+        [
+          "小羊",
+          "小乌龟，你有没有看到Brian的踪迹？我有点害怕，你能帮我确认一下安全吗？"
+        ],
+        [
+          "小烏龜",
+          "小羊別怕，我剛和小兔子確認過，Brian在東北灌木叢活動，電鋸反光很明顯。你背包的金屬反光和光之源有關，得小心點。我守著西入口，你先回溪邊等我消息，有事馬上聯絡小兔子！"
+        ]
+      ],
+      "currently": "小烏龜十分支持小熊尋找光之源的計劃，願意幫助小熊説服小兔子，小松鼠，小羊以及小貓集結團隊，一同尋找光之源。與小熊是最好的朋友",
+      "action": {
+        "event": {
+          "subject": "小烏龜",
+          "predicate": "此时",
+          "object": "检查其他小动物是否需要帮助",
+          "describe": "检查其他小动物是否需要帮助",
+          "address": [
+            "the Ville",
+            "小熊家",
+            "小熊家客廳",
+            "小熊家沙發"
+          ],
+          "emoji": "检查其他小动物是否需要帮助"
+        },
+        "obj_event": {
+          "subject": "小熊家沙發",
+          "predicate": "此时",
+          "object": "闲置中",
+          "describe": "闲置中",
+          "address": [
+            "the Ville",
+            "小熊家",
+            "小熊家客廳",
+            "小熊家沙發"
+          ],
+          "emoji": ""
+        },
+        "start": "20250213-12:45:00",
+        "duration": 10
+      },
+      "coord": [
+        126,
+        232
+      ]
+    },
+    "小熊": {
+      "config_path": "assets\\village\\agents\\小熊\\agent.json",
+      "status": {
+        "poignancy": 56
+      },
+      "schedule": {
+        "create": "20250213-09:30:00",
+        "daily_schedule": [
+          {
+            "idx": 0,
+            "describe": "睡觉",
+            "start": 0,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 1,
+            "describe": "睡觉",
+            "start": 60,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 2,
+            "describe": "睡觉",
+            "start": 120,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 3,
+            "describe": "睡觉",
+            "start": 180,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 4,
+            "describe": "睡觉",
+            "start": 240,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 5,
+            "describe": "睡觉",
+            "start": 300,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 6,
+            "describe": "睡觉",
+            "start": 360,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 7,
+            "describe": "早上7点起床，开始巡逻森林，确保安全并躲避Brian的追捕",
+            "start": 420,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 8,
+            "describe": "与小乌龟见面，讨论森林安全问题",
+            "start": 480,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 9,
+            "describe": "召集小兔子、小松鼠、小羊、小猫到家里，召开会议",
+            "start": 540,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "调整行动计划（根据光之源线索重新规划巡逻路线，规避Brian巡逻节点）",
+                "start": 590,
+                "duration": 5
+              },
+              {
+                "idx": 1,
+                "describe": "启动最终确认程序（加密通讯频道/更换暗号/检查隐蔽装备状态）",
+                "start": 595,
+                "duration": 5
+              },
+              {
+                "idx": 2,
+                "describe": "宣布行动开始并鼓舞士气（强调伪装与信息同步，特别叮嘱小羊背包反光处理方案）",
+                "start": 600,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 10,
+            "describe": "检查会议后的行动计划，准备寻找光之源的物资",
+            "start": 600,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "整理会议记录",
+                "start": 600,
+                "duration": 15
+              },
+              {
+                "idx": 1,
+                "describe": "制定行动计划",
+                "start": 615,
+                "duration": 10
+              },
+              {
+                "idx": 2,
+                "describe": "列出寻找光之源的物资清单",
+                "start": 625,
+                "duration": 10
+              },
+              {
+                "idx": 3,
+                "describe": "采购必需品",
+                "start": 635,
+                "duration": 10
+              },
+              {
+                "idx": 4,
+                "describe": "整理物资并分类",
+                "start": 645,
+                "duration": 5
+              },
+              {
+                "idx": 5,
+                "describe": "检查工具和装备",
+                "start": 650,
+                "duration": 5
+              },
+              {
+                "idx": 6,
+                "describe": "分配任务给队友",
+                "start": 655,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 11,
+            "describe": "巡逻森林边缘，确认小动物们的安全",
+            "start": 660,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "紧急追踪光之源线索（优先规避铁锈味金属区，同步干扰电锯声源）",
+                "start": 690,
+                "duration": 5
+              },
+              {
+                "idx": 1,
+                "describe": "制造金属反光干扰（用藤蔓缠绕陷阱钢索，制造虚假金属反射点）",
+                "start": 695,
+                "duration": 5
+              },
+              {
+                "idx": 2,
+                "describe": "三线撤离部署（小猫沿西侧山脊隐蔽，小乌龟断后掩护，小熊直奔光之源）",
+                "start": 700,
+                "duration": 5
+              },
+              {
+                "idx": 3,
+                "describe": "电磁脉冲干扰（启动随身装置制造短暂电磁场，扰乱陷阱感应器）",
+                "start": 705,
+                "duration": 5
+              },
+              {
+                "idx": 4,
+                "describe": "限时撤离倒计时（同步启动信号弹，用反光物在山谷东侧制造撤离标记）",
+                "start": 710,
+                "duration": 10
+              }
+            ]
+          },
+          {
+            "idx": 12,
+            "describe": "巡逻森林，检查人类破坏的痕迹并确认其他动物安全",
+            "start": 720,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "根据线索排查东北灌木丛陷阱，标记潜在危险区域",
+                "start": 750,
+                "duration": 10
+              },
+              {
+                "idx": 1,
+                "describe": "联合小兔子排查小羊活动区域反光源，确认安全",
+                "start": 760,
+                "duration": 10
+              },
+              {
+                "idx": 2,
+                "describe": "布置临时警戒线，同步小乌龟路线信息，准备应对Brian电锯",
+                "start": 770,
+                "duration": 10
+              }
+            ]
+          },
+          {
+            "idx": 13,
+            "describe": "休息并整理寻找光之源的路线图",
+            "start": 780,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 14,
+            "describe": "与小兔子见面，确认彼此安危并分享情报",
+            "start": 840,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 15,
+            "describe": "与小兔子见面，确认彼此安危并分享情报",
+            "start": 900,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 16,
+            "describe": "巡逻森林，观察Brian的活动踪迹",
+            "start": 960,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 17,
+            "describe": "与小松鼠会合，讨论寻找光之源的细节",
+            "start": 1020,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 18,
+            "describe": "与小松鼠讨论寻找光之源的计划，规划行动路线",
+            "start": 1080,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 19,
+            "describe": "召开全体会议，总结进展并规划下一步行动",
+            "start": 1140,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 20,
+            "describe": "休息并准备夜间巡逻的装备",
+            "start": 1200,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 21,
+            "describe": "继续巡逻森林，躲避Brian的追捕",
+            "start": 1260,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 22,
+            "describe": "睡觉",
+            "start": 1320,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 23,
+            "describe": "睡觉",
+            "start": 1380,
+            "duration": 60,
+            "decompose": {}
+          }
+        ]
+      },
+      "associate": {
+        "memory": {
+          "event": [
+            "node_50",
+            "node_49",
+            "node_47",
+            "node_46",
+            "node_45",
+            "node_44",
+            "node_43",
+            "node_26",
+            "node_24",
+            "node_23",
+            "node_21",
+            "node_20",
+            "node_19",
+            "node_18",
+            "node_17",
+            "node_16",
+            "node_15",
+            "node_14",
+            "node_13",
+            "node_12",
+            "node_11",
+            "node_10",
+            "node_9",
+            "node_8",
+            "node_7",
+            "node_5",
+            "node_4",
+            "node_3",
+            "node_2"
+          ],
+          "thought": [
+            "node_42",
+            "node_41",
+            "node_40",
+            "node_39",
+            "node_38",
+            "node_37",
+            "node_36",
+            "node_35",
+            "node_34",
+            "node_33",
+            "node_32",
+            "node_31",
+            "node_30",
+            "node_29",
+            "node_28",
+            "node_27",
+            "node_0"
+          ],
+          "chat": [
+            "node_48",
+            "node_25",
+            "node_22",
+            "node_6",
+            "node_1"
+          ]
+        }
+      },
+      "chats": [
+        [
+          "小熊",
+          "小兔子！你这边安全吗？Brian的电锯声越来越近了，东北方向灌木丛有陷阱，我们得赶快找到光之源线索！小羊背包的反光是不是和光之源有关？你那边有没有发现什么异常？"
+        ],
+        [
+          "小兔子",
+          "小熊，我这边暂时安全，但东北方向的灌木丛有陷阱，电锯声越来越近了！小羊背包的金属反光确实和Brian的电锯反光有关，我刚刚在东侧巡逻时发现铁锈味的痕迹，光之源的线索可能藏在陷阱后方。我们得立刻合作，否则Brian的陷阱会吞噬整个山谷！"
+        ]
+      ],
+      "currently": "小熊發現了人類破壞森林的行爲，因此在2025年2月13日這天早上9:30開會發表演講，召集了小兔子，小松鼠，小烏龜，小羊，小貓來家裏並打算説服大家一起組隊尋找光之源，並透過光之源許願讓人類遠離森林，從而保護森林的安全，不受人類破壞。與小烏龜是最好的朋友",
+      "action": {
+        "event": {
+          "subject": "小熊",
+          "predicate": "此时",
+          "object": "联合小兔子排查小羊活动区域反光源，确认安全",
+          "describe": "联合小兔子排查小羊活动区域反光源，确认安全",
+          "address": [
+            "the Ville",
+            "小羊家",
+            "小羊家客廳",
+            "小羊家沙發"
+          ],
+          "emoji": "联合小兔子排查小羊活动区域反光源，确认安全"
+        },
+        "obj_event": {
+          "subject": "小羊家沙發",
+          "predicate": "此时",
+          "object": "有反光",
+          "describe": "有反光",
+          "address": [
+            "the Ville",
+            "小羊家",
+            "小羊家客廳",
+            "小羊家沙發"
+          ],
+          "emoji": ""
+        },
+        "start": "20250213-12:40:00",
+        "duration": 10
+      },
+      "coord": [
+        7,
+        177
+      ]
+    },
+    "小羊": {
+      "config_path": "assets\\village\\agents\\小羊\\agent.json",
+      "status": {
+        "poignancy": 0
+      },
+      "schedule": {
+        "create": "20250213-09:30:00",
+        "daily_schedule": [
+          {
+            "idx": 0,
+            "describe": "睡觉",
+            "start": 0,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 1,
+            "describe": "睡觉",
+            "start": 60,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 2,
+            "describe": "睡觉",
+            "start": 120,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 3,
+            "describe": "睡觉",
+            "start": 180,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 4,
+            "describe": "睡觉",
+            "start": 240,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 5,
+            "describe": "睡觉",
+            "start": 300,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 6,
+            "describe": "睡觉",
+            "start": 360,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 7,
+            "describe": "起床并整理衣物，悄悄观察森林边缘",
+            "start": 420,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 8,
+            "describe": "与小熊一同巡逻森林边缘，躲避Brian的追捕",
+            "start": 480,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 9,
+            "describe": "隐蔽在树后观察Brian的动向，因害怕而颤抖",
+            "start": 540,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "听从小熊指挥移动",
+                "start": 590,
+                "duration": 5
+              },
+              {
+                "idx": 1,
+                "describe": "与羊群汇合并汇报安全状况",
+                "start": 595,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 10,
+            "describe": "听从小熊指挥前往溪边，途中不断回头确认安全",
+            "start": 600,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "跟随小熊出发前往溪边",
+                "start": 600,
+                "duration": 5
+              },
+              {
+                "idx": 1,
+                "describe": "途中回头确认是否有Brian靠近",
+                "start": 605,
+                "duration": 5
+              },
+              {
+                "idx": 2,
+                "describe": "用前蹄摩擦树干缓解紧张",
+                "start": 610,
+                "duration": 5
+              },
+              {
+                "idx": 3,
+                "describe": "听从小熊指令调整行进方向",
+                "start": 615,
+                "duration": 5
+              },
+              {
+                "idx": 4,
+                "describe": "检查草丛是否有异常动静",
+                "start": 620,
+                "duration": 5
+              },
+              {
+                "idx": 5,
+                "describe": "用耳朵贴地倾听周围声响",
+                "start": 625,
+                "duration": 5
+              },
+              {
+                "idx": 6,
+                "describe": "回头确认小熊位置以防走散",
+                "start": 630,
+                "duration": 5
+              },
+              {
+                "idx": 7,
+                "describe": "摸索溪边岩石以确认安全",
+                "start": 635,
+                "duration": 5
+              },
+              {
+                "idx": 8,
+                "describe": "用前蹄抓挠地面缓解恐惧",
+                "start": 640,
+                "duration": 5
+              },
+              {
+                "idx": 9,
+                "describe": "保持低姿态靠近溪边等待小兔子",
+                "start": 645,
+                "duration": 5
+              },
+              {
+                "idx": 10,
+                "describe": "听从小熊指挥前往溪边，途中不断回头确认安全",
+                "start": 650,
+                "duration": 10
+              }
+            ]
+          },
+          {
+            "idx": 11,
+            "describe": "在溪边等待小兔子，因紧张而不断舔舐前蹄",
+            "start": 660,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "回头确认周围安全（调整原11:25-11:45时段，缩短15分钟）",
+                "start": 680,
+                "duration": 5
+              },
+              {
+                "idx": 1,
+                "describe": "观察小兔子的动静（调整原11:45-11:55时段，提前10分钟）",
+                "start": 685,
+                "duration": 10
+              },
+              {
+                "idx": 2,
+                "describe": "保持静默观察（新增时段，用于规避金属反光风险）",
+                "start": 695,
+                "duration": 20
+              },
+              {
+                "idx": 3,
+                "describe": "低姿缓步靠近（调整原11:55-12:00时段，增加隐蔽动作）",
+                "start": 715,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 12,
+            "describe": "与小兔子会合，确认彼此安全并讨论躲避Brian的策略",
+            "start": 720,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "在溪边等待小兔子",
+                "start": 720,
+                "duration": 15
+              },
+              {
+                "idx": 1,
+                "describe": "确认彼此安全",
+                "start": 735,
+                "duration": 10
+              },
+              {
+                "idx": 2,
+                "describe": "讨论躲避Brian的策略",
+                "start": 745,
+                "duration": 15
+              },
+              {
+                "idx": 3,
+                "describe": "观察周围环境",
+                "start": 760,
+                "duration": 10
+              },
+              {
+                "idx": 4,
+                "describe": "回顾与小熊的互动",
+                "start": 770,
+                "duration": 10
+              }
+            ]
+          },
+          {
+            "idx": 13,
+            "describe": "跟随小松鼠前往松果林，因小松鼠的误导而犹豫是否深入",
+            "start": 780,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 14,
+            "describe": "在松果林边缘徘徊，低声询问小松鼠是否安全",
+            "start": 840,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 15,
+            "describe": "跟随小松鼠进入松果林，因害怕而不断回头张望",
+            "start": 900,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 16,
+            "describe": "发现小松鼠的误导后慌乱逃离，撞到树干",
+            "start": 960,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 17,
+            "describe": "隐藏在灌木丛中，因恐惧而浑身发抖",
+            "start": 1020,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 18,
+            "describe": "与小乌龟在树洞秘密集会，商议寻找光之源的路线",
+            "start": 1080,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 19,
+            "describe": "与小熊再次汇合，确认Brian的踪迹并规划次日行动",
+            "start": 1140,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 20,
+            "describe": "与小熊一同寻找安全的藏身之处，因害怕而不敢说话",
+            "start": 1200,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 21,
+            "describe": "在萤火虫聚集处用树叶遮掩自己，观察周围动静",
+            "start": 1260,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 22,
+            "describe": "隐蔽在洞穴中，因缺乏主见而不断询问小熊意见",
+            "start": 1320,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 23,
+            "describe": "睡觉前用树叶包裹自己，祈求光之源能实现愿望",
+            "start": 1380,
+            "duration": 60,
+            "decompose": {}
+          }
+        ]
+      },
+      "associate": {
+        "memory": {
+          "event": [
+            "node_27",
+            "node_26",
+            "node_25",
+            "node_24",
+            "node_23",
+            "node_22",
+            "node_21",
+            "node_19",
+            "node_18",
+            "node_17",
+            "node_16",
+            "node_15",
+            "node_14",
+            "node_13",
+            "node_12",
+            "node_11",
+            "node_10",
+            "node_9",
+            "node_8",
+            "node_7",
+            "node_5",
+            "node_4",
+            "node_3",
+            "node_2",
+            "node_1"
+          ],
+          "thought": [
+            "node_44",
+            "node_43",
+            "node_42",
+            "node_41",
+            "node_40",
+            "node_39",
+            "node_38",
+            "node_37",
+            "node_36",
+            "node_35",
+            "node_34",
+            "node_33",
+            "node_32",
+            "node_31",
+            "node_30",
+            "node_29",
+            "node_28",
+            "node_0"
+          ],
+          "chat": [
+            "node_20",
+            "node_6"
+          ]
+        }
+      },
+      "chats": [],
+      "currently": "小羊由於與羊群走散而迷失在森林裏，極度恐懼人類，視小熊為保護它的救命稻草並時刻跟在小熊身邊，願意與小熊一起尋找光之源，希望獲得光之源后許願回到羊群身邊",
+      "action": {
+        "event": {
+          "subject": "小羊",
+          "predicate": "此时",
+          "object": "回顾与小熊的互动",
+          "describe": "回顾与小熊的互动",
+          "address": [
+            "the Ville",
+            "小熊家",
+            "小熊家客廳",
+            "小熊家沙發"
+          ],
+          "emoji": "回顾与小熊的互动"
+        },
+        "obj_event": {
+          "subject": "小熊家沙發",
+          "predicate": "此时",
+          "object": "正在承载回忆",
+          "describe": "正在承载回忆",
+          "address": [
+            "the Ville",
+            "小熊家",
+            "小熊家客廳",
+            "小熊家沙發"
+          ],
+          "emoji": ""
+        },
+        "start": "20250213-12:50:00",
+        "duration": 10
+      },
+      "coord": [
+        126,
+        235
+      ]
+    },
+    "小貓": {
+      "config_path": "assets\\village\\agents\\小貓\\agent.json",
+      "status": {
+        "poignancy": 24
+      },
+      "schedule": {
+        "create": "20250213-09:30:00",
+        "daily_schedule": [
+          {
+            "idx": 0,
+            "describe": "睡觉",
+            "start": 0,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 1,
+            "describe": "睡觉",
+            "start": 60,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 2,
+            "describe": "睡觉",
+            "start": 120,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 3,
+            "describe": "睡觉",
+            "start": 180,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 4,
+            "describe": "睡觉",
+            "start": 240,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 5,
+            "describe": "睡觉",
+            "start": 300,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 6,
+            "describe": "睡觉",
+            "start": 360,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 7,
+            "describe": "起床后在森林边缘观察地形，确认Brian的巡逻路线",
+            "start": 420,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 8,
+            "describe": "与小兔子偶遇，谎称「为族群寻找新栖息地」",
+            "start": 480,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 9,
+            "describe": "隐藏在树丛中观察小熊的行动，确认光之源传闻的真实性",
+            "start": 540,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "选择隐蔽观察点",
+                "start": 540,
+                "duration": 5
+              },
+              {
+                "idx": 1,
+                "describe": "躲避Brian的视线",
+                "start": 545,
+                "duration": 5
+              },
+              {
+                "idx": 2,
+                "describe": "观察小熊行动",
+                "start": 550,
+                "duration": 25
+              },
+              {
+                "idx": 3,
+                "describe": "记录小熊的线索",
+                "start": 575,
+                "duration": 15
+              },
+              {
+                "idx": 4,
+                "describe": "小猫与小熊讨论光之源线索（Brian巡逻频繁）",
+                "start": 590,
+                "duration": 5
+              },
+              {
+                "idx": 5,
+                "describe": "伪装小羊背包反光现象并撤离现场",
+                "start": 595,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 10,
+            "describe": "与小松鼠相遇，假装整理松果并暗示「需要躲避猎人」",
+            "start": 600,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "整理毛发并调整姿势",
+                "start": 600,
+                "duration": 5
+              },
+              {
+                "idx": 1,
+                "describe": "沿路径寻找小松鼠的踪迹",
+                "start": 605,
+                "duration": 10
+              },
+              {
+                "idx": 2,
+                "describe": "与小松鼠对话并编造「躲避猎人」的谎言",
+                "start": 615,
+                "duration": 15
+              },
+              {
+                "idx": 3,
+                "describe": "观察周围环境，警惕Brian的踪迹",
+                "start": 630,
+                "duration": 10
+              },
+              {
+                "idx": 4,
+                "describe": "整理松果并留下「被猎人惊扰」的假象",
+                "start": 640,
+                "duration": 10
+              },
+              {
+                "idx": 5,
+                "describe": "检查溪流旁是否有Brian的陷阱痕迹",
+                "start": 650,
+                "duration": 5
+              },
+              {
+                "idx": 6,
+                "describe": "伪装成自然状态，避免暴露身份",
+                "start": 655,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 11,
+            "describe": "沿溪流寻找水源，警惕Brian的陷阱痕迹",
+            "start": 660,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "检查Brian踪迹（原计划12:05-12:10提前10分钟）",
+                "start": 700,
+                "duration": 15
+              },
+              {
+                "idx": 1,
+                "describe": "返回溪流源头标记安全路径（预留5分钟缓冲时间）",
+                "start": 715,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 12,
+            "describe": "发现捕兽夹痕迹，迅速撤离并通知小乌龟加强警戒",
+            "start": 720,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "检查地面和周围是否有捕兽夹痕迹",
+                "start": 720,
+                "duration": 15
+              },
+              {
+                "idx": 1,
+                "describe": "仔细观察可能的陷阱位置",
+                "start": 735,
+                "duration": 10
+              },
+              {
+                "idx": 2,
+                "describe": "迅速撤离到安全区域",
+                "start": 745,
+                "duration": 20
+              },
+              {
+                "idx": 3,
+                "describe": "通知小乌龟加强警戒",
+                "start": 765,
+                "duration": 10
+              },
+              {
+                "idx": 4,
+                "describe": "确认小乌龟已收到消息",
+                "start": 775,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 13,
+            "describe": "在岩石后方伪装成枯叶，躲避Brian的视线",
+            "start": 780,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 14,
+            "describe": "探索废弃树洞，回忆与主人共处的温暖场景",
+            "start": 840,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 15,
+            "describe": "与小熊秘密会面，试探对方是否知晓人类踪迹",
+            "start": 900,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 16,
+            "describe": "沿着山脊线巡逻，用爪子轻触曾被主人抚摸过的树干",
+            "start": 960,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 17,
+            "describe": "隐藏在灌木丛中，观察Brian的捕兽夹布设位置",
+            "start": 1020,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 18,
+            "describe": "伪装成觅食者接近小羊，借机确认Brian的活动方向",
+            "start": 1080,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 19,
+            "describe": "在月光下舔舐伤口，低声呢喃主人的名字",
+            "start": 1140,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 20,
+            "describe": "沿着萤火虫轨迹移动，避开Brian可能经过的林间小径",
+            "start": 1200,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 21,
+            "describe": "与另一只小猫碰面，用「分享猫薄荷」为由交换躲避技巧",
+            "start": 1260,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 22,
+            "describe": "在空树洞中蜷缩，用爪子紧紧抱住曾属于主人的毛线球",
+            "start": 1320,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 23,
+            "describe": "盯着星空发呆，用尾巴轻拍地面模仿主人的安抚动作",
+            "start": 1380,
+            "duration": 60,
+            "decompose": {}
+          }
+        ]
+      },
+      "associate": {
+        "memory": {
+          "event": [
+            "node_81",
+            "node_80",
+            "node_79",
+            "node_78",
+            "node_77",
+            "node_61",
+            "node_60",
+            "node_59",
+            "node_58",
+            "node_56",
+            "node_55",
+            "node_54",
+            "node_53",
+            "node_52",
+            "node_50",
+            "node_49",
+            "node_48",
+            "node_47",
+            "node_46",
+            "node_45",
+            "node_44",
+            "node_43",
+            "node_42",
+            "node_41",
+            "node_40",
+            "node_22",
+            "node_21",
+            "node_20",
+            "node_19",
+            "node_18",
+            "node_17",
+            "node_16",
+            "node_15",
+            "node_14",
+            "node_13",
+            "node_12",
+            "node_11",
+            "node_10",
+            "node_8",
+            "node_7",
+            "node_6",
+            "node_5",
+            "node_4",
+            "node_3",
+            "node_2",
+            "node_1"
+          ],
+          "thought": [
+            "node_76",
+            "node_75",
+            "node_74",
+            "node_73",
+            "node_72",
+            "node_71",
+            "node_70",
+            "node_69",
+            "node_68",
+            "node_67",
+            "node_66",
+            "node_65",
+            "node_64",
+            "node_63",
+            "node_62",
+            "node_39",
+            "node_38",
+            "node_37",
+            "node_36",
+            "node_35",
+            "node_34",
+            "node_33",
+            "node_32",
+            "node_31",
+            "node_30",
+            "node_29",
+            "node_28",
+            "node_27",
+            "node_26",
+            "node_25",
+            "node_24",
+            "node_23",
+            "node_0"
+          ],
+          "chat": [
+            "node_57",
+            "node_51",
+            "node_9"
+          ]
+        }
+      },
+      "chats": [],
+      "currently": "小貓由於被人類小朋友遺棄后來到森林，十分缺乏安全感并且感到陌生，由於質疑光之源的真實性因此對於小熊尋找光之源的提議半信半疑，但是又希望如果真的找到光之源就許願回到曾經的主人身邊。對同樣是新居民的小貓有好感",
+      "action": {
+        "event": {
+          "subject": "小貓",
+          "predicate": "此时",
+          "object": "通知小乌龟加强警戒",
+          "describe": "通知小乌龟加强警戒",
+          "address": [
+            "the Ville",
+            "小烏龜家",
+            "小烏龜家客廳",
+            "小烏龜家凳子"
+          ],
+          "emoji": "通知小乌龟加强警戒"
+        },
+        "obj_event": {
+          "subject": "小烏龜家凳子",
+          "predicate": "此时",
+          "object": "正在警戒",
+          "describe": "正在警戒",
+          "address": [
+            "the Ville",
+            "小烏龜家",
+            "小烏龜家客廳",
+            "小烏龜家凳子"
+          ],
+          "emoji": ""
+        },
+        "start": "20250213-12:45:00",
+        "duration": 10
+      },
+      "coord": [
+        46,
+        204
+      ]
+    }
+  },
+  "step": 21
+}

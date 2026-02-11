@@ -40,7 +40,7 @@ pip install -r requirements.txt
 
 ```
 cd generative_agents
-python start.py --name sim-test --start "20250213-09:30" --step 10 --stride 10
+python start.py --name sim-test --start "20250213-12:00" --step 30 --stride 5
 ```
 
 參數説明:

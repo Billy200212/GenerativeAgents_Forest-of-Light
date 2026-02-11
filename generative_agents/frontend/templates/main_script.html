@@ -4,9 +4,13 @@
     <meta charset="UTF-8">
     <title>Generative Agents Replay</title>
     <style>
+        /* --- 樣式設置：黑色背景，適配暗色模式 --- */
         body { margin: 0; padding: 0; overflow: hidden; background-color: #222; }
+        /* 遊戲主畫布區域 */
         #game-container { width: 100vw; height: 75vh; border-bottom: 2px solid #444; box-sizing: border-box; }
+        /* 底部占位符（可擴展用於顯示詳情） */
         #bottom-panel-placeholder { width: 100vw; height: 25vh; background-color: #1a1a1a; color: #555; display: flex; align-items: center; justify-content: center; font-family: monospace; }
+        /* 懸浮UI層：包含按鈕、時間顯示和對話框 */
         #ui-layer { position: fixed; top: 20px; left: 20px; z-index: 1000; display: flex; flex-direction: column; gap: 10px; font-family: 'Segoe UI', sans-serif; pointer-events: none; }
         .ui-row { display: flex; gap: 10px; pointer-events: auto; }
         .game-btn { background-color: #ffffcc; border: 2px solid #666; border-radius: 8px; padding: 8px 16px; font-size: 16px; font-weight: bold; color: #333; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.3); transition: all 0.2s ease; }
@@ -16,6 +20,7 @@
     </style>
 </head>
 <body>
+    <!-- UI 元素結構 -->
     <div id="ui-layer">
         <div class="ui-row">
             <button id="btn-play" class="game-btn">▶ Run</button>
@@ -27,32 +32,51 @@
     <div id="game-container"></div>
     <div id="bottom-panel-placeholder"></div>
     <div id="temp_focus" style="display:none;"></div>
+
+    <!-- 引入 Phaser 3 游戲引擎 -->
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
     <script type="text/javascript">
-        // --- Backend Data Injection ---
+        // ==========================================
+        //  後端數據注入 (Jinja2 Templating)
+        // ==========================================
+        // 從 Flask 後端獲取初始數據
         let step = {{ step|tojson }};
         let step_size = {{ sec_per_step|tojson }} * 1000; 
         let zoom = {{ zoom|tojson }};
         if (zoom <= 0) zoom = 0.5;
         let tile_width = 32;
         let movement_speed = {{ play_speed|tojson }};
-        let execute_count_max = tile_width / movement_speed;
+        
+        // [核心設置]：幀同步策略
+        // execute_count_max = 1 意味著前端的每一幀渲染循環 (update)，都對應後端 movement.json 中的一幀數據。
+        // 由於 compress.py 已經將路徑細分為了每秒60幀的平滑坐標，前端不需要做任何插值計算，
+        // 只需要"傻瓜式"地讀取並顯示，這樣保證了絕對的流暢度和數據一致性。
+        let execute_count_max = 1; 
+        
         let execute_count = execute_count_max;
+
+        // all_movement 包含了所有步驟的詳細坐標數據，是個巨大的 JSON 對象
         let all_movement = {{ all_movement|tojson }};
         let datetime_options = { weekday: "long", year: "numeric", month: "long", day: "numeric" };
         let start_datetime = new Date(Date.parse({{ start_datetime|tojson }}));
+
+        // 角色初始位置和名稱
         let persona_names = {{ persona_init_pos|tojson }};
         var spawn_tile_loc = {};
         for (var key in persona_names) { spawn_tile_loc[key] = persona_names[key]; }
-        var personas = {};
-        var pronunciatios = {};
+
+        // 全局變量定義
+        var personas = {};      // 存儲角色 Sprite 對象
+        var pronunciatios = {}; // 存儲角色頭頂的文字對象
         let anims_direction;
-        let pre_anims_direction_dict = {};
-        let movement_target = {};
+        let pre_anims_direction_dict = {}; // 記錄上一次的朝向，用於停止時保持朝向
+        let movement_target = {}; // 當前幀的目標坐標緩存
         let finished = false;
         let paused = true; 
         let camera_locked = false;
         let focused_persona = null;
+
+        // UI 綁定
         const btnPlay = document.getElementById('btn-play');
         const btnConv = document.getElementById('btn-conversation');
         const txtTime = document.getElementById('time-display');
@@ -60,106 +84,106 @@
         let mapWidth = 0;
         let mapHeight = 0;
         const gameContainer = document.getElementById('game-container');
+
+        // ==========================================
+        //  Phaser 遊戲配置
+        // ==========================================
         const config = {
             type: Phaser.AUTO,
             width: gameContainer.clientWidth,
             height: gameContainer.clientHeight,
             parent: "game-container",
             mode: Phaser.Scale.RESIZE,
-            pixelArt: true,
-            physics: { default: "arcade", arcade: { gravity: { y: 0 } } },
+            pixelArt: true, // 像素畫風模式，防止放大時模糊
+            physics: { default: "arcade", arcade: { gravity: { y: 0 } } }, // 頂視角無需重力
             scene: { preload: preload, create: create, update: update }
         };
         const game = new Phaser.Game(config);
         let cursors, player, mainCamera, map;
 
+        // 1. 資源加載階段
         function preload() {
             this.load.crossOrigin = "";
-            // Load Map JSON using the dynamic prefix
+            // 加載地圖文件 (Tiled 格式)
             this.load.tilemapTiledJSON("map", "static/assets/village/tilemap/tilemap.json");
-
-            // [AUTO-GENERATED] Load Tileset Images
+            // 加載地圖素材圖片
             this.load.image("tileset_forestmap", "static/assets/village/tilemap/forestmap.png");
             this.load.image("tileset_blocks", "static/assets/village/tilemap/blocks.png");
-
-
-            // Load Agents
+            // 加載角色動作圖集 (Sprite Atlas)
             this.load.atlas("atlas", "static/assets/village/agents/小烏龜/texture.png", "static/assets/village/agents/sprite.json");
             for (var p in persona_names) {
                 let image_static = "static/assets/village/agents/" + p + "/texture.png";
                 this.load.atlas(p, image_static, "static/assets/village/agents/sprite.json");
             }
         }
-
+        // 2. 場景創建階段
         function create() {
+            // 創建地圖
             map = this.make.tilemap({ key: "map" });
             mapWidth = map.widthInPixels;
             mapHeight = map.heightInPixels;
-            let tileset_group = [];
 
-            // [AUTO-GENERATED] Link Tilesets
+            // 綁定素材集
+            let tileset_group = [];
             const ts_forestmap = map.addTilesetImage("forestmap", "tileset_forestmap");
             if (ts_forestmap) tileset_group.push(ts_forestmap);
             const ts_blocks = map.addTilesetImage("blocks", "tileset_blocks");
-            // Hidden by user setting: blocks.png (Not added to tileset_group)
 
-
-            // [AUTO-GENERATED] Create Layers
-
+            // 定義所有圖層名稱 (根據 Tiled 文件設定)
             const all_layers = ["mainmap","1人類區域","1河流下游","1河流上游","1小熊家","1小兔子家","1小松鼠家","1小烏龜家","1小羊家","1小貓家","1道路","2小熊家客廳","2小熊家臥室","2小兔子家客廳","2小兔子家臥室","2小兔子家菜園","2小松鼠家客廳","2小松鼠家臥室","2小烏龜家客廳","2小烏龜家臥室","2小烏龜家菜園","2小羊家客廳","2小羊家臥室","2小貓家客廳","2小貓家臥室","2神秘領域","3小熊家沙發","3床","3小兔子家沙發","3床","3小松鼠家沙發","3床","3小烏龜家凳子","3床","3小羊家沙發","3床","3小貓家凳子","3床","3光之源","collisions"];
 
+            // 渲染所有圖層
             all_layers.forEach(layerName => {
-                // Create layer using the group of all (non-hidden) tilesets
                 const layer = map.createLayer(layerName, tileset_group, 0, 0);
-                
                 if (layer) {
-                    // Smart Depth: Layers starting with "3" are high
-                    if (layerName.startsWith("3")) {
-                        layer.setDepth(2);
-                    }
-                    // Hide collisions layer specifically if named "collisions"
-                    if (layerName === "collisions") {
-                        layer.setVisible(false); 
-                    }
-                } else {
-                    // This warning is expected for layers using hidden tilesets
-                    // console.warn("Layer not rendered (possibly hidden): " + layerName);
+                    // "3"開頭的圖層通常是傢俱上層（如床頭），設置深度讓角色可以被遮擋
+                    if (layerName.startsWith("3")) { layer.setDepth(2); }
+                    if (layerName === "collisions") { layer.setVisible(false); }
                 }
             });
 
+            // 設置攝像機和隱形主角（用於攝像機跟隨）
             player = this.physics.add.sprite(mapWidth / 2, mapHeight / 2, "atlas", "down").setSize(30, 40);
             player.setVisible(false);
             mainCamera = this.cameras.main;
             mainCamera.startFollow(player);
             mainCamera.setBounds(0, 0, mapWidth, mapHeight);
             mainCamera.setZoom(zoom);
-            cursors = this.input.keyboard.createCursorKeys();
+            cursors = this.input.keyboard.createCursorKeys(); // 綁定鍵盤方向鍵
 
+            // 生成所有角色 Sprite
             for (let i=0; i<Object.keys(spawn_tile_loc).length; i++) {
                 let p_name = Object.keys(spawn_tile_loc)[i];
+                // 將網格坐標轉換為像素坐標
                 let start_pos = [spawn_tile_loc[p_name][0] * tile_width + tile_width / 2, spawn_tile_loc[p_name][1] * tile_width + tile_width];
                 let new_sprite = this.physics.add.sprite(start_pos[0], start_pos[1], p_name, "down").setSize(30, 40).setOffset(0, 0);
                 new_sprite.displayWidth = 40;
-                new_sprite.scaleY = new_sprite.scaleX;
+                new_sprite.scaleY = new_sprite.scaleX; // 保持比例
                 personas[p_name] = new_sprite;
+
+                // 創建角色頭頂的文本框
                 pronunciatios[p_name] = this.add.text(new_sprite.body.x - 15, new_sprite.body.y - 40, "", { font: "18px monospace", fill: "#000000", backgroundColor: "#ffffcc", padding: { x: 4, y: 4}, borderRadius:"10px" }).setDepth(3).setAlpha(0.7);
             }
 
+            // 創建角色行走動畫 (上下左右)
             const anims = this.anims;
             for (let i = 0; i < Object.keys(persona_names).length; i++) {
                 let p_name = Object.keys(persona_names)[i];
-                let fr = movement_speed > 1 ? 8 : 4;
+                let fr = movement_speed > 1 ? 8 : 4; // 根據速度調整幀率
                 ['left', 'right', 'down', 'up'].forEach(dir => {
                     anims.create({ key: `${p_name}-${dir}-walk`, frames: anims.generateFrameNames(p_name, { prefix: `${dir}-walk.`, start: 0, end: 3, zeroPad: 3 }), frameRate: fr, repeat: -1 });
                 });
             }
 
-            // Input handling
+            // --- 鼠標控制邏輯 ---
+            // 中鍵拖動地圖
             let isDragging = false;
             let lastDragPoint = null;
             this.input.on('pointerdown', (pointer) => { if (pointer.middleButtonDown()) { isDragging = true; lastDragPoint = { x: pointer.x, y: pointer.y }; camera_locked = false; focused_persona = null; mainCamera.stopFollow(); } });
             this.input.on('pointermove', (pointer) => { if (isDragging && lastDragPoint) { const dx = (pointer.x - lastDragPoint.x) / mainCamera.zoom; const dy = (pointer.y - lastDragPoint.y) / mainCamera.zoom; mainCamera.scrollX -= dx; mainCamera.scrollY -= dy; lastDragPoint.x = pointer.x; lastDragPoint.y = pointer.y; } });
             this.input.on('pointerup', (pointer) => { if (pointer.middleButtonReleased()) { isDragging = false; lastDragPoint = null; if (!camera_locked) { player.setPosition(mainCamera.worldView.centerX, mainCamera.worldView.centerY); mainCamera.startFollow(player); } } });
+            
+            // 滾輪縮放地圖
             this.input.on('wheel', (pointer, gameObjects, deltaX, deltaY, deltaZ) => {
                 const minZoom = Math.min(mainCamera.width / mapWidth, mainCamera.height / mapHeight);
                 let currentZoom = mainCamera.zoom;
@@ -172,6 +196,7 @@
             setupUI();
         }
 
+        // 輔助函數：確保攝像機不超出地圖邊界
         function checkAndApplyBounds() {
             const scaledMapW = mapWidth * mainCamera.zoom;
             const scaledMapH = mapHeight * mainCamera.zoom;
@@ -191,11 +216,17 @@
             else { btnPlay.innerText = "⏸ Pause"; btnPlay.style.backgroundColor = "#ccffcc"; }
         }
 
+        // ==========================================
+        //  3. 遊戲主循環 (每一幀執行一次)
+        // ==========================================
         function update(time, delta) {
             checkAndApplyBounds();
+
+            // 處理外部聚焦請求（如果有的話）
             let dom_focus = document.getElementById("temp_focus").textContent;
             if (dom_focus !== "") { focused_persona = dom_focus; camera_locked = true; document.getElementById("temp_focus").innerHTML = ""; if (personas[focused_persona]) { mainCamera.startFollow(personas[focused_persona], true, 0.08, 0.08); mainCamera.zoomTo(2, 1000, 'Power2'); } }
             
+            // 鍵盤移動攝像機
             const camSpeed = 500 / mainCamera.zoom;
             if (!camera_locked) {
                 player.body.setVelocity(0);
@@ -207,40 +238,94 @@
             }
 
             if (finished || paused) return;
+
+            // 更新時間顯示
             curr_datetime = new Date(start_datetime.getTime());
             txtTime.innerText = curr_datetime.toLocaleTimeString("en-US", datetime_options);
+
+            // 更新對話框内容
             let key = `${curr_datetime.getFullYear()}${(curr_datetime.getMonth()+1).toString().padStart(2,"0")}${curr_datetime.getDate().toString().padStart(2,"0")}-${curr_datetime.getHours().toString().padStart(2,"0")}:${curr_datetime.getMinutes().toString().padStart(2,"0")}`;
             if (all_movement["conversation"] && all_movement["conversation"][key]) boxConv.innerHTML = `<strong>${key}</strong><br>${all_movement["conversation"][key]}`;
 
+            // --- 核心角色移動邏輯 ---
             for (let i = 0; i < Object.keys(personas).length; i++) {
                 let p_name = Object.keys(personas)[i];
                 let curr_persona = personas[p_name];
                 let curr_pronun = pronunciatios[p_name];
+
+                // 檢查是否有該步驟的數據
                 if (step in all_movement && p_name.replace("_", " ") in all_movement[step]) {
+
+                    // 每個邏輯幀（這裏簡化爲每次 update）讀取一次數據
                     if (execute_count == execute_count_max) {
                         let data = all_movement[step][p_name.replace("_", " ")];
+
+                        // 1. 獲取精確坐標：後端 compress.py 已經做過亞像素插值，所以這裏的坐標是平滑連續的
                         movement_target[p_name] = [ data["movement"][0] * tile_width + tile_width / 2, data["movement"][1] * tile_width + tile_width ];
+                        
+                        // 2. 獲取活動描述：例如 "前往 小熊家"
                         let act = data["action"];
                         curr_pronun.setText(`${p_name}: ${act.length > 15 ? act.substring(0,12)+"..." : act}`);
+                        
+                        // 3. 更新網頁上的詳細信息面板（實時位置和當前活動）
+                        // 注意：這裏的 data["location"] 已經被 compress.py 修復為真實物理位置，而非目的地
                         let descEl = document.getElementById("agent_desc__"+p_name); if(descEl) descEl.innerHTML = all_movement["description"][p_name]["currently"];
                         let actEl = document.getElementById("current_action__"+p_name); if(actEl) actEl.innerHTML = act;
-                        let locEl = document.getElementById("target_address__"+p_name); if(locEl) locEl.innerHTML = data["location"];
+                        let locEl = document.getElementById("target_address__"+p_name); if(locEl) locEl.innerHTML = data["location"]; // 顯示修復後的實時位置
                     }
+
+                    // 執行位置更新
                     if (execute_count > 0 && movement_target[p_name]) {
-                        let tx = movement_target[p_name][0]; let ty = movement_target[p_name][1];
-                        let dx = tx - curr_persona.x; let dy = ty - curr_persona.y;
+                        let tx = movement_target[p_name][0]; 
+                        let ty = movement_target[p_name][1];
+                        let dx = tx - curr_persona.x; 
+                        let dy = ty - curr_persona.y;
                         let isMoving = false;
-                        if (Math.abs(dx) > 0.5) { curr_persona.x += dx > 0 ? movement_speed : -movement_speed; anims_direction = dx > 0 ? 'r' : 'l'; isMoving = true; } 
-                        else if (Math.abs(dy) > 0.5) { curr_persona.y += dy > 0 ? movement_speed : -movement_speed; anims_direction = dy > 0 ? 'd' : 'u'; isMoving = true; }
-                        if (isMoving) { let dirName = anims_direction === 'l' ? 'left' : anims_direction === 'r' ? 'right' : anims_direction === 'u' ? 'up' : 'down'; curr_persona.anims.play(`${p_name}-${dirName}-walk`, true); pre_anims_direction_dict[p_name] = dirName; } 
-                        else { let lastDir = pre_anims_direction_dict[p_name] || 'down'; curr_persona.anims.stop(); curr_persona.setTexture(p_name, `${lastDir}-walk.000`); }
-                        curr_pronun.x = curr_persona.x - 15; curr_pronun.y = curr_persona.y - 40;
+                        
+                        // [終極平滑方案]：直接賦值坐標
+                        // 由於 movement.json 已經包含了所有平滑過渡的幀，
+                        // 前端不需要再做 tween 或插值計算，直接應用坐標即可實現如絲般順滑的移動。
+                        // 這解決了之前"走走停停"的問題，因爲後端填補了所有空閑幀。
+                        curr_persona.x = tx;
+                        curr_persona.y = ty;
+                        
+                        // 根據微小的位移量來判斷並播放行走動畫
+                        if (Math.abs(dx) > 0.001 || Math.abs(dy) > 0.001) { 
+                            isMoving = true;
+                            if (Math.abs(dx) > Math.abs(dy)) {
+                                anims_direction = dx > 0 ? 'r' : 'l'; 
+                            } else {
+                                anims_direction = dy > 0 ? 'd' : 'u'; 
+                            }
+                        }
+                        
+                        // 播放動畫
+                        if (isMoving) { 
+                            let dirName = anims_direction === 'l' ? 'left' : anims_direction === 'r' ? 'right' : anims_direction === 'u' ? 'up' : 'down'; 
+                            curr_persona.anims.play(`${p_name}-${dirName}-walk`, true); 
+                            pre_anims_direction_dict[p_name] = dirName; 
+                        } else { 
+                            // 停止時保持最後的朝向
+                            let lastDir = pre_anims_direction_dict[p_name] || 'down'; 
+                            curr_persona.anims.stop(); 
+                            curr_persona.setTexture(p_name, `${lastDir}-walk.000`); 
+                        }
+                        // 更新頭頂文字位置
+                        curr_pronun.x = curr_persona.x - 15; 
+                        curr_pronun.y = curr_persona.y - 40;
                     }
                 }
             }
+
+            // 幀計數器遞減，當歸零時進入下一個仿真步
             if (execute_count == 0) {
+                // 強制同步位置，防止浮點數誤差積累
                 for (let p in personas) { if (movement_target[p]) { personas[p].x = movement_target[p][0]; personas[p].y = movement_target[p][1]; } }
+                
+                // 重置計數器，步數加一，時間推進
                 execute_count = execute_count_max + 1; step++; start_datetime = new Date(start_datetime.getTime() + step_size);
+                
+                // 檢查是否還有數據，沒有則結束
                 if (!(step in all_movement)) { finished = true; updateBtnState(); }
             }
             execute_count--;
