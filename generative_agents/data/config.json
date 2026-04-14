@@ -13,8 +13,8 @@
             "llm": {
                 "provider": "openai",
                 "model": "gemini-3-flash-preview",
-                "base_url": "",
-                "api_key": ""
+                "base_url": "https://generativelanguage.googleapis.com/v1beta/openai/",
+                "api_key": "API"
             },
             "interval": 1000,
             "poignancy_max": 150
@@ -24,8 +24,8 @@
             "embedding": {
                 "provider": "openai",
                 "model": "gemini-embedding-001",
-                "base_url": "",
-                "api_key": ""
+                "base_url": "https://generativelanguage.googleapis.com/v1beta/openai/",
+                "api_key": "API"
             },
             "retention": 8
         }

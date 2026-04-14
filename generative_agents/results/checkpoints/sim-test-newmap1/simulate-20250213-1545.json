@@ -1,0 +1,3745 @@
+{
+  "stride": 5,
+  "time": "20250213-15:45",
+  "maze": {
+    "path": "assets\\village\\maze.json"
+  },
+  "agent_base": {
+    "percept": {
+      "mode": "box",
+      "vision_r": 8,
+      "att_bandwidth": 8
+    },
+    "schedule": {
+      "max_try": 5,
+      "diversity": 5
+    },
+    "think": {
+      "llm": {
+        "provider": "openai",
+        "model": "gemini-3-flash-preview",
+        "base_url": "https://generativelanguage.googleapis.com/v1beta/openai/",
+        "api_key": "API"
+      },
+      "interval": 1000,
+      "poignancy_max": 150
+    },
+    "chat_iter": 4,
+    "associate": {
+      "embedding": {
+        "provider": "openai",
+        "model": "gemini-embedding-001",
+        "base_url": "https://generativelanguage.googleapis.com/v1beta/openai/",
+        "api_key": "API"
+      },
+      "retention": 8
+    }
+  },
+  "agents": {
+    "Brian": {
+      "config_path": "assets\\village\\agents\\Brian\\agent.json",
+      "status": {
+        "poignancy": 100
+      },
+      "schedule": {
+        "create": "20250213-12:05:00",
+        "daily_schedule": [
+          {
+            "idx": 0,
+            "describe": "睡觉",
+            "start": 0,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 1,
+            "describe": "睡觉",
+            "start": 60,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 2,
+            "describe": "睡觉",
+            "start": 120,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 3,
+            "describe": "睡觉",
+            "start": 180,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 4,
+            "describe": "睡觉",
+            "start": 240,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 5,
+            "describe": "睡觉",
+            "start": 300,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 6,
+            "describe": "睡觉",
+            "start": 360,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 7,
+            "describe": "起床并整理猎枪与狩猎装备",
+            "start": 420,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 8,
+            "describe": "磨利剥皮刀并检查捕兽夹的灵敏度",
+            "start": 480,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 9,
+            "describe": "进入森林深处寻找新鲜的动物脚印",
+            "start": 540,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 10,
+            "describe": "在动物常经过的溪边设置隐蔽的捕兽夹",
+            "start": 600,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 11,
+            "describe": "砍伐挡路的小树林以开辟更广阔的射击视野",
+            "start": 660,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 12,
+            "describe": "追踪大量脚印至动物巢穴附近进行静默蹲守",
+            "start": 720,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "仔细观察地面脚印并辨别动物的行进方向",
+                "start": 720,
+                "duration": 10
+              },
+              {
+                "idx": 1,
+                "describe": "沿著足迹在林间静默穿行以接近动物巢穴",
+                "start": 730,
+                "duration": 15
+              },
+              {
+                "idx": 2,
+                "describe": "确认巢穴的具体位置并评估周边的隐蔽环境",
+                "start": 745,
+                "duration": 10
+              },
+              {
+                "idx": 3,
+                "describe": "潜行至视野开阔的伏击点并清理脚下的枯枝碎叶",
+                "start": 755,
+                "duration": 10
+              },
+              {
+                "idx": 4,
+                "describe": "检查猎枪弹药并调整坐姿进入静默蹲守状态",
+                "start": 765,
+                "duration": 10
+              },
+              {
+                "idx": 5,
+                "describe": "屏息凝神观察巢穴动静等待猎物出现",
+                "start": 775,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 13,
+            "describe": "在小乌龟家门外的道路和花园附近进行埋伏和巡逻",
+            "start": 780,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "潜行至小乌龟家外的道路边缘进行初步观察",
+                "start": 780,
+                "duration": 10
+              },
+              {
+                "idx": 1,
+                "describe": "仔细检查花园四周的围栏和可能的动物出入口",
+                "start": 790,
+                "duration": 10
+              },
+              {
+                "idx": 2,
+                "describe": "确认风向并选择位于下风口的隐蔽灌木丛",
+                "start": 800,
+                "duration": 5
+              },
+              {
+                "idx": 3,
+                "describe": "沿著花园外围进行低姿态巡逻以排除潜在干扰",
+                "start": 805,
+                "duration": 10
+              },
+              {
+                "idx": 4,
+                "describe": "清理埋伏点附近的枯枝败叶以避免移动时发出声响",
+                "start": 815,
+                "duration": 10
+              },
+              {
+                "idx": 5,
+                "describe": "在道路旁的树荫阴影处建立临时的观察点",
+                "start": 825,
+                "duration": 5
+              },
+              {
+                "idx": 6,
+                "describe": "检查猎枪状态并进入高度戒备的埋伏姿态",
+                "start": 830,
+                "duration": 10
+              }
+            ]
+          },
+          {
+            "idx": 14,
+            "describe": "架起猎枪寻找最佳射击角度并保持绝对安静",
+            "start": 840,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "在花园侧翼寻找一个视野开阔且隐蔽的伏击位置",
+                "start": 840,
+                "duration": 10
+              },
+              {
+                "idx": 1,
+                "describe": "检查并调试猎枪的瞄准镜与弹药状态",
+                "start": 850,
+                "duration": 5
+              },
+              {
+                "idx": 2,
+                "describe": "清理射击扇面内可能阻挡视线的杂草和细枝",
+                "start": 855,
+                "duration": 10
+              },
+              {
+                "idx": 3,
+                "describe": "调整卧倒姿势以获得最稳定的射击支撑点",
+                "start": 865,
+                "duration": 10
+              },
+              {
+                "idx": 4,
+                "describe": "利用周围植被对身体和枪管进行最后的伪装处理",
+                "start": 875,
+                "duration": 5
+              },
+              {
+                "idx": 5,
+                "describe": "屏息凝神进入绝对静止状态并观察花园动静",
+                "start": 880,
+                "duration": 10
+              },
+              {
+                "idx": 6,
+                "describe": "保持高度警觉并持续锁定预想的动物出没区域",
+                "start": 890,
+                "duration": 10
+              }
+            ]
+          },
+          {
+            "idx": 15,
+            "describe": "发现动物出没并开始进行残酷的追逐与狩猎",
+            "start": 900,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "屏息观察花园周围的动静并锁定猎物",
+                "start": 900,
+                "duration": 10
+              },
+              {
+                "idx": 1,
+                "describe": "检查猎枪并利用掩体悄悄接近目标",
+                "start": 910,
+                "duration": 10
+              },
+              {
+                "idx": 2,
+                "describe": "瞄准猎物并进行精准的威慑性射击",
+                "start": 920,
+                "duration": 5
+              },
+              {
+                "idx": 3,
+                "describe": "观察受惊动物的逃跑路线并迅速展开追击",
+                "start": 925,
+                "duration": 10
+              },
+              {
+                "idx": 4,
+                "describe": "在密林中高速穿梭以缩短与猎物的距离",
+                "start": 935,
+                "duration": 10
+              },
+              {
+                "idx": 5,
+                "describe": "追踪林间留下的血迹并享受狩猎的残酷乐趣",
+                "start": 945,
+                "duration": 10
+              },
+              {
+                "idx": 6,
+                "describe": "将猎物驱赶至森林出口的预定方向",
+                "start": 955,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 16,
+            "describe": "在森林出口处补设陷阱以防猎物逃脱",
+            "start": 960,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 17,
+            "describe": "搜寻受伤动物留下的血迹",
+            "start": 1020,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 18,
+            "describe": "检查全天设置的所有捕兽夹是否有收获",
+            "start": 1080,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 19,
+            "describe": "拖回捕获的猎物并清理现场痕迹",
+            "start": 1140,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 20,
+            "describe": "保养武器并规划明天的伐木与狩猎路线",
+            "start": 1200,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 21,
+            "describe": "进食并处理捕获的猎物皮毛",
+            "start": 1260,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 22,
+            "describe": "检查房屋周边的警戒装置并准备休息",
+            "start": 1320,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 23,
+            "describe": "睡觉",
+            "start": 1380,
+            "duration": 60,
+            "decompose": {}
+          }
+        ]
+      },
+      "associate": {
+        "memory": {
+          "event": [
+            "node_31",
+            "node_30",
+            "node_29",
+            "node_28",
+            "node_27",
+            "node_26",
+            "node_25",
+            "node_24",
+            "node_23",
+            "node_22",
+            "node_21",
+            "node_20",
+            "node_19",
+            "node_18",
+            "node_17",
+            "node_16",
+            "node_15",
+            "node_14",
+            "node_13",
+            "node_12",
+            "node_11",
+            "node_10",
+            "node_9",
+            "node_8",
+            "node_7",
+            "node_6",
+            "node_5",
+            "node_4",
+            "node_3",
+            "node_2",
+            "node_1"
+          ],
+          "thought": [
+            "node_0"
+          ],
+          "chat": []
+        }
+      },
+      "chats": [],
+      "currently": "Brian此时在森林中发现了大量动物脚印，因此他沿著道路并跟随脚印逐渐靠近小乌龟的房子，手里拿著猎枪寻找最佳的射击角度",
+      "action": {
+        "event": {
+          "subject": "Brian",
+          "predicate": "此时",
+          "object": "在密林中高速穿梭以缩短与猎物的距离",
+          "describe": "在密林中高速穿梭以缩短与猎物的距离",
+          "address": [
+            "the Ville",
+            "小乌龟家",
+            "小乌龟家庭院",
+            "小乌龟家池塘"
+          ],
+          "emoji": "在密林中高速穿梭以缩短与猎物的距离"
+        },
+        "obj_event": {
+          "subject": "小乌龟家池塘",
+          "predicate": "此时",
+          "object": "被快速掠过",
+          "describe": "被快速掠过",
+          "address": [
+            "the Ville",
+            "小乌龟家",
+            "小乌龟家庭院",
+            "小乌龟家池塘"
+          ],
+          "emoji": ""
+        },
+        "start": "20250213-15:35:00",
+        "duration": 10
+      },
+      "coord": [
+        115,
+        63
+      ]
+    },
+    "小兔子": {
+      "config_path": "assets\\village\\agents\\小兔子\\agent.json",
+      "status": {
+        "poignancy": 133
+      },
+      "schedule": {
+        "create": "20250213-12:05:00",
+        "daily_schedule": [
+          {
+            "idx": 0,
+            "describe": "睡觉",
+            "start": 0,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 1,
+            "describe": "睡觉",
+            "start": 60,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 2,
+            "describe": "睡觉",
+            "start": 120,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 3,
+            "describe": "睡觉",
+            "start": 180,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 4,
+            "describe": "睡觉",
+            "start": 240,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 5,
+            "describe": "睡觉",
+            "start": 300,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 6,
+            "describe": "睡觉",
+            "start": 360,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 7,
+            "describe": "起床並在住所周圍進行初步偵查",
+            "start": 420,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 8,
+            "describe": "深入森林搜集關於 Brian 伐木點與陷阱的情報",
+            "start": 480,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 9,
+            "describe": "隱蔽觀察森林邊緣，記錄任何人類入侵的細節",
+            "start": 540,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 10,
+            "describe": "整理情報，為中午的會議準備撤退路線草圖",
+            "start": 600,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 11,
+            "describe": "秘密前往小烏龜家，途中確認路徑安全且未被跟蹤",
+            "start": 660,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 12,
+            "describe": "在小烏龜家客廳與小熊、小烏龜討論光之源與 Brian 的動向",
+            "start": 720,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "结合上午搜集的情报，深入分析 Brian 最近的动向规律，推演其是否已通过内鬼获知行动",
+                "start": 736,
+                "duration": 9
+              },
+              {
+                "idx": 1,
+                "describe": "针对小熊提及的细节提出质疑，通过逻辑测试观察小猫是否试图引导话题或掩饰真相",
+                "start": 745,
+                "duration": 5
+              },
+              {
+                "idx": 2,
+                "describe": "假装低头记录，利用余光及反光物体严密监视小猫，记录其与小羊之间任何可疑的眼神交流",
+                "start": 750,
+                "duration": 12
+              },
+              {
+                "idx": 3,
+                "describe": "与小乌龟进一步交换关于光之源位置的看法，评估现有信息是否为人类故意释放的诱饵",
+                "start": 762,
+                "duration": 5
+              },
+              {
+                "idx": 4,
+                "describe": "结合小乌龟分享的秘密通道，向大家提出三条极隐秘的撤退路线，并暗中观察小猫对路线的反应",
+                "start": 767,
+                "duration": 9
+              },
+              {
+                "idx": 5,
+                "describe": "整理会议要点，以更高标准再次确认门窗死角，排除可能存在的针对性监听设备，防范行踪泄露",
+                "start": 776,
+                "duration": 4
+              }
+            ]
+          },
+          {
+            "idx": 13,
+            "describe": "繼續參加緊急會議，評估尋找光之源的風險並提出撤退方案",
+            "start": 780,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "整理并确认全员对撤退路线及应急信号的掌握情况，暗中观察小猫在听到撤退计划后的反应",
+                "start": 836,
+                "duration": 3
+              },
+              {
+                "idx": 1,
+                "describe": "简要清点随身装备，调整心态，准备带领团队出发寻找“光之源”，同时通过眼神向小羊确认监视任务开始",
+                "start": 839,
+                "duration": 1
+              }
+            ]
+          },
+          {
+            "idx": 14,
+            "describe": "在會議中觀察小羊與小貓的言行，尋找可能的間諜嫌疑",
+            "start": 840,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "進入密道並由小兔子在隊尾進行最後的安全確認，消除入口痕跡，防止被布萊恩的眼線追蹤",
+                "start": 896,
+                "duration": 2
+              },
+              {
+                "idx": 1,
+                "describe": "隊伍在密道中保持高度靜默推進，小兔子邊殿後邊留意隊員動態，確保全員在 15:00 前安全深入密道，持續向「光之源」方向前進",
+                "start": 898,
+                "duration": 2
+              }
+            ]
+          },
+          {
+            "idx": 15,
+            "describe": "開始跟蹤小羊與小貓，調查他們是否與人類有秘密接觸",
+            "start": 900,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "继续保持警惕距离，利用森林植被掩护，在垫后位置严密跟踪进入密道的同伴行踪",
+                "start": 911,
+                "duration": 5
+              },
+              {
+                "idx": 1,
+                "describe": "仔细检查众人经过的路径，寻找是否有故意丢弃的联络信物或指向“光之源”外的错误标记",
+                "start": 916,
+                "duration": 5
+              },
+              {
+                "idx": 2,
+                "describe": "观察小羊与小猫在复杂地形中是否有反侦察行为，或确认两人是否有异常的眼神交流",
+                "start": 921,
+                "duration": 10
+              },
+              {
+                "idx": 3,
+                "describe": "记录众人停留的位置，分析该处是否可能为人类眼线的接头地点或预设的伏击圈",
+                "start": 931,
+                "duration": 10
+              },
+              {
+                "idx": 4,
+                "describe": "屏息凝神靠近两人，试图窃听关于 Brian 动向及“光之源”真实意图的私密对话",
+                "start": 941,
+                "duration": 10
+              },
+              {
+                "idx": 5,
+                "describe": "整理初步怀疑证据，同时在森林边缘快速搜寻捕兽夹，确保全员撤离路线的绝对安全",
+                "start": 951,
+                "duration": 9
+              }
+            ]
+          },
+          {
+            "idx": 16,
+            "describe": "前往森林邊緣偵查 Brian 是否設置了新的捕獸夾",
+            "start": 960,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 17,
+            "describe": "監視森林外圍的動靜，確保 Brian 沒有靠近動物核心區",
+            "start": 1020,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 18,
+            "describe": "檢查森林內部的隱蔽通訊標記，確認其他居民的安危",
+            "start": 1080,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 19,
+            "describe": "返回隱蔽據點，分析今日觀察到的所有可疑細節",
+            "start": 1140,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 20,
+            "describe": "加固住所防禦，對周圍環境保持高度警覺",
+            "start": 1200,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 21,
+            "describe": "進行深夜前的最後一次偵查，防範 Brian 的夜間偷襲",
+            "start": 1260,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 22,
+            "describe": "保持高度警惕，在隱蔽處監聽森林深處的異常動靜",
+            "start": 1320,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 23,
+            "describe": "整理今日搜集的情報，規劃明日的偵查路線",
+            "start": 1380,
+            "duration": 60,
+            "decompose": {}
+          }
+        ]
+      },
+      "associate": {
+        "memory": {
+          "event": [
+            "node_203",
+            "node_201",
+            "node_200",
+            "node_199",
+            "node_198",
+            "node_197",
+            "node_195",
+            "node_194",
+            "node_193",
+            "node_192",
+            "node_191",
+            "node_190",
+            "node_189",
+            "node_188",
+            "node_186",
+            "node_185",
+            "node_184",
+            "node_183",
+            "node_182",
+            "node_181",
+            "node_163",
+            "node_162",
+            "node_161",
+            "node_160",
+            "node_159",
+            "node_158",
+            "node_157",
+            "node_155",
+            "node_154",
+            "node_152",
+            "node_151",
+            "node_150",
+            "node_149",
+            "node_147",
+            "node_146",
+            "node_145",
+            "node_144",
+            "node_143",
+            "node_142",
+            "node_141",
+            "node_139",
+            "node_138",
+            "node_137",
+            "node_119",
+            "node_118",
+            "node_117",
+            "node_116",
+            "node_114",
+            "node_113",
+            "node_112",
+            "node_111",
+            "node_110",
+            "node_109",
+            "node_108",
+            "node_107",
+            "node_106",
+            "node_105",
+            "node_104",
+            "node_103",
+            "node_102",
+            "node_101",
+            "node_100",
+            "node_98",
+            "node_97",
+            "node_96",
+            "node_95",
+            "node_94",
+            "node_93",
+            "node_92",
+            "node_91",
+            "node_72",
+            "node_71",
+            "node_70",
+            "node_69",
+            "node_68",
+            "node_67",
+            "node_66",
+            "node_65",
+            "node_64",
+            "node_63",
+            "node_62",
+            "node_61",
+            "node_60",
+            "node_59",
+            "node_58",
+            "node_57",
+            "node_56",
+            "node_55",
+            "node_54",
+            "node_53",
+            "node_52",
+            "node_51",
+            "node_50",
+            "node_49",
+            "node_48",
+            "node_47",
+            "node_46",
+            "node_45",
+            "node_44",
+            "node_43",
+            "node_25",
+            "node_24",
+            "node_23",
+            "node_22",
+            "node_21",
+            "node_20",
+            "node_19",
+            "node_18",
+            "node_17",
+            "node_16",
+            "node_15",
+            "node_14",
+            "node_13",
+            "node_12",
+            "node_10",
+            "node_9",
+            "node_8",
+            "node_7",
+            "node_6",
+            "node_5",
+            "node_3",
+            "node_2"
+          ],
+          "thought": [
+            "node_180",
+            "node_179",
+            "node_178",
+            "node_177",
+            "node_176",
+            "node_175",
+            "node_174",
+            "node_173",
+            "node_172",
+            "node_171",
+            "node_170",
+            "node_169",
+            "node_168",
+            "node_167",
+            "node_166",
+            "node_165",
+            "node_164",
+            "node_136",
+            "node_135",
+            "node_134",
+            "node_133",
+            "node_132",
+            "node_131",
+            "node_130",
+            "node_129",
+            "node_128",
+            "node_127",
+            "node_126",
+            "node_125",
+            "node_124",
+            "node_123",
+            "node_122",
+            "node_121",
+            "node_120",
+            "node_90",
+            "node_89",
+            "node_88",
+            "node_87",
+            "node_86",
+            "node_85",
+            "node_84",
+            "node_83",
+            "node_82",
+            "node_81",
+            "node_80",
+            "node_79",
+            "node_78",
+            "node_77",
+            "node_76",
+            "node_75",
+            "node_74",
+            "node_42",
+            "node_41",
+            "node_40",
+            "node_39",
+            "node_38",
+            "node_37",
+            "node_36",
+            "node_35",
+            "node_34",
+            "node_33",
+            "node_32",
+            "node_31",
+            "node_30",
+            "node_29",
+            "node_28",
+            "node_27",
+            "node_26",
+            "node_0"
+          ],
+          "chat": [
+            "node_202",
+            "node_196",
+            "node_187",
+            "node_156",
+            "node_153",
+            "node_148",
+            "node_140",
+            "node_115",
+            "node_99",
+            "node_73",
+            "node_11",
+            "node_4",
+            "node_1"
+          ]
+        }
+      },
+      "chats": [
+        [
+          "小烏龜",
+          "小兔子，我明白你是在考驗大家的反應，謹慎些確實能保命。但布萊恩的電鋸聲已經越來越近了，我們這幫老小不能再耽擱。大家放心，我這老骨頭會親自帶路走那些最隱蔽的密道，絕對保證大家的安全。現在最重要的是大家要一條心，跟著小熊趕緊出發去尋找『光之源』，那才是我們森林最後的希望啊。"
+        ],
+        [
+          "小兔子",
+          "小烏龜，謹慎是生存的唯一法則，剛才的試探只是為了確保我們的計劃不會被某些『意外』洩露。既然你保證了密道的安全性，我建議立刻分組撤離，由我負責殿後監控任何可疑的動向。小熊，尋找『光之源』的行動不能再拖了，布萊恩的電鋸聲隨時可能切斷我們的退路，大家必須保持絕對警惕，絕不能回頭！"
+        ],
+        [
+          "小烏龜",
+          "小兔子，時間真的不多了，我這把老骨頭都能感覺到地面在微微顫抖，那是布萊恩的電鋸在逼近。既然你已經確認好了撤離細節，我們就立即出發吧。我會帶頭走那條最隱蔽的密道，後方就全靠你警惕了。大家一定要跟緊，只要我們能找到『光之源』，這片森林就一定能保住。別怕，我們團結在一起，一定能平安穿過密道的。"
+        ],
+        [
+          "小兔子",
+          "明白，我會負責殿後。但我還是要提醒，隊伍裡必須保持絕對的安靜，尤其是新來的幾位，我會盯緊他們的。我已經規劃好了三條備選的撤退路線，萬一密道出口被布萊恩堵住，我們必須立刻轉向。小烏龜，你帶路時務必留意地面震動的頻率，我總覺得這附近還有別的眼線。大家動作快，光之源是我們最後的機會了。"
+        ],
+        [
+          "小烏龜",
+          "小兔子，別看了，我這老骨頭雖然動作慢，但也能感覺到林子裡的氣氛越來越壓抑。你的謹慎很有道理，但我們得趕在布萊恩的電鋸聲逼近前動身。密道已經準備好了，大家都在等著我們出發尋找『光之源』，我們必須抓緊時間，確保每個人都能安全撤離。"
+        ],
+        [
+          "小兔子",
+          "我明白，小烏龜。雖然時間緊迫，但越是這種時候越不能放鬆警惕。我會負責墊後，但我建議撤退時不要走直線，必須經過我剛才標記的那幾個隱蔽點。另外，我還是不放心小羊和小貓，我會一邊撤離一邊盯緊他們。如果發現任何不對勁，我會立刻發出信號，到時候你們別回頭，直接往『光之源』的方向跑。"
+        ],
+        [
+          "小熊",
+          "小兔子，看到你已经在掩护位置就位我就放心了。接下来的撤离过程，后方的安全就全交给你了，一定要警惕布莱恩的动静，也要留意队伍里有没有异常。我和小乌龟现在立刻动身去河流上游寻找‘光之源’的线索，那是我们唯一的希望。记住，如果发现危险立刻吹哨子联络，我们绝不会丢下任何一个伙伴，森林的未来就看我们的了！"
+        ],
+        [
+          "小兔子",
+          "放心，我会守好后方，任何风吹草动都逃不过我的眼睛。布莱恩的电锯声目前还在远处，但我更担心队伍内部——我会替你死死盯着那两个新来的。你们去上游千万要小心，那里地势开阔容易暴露，一旦发现异常我会立刻吹哨。记住，除了我们几个，别轻易相信任何人，我会确保撤退路线随时可用。"
+        ]
+      ],
+      "currently": "小兔子正在【小乌龟家客厅】聼小熊与小乌龟的计划，并正在评估是否跟随小熊寻找光之源守护森林。它一边听小熊开会，一边留意并观察小羊与小猫，试图找出谁可能是人类的眼线。它准备在会议上提出关于撤退路线的建议",
+      "action": {
+        "event": {
+          "subject": "小兔子",
+          "predicate": "对话",
+          "object": "小熊",
+          "describe": "小熊与小乌龟前往上游寻找“光之源”。小兔子负责后方掩护，既要警惕敌人布莱恩，也要监视队内新人防范内鬼。双方约定以哨声为号，确保撤离安全，共同守护森林的未来。",
+          "address": [
+            "the Ville",
+            "小乌龟家",
+            "小乌龟家客厅",
+            "小乌龟家沙发"
+          ],
+          "emoji": "💬"
+        },
+        "obj_event": null,
+        "start": "20250213-15:10:00",
+        "duration": 1
+      },
+      "coord": [
+        41,
+        59
+      ]
+    },
+    "小松鼠": {
+      "config_path": "assets\\village\\agents\\小松鼠\\agent.json",
+      "status": {
+        "poignancy": 42
+      },
+      "schedule": {
+        "create": "20250213-12:05:00",
+        "daily_schedule": [
+          {
+            "idx": 0,
+            "describe": "睡觉",
+            "start": 0,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 1,
+            "describe": "睡觉",
+            "start": 60,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 2,
+            "describe": "睡觉",
+            "start": 120,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 3,
+            "describe": "睡觉",
+            "start": 180,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 4,
+            "describe": "睡觉",
+            "start": 240,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 5,
+            "describe": "睡觉",
+            "start": 300,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 6,
+            "describe": "睡觉",
+            "start": 360,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 7,
+            "describe": "起床并观察树下是否有伐木工 Brian 留下的捕兽夹",
+            "start": 420,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 8,
+            "describe": "在高处巡视森林，确认 Brian 的位置以确保稍后出行的安全",
+            "start": 480,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 9,
+            "describe": "在森林各处游荡，向动物们散播“小猫是人类内鬼”的谣言",
+            "start": 540,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 10,
+            "describe": "偶遇小兔子，叮嘱她躲避 Brian 的追捕，并暗示森林中有人在与人类勾结",
+            "start": 600,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 11,
+            "describe": "确认前往小乌龟家的路线安全，避开所有人类可能出现的伐木区",
+            "start": 660,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 12,
+            "describe": "在小乌龟家参加会议，当众指责小猫有“人类的臭味”并挑拨大家的关系",
+            "start": 720,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "突然跳到高处指着小猫，大声指责其身上有“人类的臭味”",
+                "start": 741,
+                "duration": 10
+              },
+              {
+                "idx": 1,
+                "describe": "展示自己断掉的一半尾巴，控诉人类的残暴以煽动仇恨",
+                "start": 751,
+                "duration": 10
+              },
+              {
+                "idx": 2,
+                "describe": "针对小猫的辩解进行言语挑唆，诱导大家产生猜忌",
+                "start": 761,
+                "duration": 10
+              },
+              {
+                "idx": 3,
+                "describe": "观察现场陷入混乱与恐慌的氛围，确认挑拨成功，并与小兔子交换眼神确认撤退路线",
+                "start": 771,
+                "duration": 9
+              }
+            ]
+          },
+          {
+            "idx": 13,
+            "describe": "在会议中假意支持小熊寻找光之源，实则暗中观察谁最可能威胁到自己的计划",
+            "start": 780,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "继续完成对在座动物的评估，重点观察谁对小乌龟的提议反应过激，以此判断谁最可能威胁到自己与小兔子的计划",
+                "start": 818,
+                "duration": 4
+              },
+              {
+                "idx": 1,
+                "describe": "借小乌龟提到的“伐木威胁”顺势而为，再次散布关于“内鬼”的隐晦担忧，利用恐慌心理削弱小乌龟建立的信任，为煽动情绪做铺垫",
+                "start": 822,
+                "duration": 9
+              },
+              {
+                "idx": 2,
+                "describe": "悄悄向客厅边缘挪动，在监视可疑者的同时重点警惕布莱恩的动向，为接下来的提前离场寻找最佳时机",
+                "start": 831,
+                "duration": 9
+              }
+            ]
+          },
+          {
+            "idx": 14,
+            "describe": "提前溜出会议现场，去秘密地点藏匿坚果，防止被 Brian 或其他动物发现",
+            "start": 840,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "强忍内讧后的不快，利用对地形的熟悉甩掉小猫，加速逃离电锯轰鸣声区域",
+                "start": 841,
+                "duration": 9
+              },
+              {
+                "idx": 1,
+                "describe": "警惕地在灌木丛中绕行，确认已彻底甩掉小猫，且未被小熊跟踪",
+                "start": 850,
+                "duration": 5
+              },
+              {
+                "idx": 2,
+                "describe": "快速奔向位于森林深处老橡树根部的秘密藏匿点",
+                "start": 855,
+                "duration": 10
+              },
+              {
+                "idx": 3,
+                "describe": "拨开遮挡的枯叶，挖开泥土检查之前的坚果是否安全",
+                "start": 865,
+                "duration": 5
+              },
+              {
+                "idx": 4,
+                "describe": "将今天收集的优质坚果小心地放入坑中并压实填埋",
+                "start": 870,
+                "duration": 10
+              },
+              {
+                "idx": 5,
+                "describe": "采集周围的苔藓和浮土，对藏匿点进行精细的伪装",
+                "start": 880,
+                "duration": 10
+              },
+              {
+                "idx": 6,
+                "describe": "仔细清理爪子上的泥土和气味，防止被 Brian 发现",
+                "start": 890,
+                "duration": 5
+              },
+              {
+                "idx": 7,
+                "describe": "离开藏匿点，向 Brian 伐木区附近的高大杉树移动",
+                "start": 895,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 15,
+            "describe": "爬上高枝监视 Brian 的伐木进度，记录他的活动规律以便日后报复",
+            "start": 900,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "穿过密林前往 Brian 的伐木作业区",
+                "start": 900,
+                "duration": 10
+              },
+              {
+                "idx": 1,
+                "describe": "挑选一棵视野开阔且足以隐藏断尾的高大松树",
+                "start": 910,
+                "duration": 10
+              },
+              {
+                "idx": 2,
+                "describe": "攀爬至高处并调整姿态，确保能看清 Brian 的一举一动",
+                "start": 920,
+                "duration": 5
+              },
+              {
+                "idx": 3,
+                "describe": "屏息观察 Brian 砍伐树木的频率和使用的工具",
+                "start": 925,
+                "duration": 15
+              },
+              {
+                "idx": 4,
+                "describe": "记录 Brian 休息的时间点以及他存放伐木工具的位置",
+                "start": 940,
+                "duration": 10
+              },
+              {
+                "idx": 5,
+                "describe": "观察伐木区周围是否有其他人类或陷阱的痕迹",
+                "start": 950,
+                "duration": 5
+              },
+              {
+                "idx": 6,
+                "describe": "悄无声息地从高处下撤，准备前往与小羊偶遇的地点",
+                "start": 955,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 16,
+            "describe": "遇到小羊，询问她是否安全，并趁机向她散布关于光之源的虚假情报",
+            "start": 960,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 17,
+            "describe": "最后一次检查森林各处的谣言传播情况，确保动物们陷入猜忌",
+            "start": 1020,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 18,
+            "describe": "回到高处的树洞，在对人类的仇恨中进入梦乡",
+            "start": 1080,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 19,
+            "describe": "睡觉",
+            "start": 1140,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 20,
+            "describe": "睡觉",
+            "start": 1200,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 21,
+            "describe": "睡觉",
+            "start": 1260,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 22,
+            "describe": "睡觉",
+            "start": 1320,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 23,
+            "describe": "睡觉",
+            "start": 1380,
+            "duration": 60,
+            "decompose": {}
+          }
+        ]
+      },
+      "associate": {
+        "memory": {
+          "event": [
+            "node_155",
+            "node_154",
+            "node_153",
+            "node_152",
+            "node_151",
+            "node_150",
+            "node_149",
+            "node_147",
+            "node_129",
+            "node_128",
+            "node_127",
+            "node_126",
+            "node_125",
+            "node_124",
+            "node_123",
+            "node_122",
+            "node_121",
+            "node_120",
+            "node_119",
+            "node_118",
+            "node_117",
+            "node_116",
+            "node_115",
+            "node_114",
+            "node_113",
+            "node_112",
+            "node_111",
+            "node_110",
+            "node_108",
+            "node_106",
+            "node_105",
+            "node_104",
+            "node_103",
+            "node_102",
+            "node_101",
+            "node_83",
+            "node_82",
+            "node_81",
+            "node_80",
+            "node_79",
+            "node_78",
+            "node_77",
+            "node_76",
+            "node_75",
+            "node_73",
+            "node_72",
+            "node_71",
+            "node_70",
+            "node_69",
+            "node_68",
+            "node_67",
+            "node_66",
+            "node_65",
+            "node_64",
+            "node_63",
+            "node_62",
+            "node_61",
+            "node_60",
+            "node_59",
+            "node_58",
+            "node_57",
+            "node_56",
+            "node_55",
+            "node_54",
+            "node_53",
+            "node_52",
+            "node_51",
+            "node_50",
+            "node_49",
+            "node_31",
+            "node_30",
+            "node_29",
+            "node_28",
+            "node_27",
+            "node_26",
+            "node_25",
+            "node_24",
+            "node_23",
+            "node_22",
+            "node_21",
+            "node_20",
+            "node_19",
+            "node_17",
+            "node_16",
+            "node_15",
+            "node_14",
+            "node_13",
+            "node_12",
+            "node_11",
+            "node_10",
+            "node_9",
+            "node_8",
+            "node_7",
+            "node_6",
+            "node_5",
+            "node_4",
+            "node_3",
+            "node_2",
+            "node_1"
+          ],
+          "thought": [
+            "node_146",
+            "node_145",
+            "node_144",
+            "node_143",
+            "node_142",
+            "node_141",
+            "node_140",
+            "node_139",
+            "node_138",
+            "node_137",
+            "node_136",
+            "node_135",
+            "node_134",
+            "node_133",
+            "node_132",
+            "node_131",
+            "node_130",
+            "node_100",
+            "node_99",
+            "node_98",
+            "node_97",
+            "node_96",
+            "node_95",
+            "node_94",
+            "node_93",
+            "node_92",
+            "node_91",
+            "node_90",
+            "node_89",
+            "node_88",
+            "node_87",
+            "node_86",
+            "node_85",
+            "node_84",
+            "node_48",
+            "node_47",
+            "node_46",
+            "node_45",
+            "node_44",
+            "node_43",
+            "node_42",
+            "node_41",
+            "node_40",
+            "node_39",
+            "node_38",
+            "node_37",
+            "node_36",
+            "node_35",
+            "node_34",
+            "node_33",
+            "node_32",
+            "node_0"
+          ],
+          "chat": [
+            "node_148",
+            "node_109",
+            "node_107",
+            "node_74",
+            "node_18"
+          ]
+        }
+      },
+      "chats": [
+        [
+          "小貓",
+          "如果你打算趁大家不注意溜走，那你的演技可真拙劣。與其把那雙神經質的眼睛盯在我身上，不如多聽聽外面電鋸的聲音——布萊恩可不會因為你嗓門大就放過你。既然都要去找『光之源』，就收起你那套無聊的猜忌，我可沒興趣陪你們玩什麼抓內鬼的遊戲，真是不優雅。"
+        ],
+        [
+          "小松鼠",
+          "優雅？在電鋸的轟鳴聲面前談優雅，真像是那些被人類豢養的寵物才會有的口吻。我這截斷尾每跳動一下，都在提醒我人類有多殘暴，而你身上那股『味道』可騙不了我的鼻子！別以為能用幾句冷嘲熱諷就掩蓋你的嫌疑，布萊恩的電鋸聲越來越近了，誰知道是不是你引來的？我會盯死你的，在找到『光之源』之前，任何想把我們賣給人類的傢伙都別想得逞！"
+        ]
+      ],
+      "currently": "小松鼠正在【小乌龟家客厅】假意响应并支持小熊寻找光之源的号召。实则计划藉助小熊找到光之源后抢先许愿让人类灭绝。在会议中小松鼠指责小猫身上有“人类的臭味”，它试图让大家感到恐慌",
+      "action": {
+        "event": {
+          "subject": "小松鼠",
+          "predicate": "此时",
+          "object": "穿过密林前往 Brian 的伐木作业区",
+          "describe": "穿过密林前往 Brian 的伐木作业区",
+          "address": [
+            "the Ville",
+            "Brian家",
+            "Brian家后院",
+            "Brian砍伐的木材堆"
+          ],
+          "emoji": "穿过密林前往 Brian 的伐木作业区"
+        },
+        "obj_event": {
+          "subject": "Brian砍伐的木材堆",
+          "predicate": "此时",
+          "object": "被整齐地堆放着",
+          "describe": "被整齐地堆放着",
+          "address": [
+            "the Ville",
+            "Brian家",
+            "Brian家后院",
+            "Brian砍伐的木材堆"
+          ],
+          "emoji": ""
+        },
+        "start": "20250213-15:00:00",
+        "duration": 10
+      },
+      "coord": [
+        101,
+        25
+      ]
+    },
+    "小乌龟": {
+      "config_path": "assets\\village\\agents\\小乌龟\\agent.json",
+      "status": {
+        "poignancy": 120
+      },
+      "schedule": {
+        "create": "20250213-12:05:00",
+        "daily_schedule": [
+          {
+            "idx": 0,
+            "describe": "睡觉",
+            "start": 0,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 1,
+            "describe": "睡觉",
+            "start": 60,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 2,
+            "describe": "睡觉",
+            "start": 120,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 3,
+            "describe": "睡觉",
+            "start": 180,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 4,
+            "describe": "睡觉",
+            "start": 240,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 5,
+            "describe": "睡觉",
+            "start": 300,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 6,
+            "describe": "睡觉",
+            "start": 360,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 7,
+            "describe": "起床整理房间",
+            "start": 420,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 8,
+            "describe": "在自家菜园工作并检查周边环境",
+            "start": 480,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 9,
+            "describe": "继续在菜园劳作并收集新鲜食材",
+            "start": 540,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 10,
+            "describe": "在家里研究地图，寻找避开 Brian 的秘密通道",
+            "start": 600,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 11,
+            "describe": "准备午餐和会议所需的零食",
+            "start": 660,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 12,
+            "describe": "在家里协助小熊召开紧急会议，接待小兔子、小松鼠、小羊和小猫",
+            "start": 720,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "稳重地为伙伴们安排座位，确保每只小动物都坐得舒适",
+                "start": 726,
+                "duration": 10
+              },
+              {
+                "idx": 1,
+                "describe": "将提前准备好的午餐和会议零食从厨房端到客厅",
+                "start": 736,
+                "duration": 10
+              },
+              {
+                "idx": 2,
+                "describe": "为每一位伙伴倒上温水，并用和蔼的话语安抚大家紧张的情绪",
+                "start": 746,
+                "duration": 10
+              },
+              {
+                "idx": 3,
+                "describe": "检查客厅的窗帘和门锁，确保会议的私密性与安全",
+                "start": 756,
+                "duration": 5
+              },
+              {
+                "idx": 4,
+                "describe": "确认家中的秘密通道入口已妥善遮蔽，做好应急撤离准备",
+                "start": 761,
+                "duration": 5
+              },
+              {
+                "idx": 5,
+                "describe": "坐在小熊身边，以坚定的眼神示意会议可以正式开始",
+                "start": 766,
+                "duration": 14
+              }
+            ]
+          },
+          {
+            "idx": 13,
+            "describe": "与伙伴们讨论森林安全问题，商讨寻找光之源的计划",
+            "start": 780,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "针对刚才的猜忌风波进行收尾，重点安抚受惊的小兔子，并再次强调团结一致是抵御电锯威胁的唯一出路",
+                "start": 818,
+                "duration": 4
+              },
+              {
+                "idx": 1,
+                "describe": "与小熊共同分析寻找光之源的具体行动路线，结合秘密通道位置，确保避开人类伐木区及潜在的危险陷阱",
+                "start": 822,
+                "duration": 3
+              },
+              {
+                "idx": 2,
+                "describe": "面对布莱恩的威胁，小乌龟和小熊安抚并鼓励伙伴，呼吁大家团结一致。他们计划立即经秘密通道撤退，寻找“光之源”以驱逐破坏者，共同守护森林家园。",
+                "start": 825,
+                "duration": 1
+              },
+              {
+                "idx": 3,
+                "describe": "继续与小熊深化寻找光之源的具体路线分析，重点确认秘密通道的出口安全，并根据布莱恩的威胁调整避险策略",
+                "start": 826,
+                "duration": 10
+              },
+              {
+                "idx": 4,
+                "describe": "总结讨论要点，重申互不抛弃的约定，确认大家保护森林的决心，准备开始撤退行动",
+                "start": 836,
+                "duration": 4
+              }
+            ]
+          },
+          {
+            "idx": 14,
+            "describe": "说服大家集结团队，并承诺提供家作为抵抗 Brian 的基地",
+            "start": 840,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "在密道行進中低聲完成剩餘成員的意向確認，確保全員進入高度警戒狀態，並抵達密道出口準備展開後續行動",
+                "start": 896,
+                "duration": 4
+              }
+            ]
+          },
+          {
+            "idx": 15,
+            "describe": "与小熊一起出发去探索河流上游",
+            "start": 900,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "保持高度警惕，以稳健且最快的步伐从小屋密道出口赶往河流汇合处",
+                "start": 925,
+                "duration": 17
+              },
+              {
+                "idx": 1,
+                "describe": "在河岸边与小熊汇合，简要告知紧急状况并交换上游地形信息",
+                "start": 942,
+                "duration": 10
+              },
+              {
+                "idx": 2,
+                "describe": "避开开阔区域，沿河岸湿地隐蔽行踪，正式向河流上游进发",
+                "start": 952,
+                "duration": 8
+              }
+            ]
+          },
+          {
+            "idx": 16,
+            "describe": "在河流上游寻找光之源的线索，并警惕 Brian 的踪迹",
+            "start": 960,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 17,
+            "describe": "标记河流附近的秘密逃生路线以保护小动物",
+            "start": 1020,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 18,
+            "describe": "结束探索任务，开始返回家中",
+            "start": 1080,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 19,
+            "describe": "回到家并整理今日探索的心得与地图更新",
+            "start": 1140,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 20,
+            "describe": "再次确认临时基地的防御与安全隐蔽工作",
+            "start": 1200,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 21,
+            "describe": "睡觉",
+            "start": 1260,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 22,
+            "describe": "睡觉",
+            "start": 1320,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 23,
+            "describe": "睡觉",
+            "start": 1380,
+            "duration": 60,
+            "decompose": {}
+          }
+        ]
+      },
+      "associate": {
+        "memory": {
+          "event": [
+            "node_241",
+            "node_240",
+            "node_239",
+            "node_237",
+            "node_236",
+            "node_235",
+            "node_234",
+            "node_233",
+            "node_232",
+            "node_231",
+            "node_230",
+            "node_229",
+            "node_227",
+            "node_226",
+            "node_225",
+            "node_224",
+            "node_205",
+            "node_204",
+            "node_203",
+            "node_202",
+            "node_201",
+            "node_200",
+            "node_199",
+            "node_198",
+            "node_197",
+            "node_195",
+            "node_194",
+            "node_193",
+            "node_192",
+            "node_191",
+            "node_190",
+            "node_189",
+            "node_188",
+            "node_186",
+            "node_185",
+            "node_184",
+            "node_183",
+            "node_182",
+            "node_181",
+            "node_163",
+            "node_161",
+            "node_160",
+            "node_159",
+            "node_158",
+            "node_157",
+            "node_156",
+            "node_154",
+            "node_153",
+            "node_152",
+            "node_151",
+            "node_150",
+            "node_149",
+            "node_148",
+            "node_147",
+            "node_146",
+            "node_145",
+            "node_144",
+            "node_143",
+            "node_142",
+            "node_141",
+            "node_140",
+            "node_139",
+            "node_138",
+            "node_137",
+            "node_119",
+            "node_118",
+            "node_117",
+            "node_116",
+            "node_114",
+            "node_113",
+            "node_112",
+            "node_111",
+            "node_110",
+            "node_109",
+            "node_108",
+            "node_106",
+            "node_105",
+            "node_104",
+            "node_103",
+            "node_102",
+            "node_101",
+            "node_100",
+            "node_99",
+            "node_98",
+            "node_97",
+            "node_96",
+            "node_95",
+            "node_94",
+            "node_76",
+            "node_75",
+            "node_74",
+            "node_73",
+            "node_71",
+            "node_70",
+            "node_69",
+            "node_68",
+            "node_67",
+            "node_66",
+            "node_65",
+            "node_64",
+            "node_63",
+            "node_62",
+            "node_61",
+            "node_60",
+            "node_59",
+            "node_58",
+            "node_57",
+            "node_56",
+            "node_55",
+            "node_54",
+            "node_53",
+            "node_52",
+            "node_51",
+            "node_50",
+            "node_49",
+            "node_48",
+            "node_47",
+            "node_29",
+            "node_28",
+            "node_27",
+            "node_26",
+            "node_25",
+            "node_24",
+            "node_23",
+            "node_22",
+            "node_21",
+            "node_20",
+            "node_19",
+            "node_18",
+            "node_17",
+            "node_16",
+            "node_15",
+            "node_14",
+            "node_13",
+            "node_12",
+            "node_11",
+            "node_10",
+            "node_9",
+            "node_8",
+            "node_7",
+            "node_6",
+            "node_5",
+            "node_4",
+            "node_3",
+            "node_1"
+          ],
+          "thought": [
+            "node_223",
+            "node_222",
+            "node_221",
+            "node_220",
+            "node_219",
+            "node_218",
+            "node_217",
+            "node_216",
+            "node_215",
+            "node_214",
+            "node_213",
+            "node_212",
+            "node_211",
+            "node_210",
+            "node_209",
+            "node_208",
+            "node_207",
+            "node_180",
+            "node_179",
+            "node_178",
+            "node_177",
+            "node_176",
+            "node_175",
+            "node_174",
+            "node_173",
+            "node_172",
+            "node_171",
+            "node_170",
+            "node_169",
+            "node_168",
+            "node_167",
+            "node_166",
+            "node_165",
+            "node_164",
+            "node_136",
+            "node_135",
+            "node_134",
+            "node_133",
+            "node_132",
+            "node_131",
+            "node_130",
+            "node_129",
+            "node_128",
+            "node_127",
+            "node_126",
+            "node_125",
+            "node_124",
+            "node_123",
+            "node_122",
+            "node_121",
+            "node_120",
+            "node_93",
+            "node_92",
+            "node_91",
+            "node_90",
+            "node_89",
+            "node_88",
+            "node_87",
+            "node_86",
+            "node_85",
+            "node_84",
+            "node_83",
+            "node_82",
+            "node_81",
+            "node_80",
+            "node_79",
+            "node_78",
+            "node_77",
+            "node_46",
+            "node_45",
+            "node_44",
+            "node_43",
+            "node_42",
+            "node_41",
+            "node_40",
+            "node_39",
+            "node_38",
+            "node_37",
+            "node_36",
+            "node_35",
+            "node_34",
+            "node_33",
+            "node_32",
+            "node_31",
+            "node_30",
+            "node_0"
+          ],
+          "chat": [
+            "node_238",
+            "node_228",
+            "node_206",
+            "node_196",
+            "node_187",
+            "node_162",
+            "node_155",
+            "node_115",
+            "node_107",
+            "node_72",
+            "node_2"
+          ]
+        }
+      },
+      "chats": [
+        [
+          "小烏龜",
+          "小兔子，別看了，我這老骨頭雖然動作慢，但也能感覺到林子裡的氣氛越來越壓抑。你的謹慎很有道理，但我們得趕在布萊恩的電鋸聲逼近前動身。密道已經準備好了，大家都在等著我們出發尋找『光之源』，我們必須抓緊時間，確保每個人都能安全撤離。"
+        ],
+        [
+          "小兔子",
+          "我明白，小烏龜。雖然時間緊迫，但越是這種時候越不能放鬆警惕。我會負責墊後，但我建議撤退時不要走直線，必須經過我剛才標記的那幾個隱蔽點。另外，我還是不放心小羊和小貓，我會一邊撤離一邊盯緊他們。如果發現任何不對勁，我會立刻發出信號，到時候你們別回頭，直接往『光之源』的方向跑。"
+        ],
+        [
+          "小烏龜",
+          "小熊，我這把老骨頭已經把地圖和應急物資都備齊了。聽那電鋸的聲音，布萊恩恐怕離我們不遠了，我們得趕緊出發。由我帶路走那條最隱蔽的密道前往河流上游，請務必叮囑大家跟緊我，千萬別掉隊，我們一定要趕在危險追上來之前找到『光之源』。"
+        ],
+        [
+          "小熊",
+          "辛苦了，小烏龜！我也聽到了，那電鋸聲越來越刺耳，布萊恩肯定就在附近。大家聽著，緊跟小烏龜的步伐，千萬不能掉隊！小貓，跟在我身邊。我們必須爭分奪秒趕往河流上游，只要找到『光之源』，我們就能守住森林，讓人類遠離這裡。大家保持警惕，我們出發！"
+        ]
+      ],
+      "currently": "小乌龟正待在【小乌龟家客厅】，它感到责任重大。作为屋主，它正在与自己的好朋友小熊一起说服小兔子，小松鼠，小羊以及小猫集结团队，一同寻找光之源，并表示全力支持小熊的计划",
+      "action": {
+        "event": {
+          "subject": "小烏龜",
+          "predicate": "此时",
+          "object": "在河岸边与小熊汇合，简要告知紧急状况并交换上游地形信息",
+          "describe": "在河岸边与小熊汇合，简要告知紧急状况并交换上游地形信息",
+          "address": [
+            "the Ville",
+            "小乌龟家",
+            "小乌龟家庭院",
+            "小乌龟家池塘"
+          ],
+          "emoji": "在河岸边与小熊汇合，简要告知紧急状况并交换上游地形信息"
+        },
+        "obj_event": {
+          "subject": "小乌龟家池塘",
+          "predicate": "此时",
+          "object": "正在一旁静候",
+          "describe": "正在一旁静候",
+          "address": [
+            "the Ville",
+            "小乌龟家",
+            "小乌龟家庭院",
+            "小乌龟家池塘"
+          ],
+          "emoji": ""
+        },
+        "start": "20250213-15:42:00",
+        "duration": 10
+      },
+      "coord": [
+        94,
+        55
+      ]
+    },
+    "小熊": {
+      "config_path": "assets\\village\\agents\\小熊\\agent.json",
+      "status": {
+        "poignancy": 31
+      },
+      "schedule": {
+        "create": "20250213-12:05:00",
+        "daily_schedule": [
+          {
+            "idx": 0,
+            "describe": "睡觉",
+            "start": 0,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 1,
+            "describe": "睡觉",
+            "start": 60,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 2,
+            "describe": "睡觉",
+            "start": 120,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 3,
+            "describe": "睡觉",
+            "start": 180,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 4,
+            "describe": "睡觉",
+            "start": 240,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 5,
+            "describe": "睡觉",
+            "start": 300,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 6,
+            "describe": "睡觉",
+            "start": 360,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 7,
+            "describe": "起床并在森林外围巡逻，检查并拆除 Brian 设置的捕兽夹",
+            "start": 420,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 8,
+            "describe": "站在高处监视 Brian 的动向，确保森林居民的安全",
+            "start": 480,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 9,
+            "describe": "拜访胆小的小羊，确认它的安危并鼓励它保持乐观",
+            "start": 540,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 10,
+            "describe": "前往森林深处搜寻关于光之源的古老遗迹线索",
+            "start": 600,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 11,
+            "describe": "到达小乌龟家，与小乌龟共同布置紧急会议的场地",
+            "start": 660,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 12,
+            "describe": "在小乌龟家主持会议，号召小兔子、小松鼠、小羊和小猫团结一致",
+            "start": 720,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "继续向大家详细描述“光之源”的神奇拯救力量，描绘森林恢复后的美好愿景",
+                "start": 736,
+                "duration": 9
+              },
+              {
+                "idx": 1,
+                "describe": "走到胆小的小羊身边，轻声安抚并运用领导力给予它信心",
+                "start": 745,
+                "duration": 10
+              },
+              {
+                "idx": 2,
+                "describe": "针对小猫的顾虑进行耐心解答，并就与小兔子达成的安全防范共识向全员做进一步说明",
+                "start": 755,
+                "duration": 10
+              },
+              {
+                "idx": 3,
+                "describe": "发表充满激情的团结演说，号召大家为了守护森林而共同战斗",
+                "start": 765,
+                "duration": 10
+              },
+              {
+                "idx": 4,
+                "describe": "确认每位伙伴的加入意愿，并与大家紧紧握手或拥抱以示团结",
+                "start": 775,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 13,
+            "describe": "向大家详细解释光之源的传说，坚定大家拯救森林的信心",
+            "start": 780,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "继续分享森林先辈们守护家园的英雄故事以激励士气",
+                "start": 826,
+                "duration": 9
+              },
+              {
+                "idx": 1,
+                "describe": "带领大家高喊口号，确认每个人拯救森林的决心",
+                "start": 835,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 14,
+            "describe": "制定应对 Brian 的紧急避险方案，确保每个人都掌握",
+            "start": 840,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "组织大家在客厅进行一次模拟躲避演练",
+                "start": 875,
+                "duration": 8
+              },
+              {
+                "idx": 1,
+                "describe": "逐一向小兔子、小羊等确认是否掌握了避险要领",
+                "start": 883,
+                "duration": 8
+              },
+              {
+                "idx": 2,
+                "describe": "总结避险方案并分发应急联络哨",
+                "start": 891,
+                "duration": 9
+              }
+            ]
+          },
+          {
+            "idx": 15,
+            "describe": "与小乌龟一起出发前往河流上游，寻找光之源的源头",
+            "start": 900,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "由小乌龟带路进入密道，三人沿着河岸向上游疾行并时刻警惕布莱恩的动静",
+                "start": 925,
+                "duration": 10
+              },
+              {
+                "idx": 1,
+                "describe": "协助小乌龟和小猫快速翻越挡在密道出口与河道交界处的巨大枯木",
+                "start": 935,
+                "duration": 10
+              },
+              {
+                "idx": 2,
+                "describe": "观察水流方向并全力感知「光之源」的能量波动，以确定最终搜索点",
+                "start": 945,
+                "duration": 10
+              },
+              {
+                "idx": 3,
+                "describe": "成功抵达河流上游源头区域，准备展开搜索以守护森林并驱逐人类",
+                "start": 955,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 16,
+            "describe": "在河流上游排查人类活动的痕迹，寻找古老的能量印记",
+            "start": 960,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 17,
+            "describe": "在森林关键路口设置预警装置，防范 Brian 的入侵",
+            "start": 1020,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 18,
+            "describe": "护送小乌龟安全返回住所，并确认沿途没有危险",
+            "start": 1080,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 19,
+            "describe": "回到家中整理线索，分析光之源可能出现的具体位置",
+            "start": 1140,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 20,
+            "describe": "巡视家附近的区域，确保没有被 Brian 跟踪",
+            "start": 1200,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 21,
+            "describe": "总结今日的进展，并规划明天的团队搜寻路线",
+            "start": 1260,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 22,
+            "describe": "准时睡觉，保持充沛的精力去守护森林",
+            "start": 1320,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 23,
+            "describe": "睡觉",
+            "start": 1380,
+            "duration": 60,
+            "decompose": {}
+          }
+        ]
+      },
+      "associate": {
+        "memory": {
+          "event": [
+            "node_216",
+            "node_215",
+            "node_213",
+            "node_195",
+            "node_194",
+            "node_193",
+            "node_192",
+            "node_191",
+            "node_190",
+            "node_189",
+            "node_188",
+            "node_187",
+            "node_186",
+            "node_185",
+            "node_184",
+            "node_183",
+            "node_182",
+            "node_181",
+            "node_180",
+            "node_179",
+            "node_178",
+            "node_177",
+            "node_176",
+            "node_175",
+            "node_174",
+            "node_173",
+            "node_172",
+            "node_171",
+            "node_170",
+            "node_152",
+            "node_151",
+            "node_150",
+            "node_149",
+            "node_148",
+            "node_147",
+            "node_146",
+            "node_145",
+            "node_144",
+            "node_143",
+            "node_142",
+            "node_141",
+            "node_139",
+            "node_137",
+            "node_136",
+            "node_135",
+            "node_134",
+            "node_133",
+            "node_132",
+            "node_131",
+            "node_130",
+            "node_129",
+            "node_128",
+            "node_110",
+            "node_109",
+            "node_108",
+            "node_107",
+            "node_106",
+            "node_105",
+            "node_104",
+            "node_103",
+            "node_102",
+            "node_101",
+            "node_100",
+            "node_99",
+            "node_98",
+            "node_96",
+            "node_95",
+            "node_94",
+            "node_92",
+            "node_91",
+            "node_90",
+            "node_89",
+            "node_88",
+            "node_87",
+            "node_71",
+            "node_70",
+            "node_69",
+            "node_68",
+            "node_67",
+            "node_66",
+            "node_65",
+            "node_64",
+            "node_63",
+            "node_62",
+            "node_61",
+            "node_60",
+            "node_59",
+            "node_58",
+            "node_57",
+            "node_56",
+            "node_55",
+            "node_54",
+            "node_53",
+            "node_52",
+            "node_51",
+            "node_50",
+            "node_49",
+            "node_48",
+            "node_47",
+            "node_46",
+            "node_45",
+            "node_27",
+            "node_26",
+            "node_25",
+            "node_24",
+            "node_23",
+            "node_22",
+            "node_21",
+            "node_20",
+            "node_19",
+            "node_18",
+            "node_17",
+            "node_16",
+            "node_15",
+            "node_14",
+            "node_13",
+            "node_12",
+            "node_10",
+            "node_9",
+            "node_8",
+            "node_7",
+            "node_6",
+            "node_5",
+            "node_4",
+            "node_3",
+            "node_2",
+            "node_1"
+          ],
+          "thought": [
+            "node_212",
+            "node_211",
+            "node_210",
+            "node_209",
+            "node_208",
+            "node_207",
+            "node_206",
+            "node_205",
+            "node_204",
+            "node_203",
+            "node_202",
+            "node_201",
+            "node_200",
+            "node_199",
+            "node_198",
+            "node_197",
+            "node_196",
+            "node_169",
+            "node_168",
+            "node_167",
+            "node_166",
+            "node_165",
+            "node_164",
+            "node_163",
+            "node_162",
+            "node_161",
+            "node_160",
+            "node_159",
+            "node_158",
+            "node_157",
+            "node_156",
+            "node_155",
+            "node_154",
+            "node_153",
+            "node_127",
+            "node_126",
+            "node_125",
+            "node_124",
+            "node_123",
+            "node_122",
+            "node_121",
+            "node_120",
+            "node_119",
+            "node_118",
+            "node_117",
+            "node_116",
+            "node_115",
+            "node_114",
+            "node_113",
+            "node_112",
+            "node_111",
+            "node_86",
+            "node_85",
+            "node_84",
+            "node_83",
+            "node_82",
+            "node_81",
+            "node_80",
+            "node_79",
+            "node_78",
+            "node_77",
+            "node_76",
+            "node_75",
+            "node_74",
+            "node_73",
+            "node_72",
+            "node_44",
+            "node_43",
+            "node_42",
+            "node_41",
+            "node_40",
+            "node_39",
+            "node_38",
+            "node_37",
+            "node_36",
+            "node_35",
+            "node_34",
+            "node_33",
+            "node_32",
+            "node_31",
+            "node_30",
+            "node_29",
+            "node_28",
+            "node_0"
+          ],
+          "chat": [
+            "node_217",
+            "node_214",
+            "node_140",
+            "node_138",
+            "node_97",
+            "node_93",
+            "node_11"
+          ]
+        }
+      },
+      "chats": [
+        [
+          "小貓",
+          "喲，大個子，帶著那隻慢吞吞的烏龜是要去哪？我正好覺得那會議無聊透頂，打算去河邊走走。不過……看你這副嚴肅的樣子，難道是發現那個電鋸狂的蹤跡了？切，我可不是在擔心，只是萬一你們這群笨蛋弄丟了路，誰來帶我去『光之源』？喂，別想把我丟下，我跟在後面只是為了監督你們，明白嗎？"
+        ],
+        [
+          "小熊",
+          "小貓，別嘴硬了，我知道你心裡也明白現在有多危險。布萊恩那個瘋子隨時可能追過來，我們必須在被他發現之前趕到河流上游找到『光之源』。既然你要跟著，就別亂跑，跟緊我和小烏龜。記住，只有大家團結在一起，我們才能保護森林，平安回來！"
+        ],
+        [
+          "小烏龜",
+          "小熊，我這把老骨頭已經把地圖和應急物資都備齊了。聽那電鋸的聲音，布萊恩恐怕離我們不遠了，我們得趕緊出發。由我帶路走那條最隱蔽的密道前往河流上游，請務必叮囑大家跟緊我，千萬別掉隊，我們一定要趕在危險追上來之前找到『光之源』。"
+        ],
+        [
+          "小熊",
+          "辛苦了，小烏龜！我也聽到了，那電鋸聲越來越刺耳，布萊恩肯定就在附近。大家聽著，緊跟小烏龜的步伐，千萬不能掉隊！小貓，跟在我身邊。我們必須爭分奪秒趕往河流上游，只要找到『光之源』，我們就能守住森林，讓人類遠離這裡。大家保持警惕，我們出發！"
+        ]
+      ],
+      "currently": "小熊正站在【小乌龟家客厅】的中央，神情严肃且充满激情。它与好朋友小乌龟正在主持关于“寻找光之源”的紧急会议。它正在试图说服小兔子，小松鼠，小羊与小猫团结一致寻找光之源，并透过光之源许愿让人类远离森林，从而保护森林的安全，不受人类破坏",
+      "action": {
+        "event": {
+          "subject": "小熊",
+          "predicate": "对话",
+          "object": "小烏龜",
+          "describe": "布萊恩帶著電鋸逼近，小烏龜與小熊決定帶領夥伴前往河流上游。小烏龜負責帶路走密道，小熊叮囑隊友緊跟，目標是尋找「光之源」以守護森林、驅逐人類。眾人爭分奪秒，即刻出發。",
+          "address": [
+            "the Ville",
+            "小乌龟家",
+            "小乌龟家客厅",
+            "小乌龟家沙发"
+          ],
+          "emoji": "💬"
+        },
+        "obj_event": null,
+        "start": "20250213-15:25:00",
+        "duration": 0
+      },
+      "coord": [
+        126,
+        45
+      ]
+    },
+    "小羊": {
+      "config_path": "assets\\village\\agents\\小羊\\agent.json",
+      "status": {
+        "poignancy": 30
+      },
+      "schedule": {
+        "create": "20250213-12:05:00",
+        "daily_schedule": [
+          {
+            "idx": 0,
+            "describe": "睡觉",
+            "start": 0,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 1,
+            "describe": "睡觉",
+            "start": 60,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 2,
+            "describe": "睡觉",
+            "start": 120,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 3,
+            "describe": "睡觉",
+            "start": 180,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 4,
+            "describe": "睡觉",
+            "start": 240,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 5,
+            "describe": "睡觉",
+            "start": 300,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 6,
+            "describe": "睡觉",
+            "start": 360,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 7,
+            "describe": "起床并紧紧跟着小熊，一刻也不敢离开",
+            "start": 420,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 8,
+            "describe": "跟着小熊在森林边缘寻找食物，时刻警惕Brian的动静，听到电锯声就躲在小熊身后",
+            "start": 480,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 9,
+            "describe": "跟着小熊去见小松鼠，询问关于光之源的消息，并确认大家的安危",
+            "start": 540,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 10,
+            "describe": "继续跟随小熊巡视森林，远远地观察Brian的行踪并随时准备逃跑",
+            "start": 600,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 11,
+            "describe": "跟着小熊前往小乌龟家，一路上因为害怕Brian的陷阱而紧抓着小熊的毛",
+            "start": 660,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 12,
+            "describe": "在小乌龟家参加紧急会议，与小熊和小乌龟讨论如何躲避Brian，寻求大家的保护",
+            "start": 720,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "继续在恐惧中紧紧抓住小熊的皮毛以寻求安全感",
+                "start": 741,
+                "duration": 6
+              },
+              {
+                "idx": 1,
+                "describe": "怯生生地向大家哀求千万不要丢下自己不管",
+                "start": 747,
+                "duration": 5
+              },
+              {
+                "idx": 2,
+                "describe": "专注听小熊和小乌龟商讨躲避陷阱的具体策略",
+                "start": 752,
+                "duration": 10
+              },
+              {
+                "idx": 3,
+                "describe": "在得到大家的保护承诺后努力平复急促的呼吸",
+                "start": 762,
+                "duration": 10
+              },
+              {
+                "idx": 4,
+                "describe": "确认自己始终处于小熊的视线保护范围内",
+                "start": 772,
+                "duration": 5
+              },
+              {
+                "idx": 5,
+                "describe": "缩在角落里准备听关于光之源的进一步计划",
+                "start": 777,
+                "duration": 3
+              }
+            ]
+          },
+          {
+            "idx": 13,
+            "describe": "躲在小乌龟家客厅的角落，紧贴着小熊，听大家商量寻找光之源的计划",
+            "start": 780,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "带着小兔子的叮嘱，在祈祷平安的同时更加隐蔽地监视小猫，并暗自记下撤退路线，在防范“内鬼”的紧迫感中，期盼能顺利找到光之源并回到羊群。",
+                "start": 836,
+                "duration": 4
+              }
+            ]
+          },
+          {
+            "idx": 14,
+            "describe": "在小乌龟家休息，虽然很害怕但因为有小熊在身边而感到稍微安心",
+            "start": 840,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "听完小乌龟的鼓励，在脑海中反复勾勒回到羊群后的幸福画面以自我安慰",
+                "start": 876,
+                "duration": 14
+              },
+              {
+                "idx": 1,
+                "describe": "检查随身物品，确认没有遗落在客厅角落",
+                "start": 890,
+                "duration": 5
+              },
+              {
+                "idx": 2,
+                "describe": "紧紧拽住小熊的衣角，站起身准备跟随其寻找“光之源”并逃离险境",
+                "start": 895,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 15,
+            "describe": "跟随小熊离开小乌龟家，去森林深处寻找光之源的线索，避开Brian的伐木区",
+            "start": 900,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "紧紧拽住小熊的衣角，颤抖着起身准备出发",
+                "start": 900,
+                "duration": 5
+              },
+              {
+                "idx": 1,
+                "describe": "战战兢兢地跟随小熊走出小乌龟家，警惕地张望四周",
+                "start": 905,
+                "duration": 10
+              },
+              {
+                "idx": 2,
+                "describe": "听到远处电锯声后迅速躲在小熊身后，加快脚步远离伐木区",
+                "start": 915,
+                "duration": 10
+              },
+              {
+                "idx": 3,
+                "describe": "在森林小径中紧跟小熊，不断确认小熊没有丢下自己",
+                "start": 925,
+                "duration": 15
+              },
+              {
+                "idx": 4,
+                "describe": "在小熊停下寻找光之源线索时，寸步不离地守在小熊身边",
+                "start": 940,
+                "duration": 15
+              },
+              {
+                "idx": 5,
+                "describe": "克服恐惧跟随小熊进入森林更深处，避开所有嘈杂的声响",
+                "start": 955,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 16,
+            "describe": "紧跟小熊躲避Brian的搜寻，在灌木丛中屏住呼吸不敢出声",
+            "start": 960,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 17,
+            "describe": "跟着小熊在森林里移动，时刻担心会遇到捕兽夹，寸步不离小熊",
+            "start": 1020,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 18,
+            "describe": "跟着小熊寻找今晚安全的落脚点，祈祷光之源能快点出现带自己回家",
+            "start": 1080,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 19,
+            "describe": "在临时营地依偎在小熊身边，确认周围有其他伙伴在场才敢放松一点",
+            "start": 1140,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 20,
+            "describe": "在小熊和其他伙伴的陪伴下入睡，梦见自己回到了羊群",
+            "start": 1200,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 21,
+            "describe": "睡觉",
+            "start": 1260,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 22,
+            "describe": "睡觉",
+            "start": 1320,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 23,
+            "describe": "睡觉",
+            "start": 1380,
+            "duration": 60,
+            "decompose": {}
+          }
+        ]
+      },
+      "associate": {
+        "memory": {
+          "event": [
+            "node_182",
+            "node_181",
+            "node_180",
+            "node_161",
+            "node_160",
+            "node_159",
+            "node_158",
+            "node_157",
+            "node_156",
+            "node_155",
+            "node_154",
+            "node_153",
+            "node_152",
+            "node_151",
+            "node_150",
+            "node_149",
+            "node_148",
+            "node_147",
+            "node_146",
+            "node_145",
+            "node_144",
+            "node_143",
+            "node_141",
+            "node_140",
+            "node_139",
+            "node_138",
+            "node_137",
+            "node_136",
+            "node_135",
+            "node_134",
+            "node_116",
+            "node_115",
+            "node_114",
+            "node_113",
+            "node_112",
+            "node_111",
+            "node_110",
+            "node_109",
+            "node_108",
+            "node_107",
+            "node_105",
+            "node_104",
+            "node_103",
+            "node_102",
+            "node_100",
+            "node_99",
+            "node_98",
+            "node_97",
+            "node_96",
+            "node_95",
+            "node_94",
+            "node_93",
+            "node_92",
+            "node_73",
+            "node_72",
+            "node_71",
+            "node_70",
+            "node_69",
+            "node_68",
+            "node_67",
+            "node_66",
+            "node_65",
+            "node_64",
+            "node_63",
+            "node_62",
+            "node_61",
+            "node_60",
+            "node_59",
+            "node_58",
+            "node_57",
+            "node_56",
+            "node_55",
+            "node_54",
+            "node_53",
+            "node_52",
+            "node_51",
+            "node_50",
+            "node_49",
+            "node_48",
+            "node_30",
+            "node_29",
+            "node_28",
+            "node_27",
+            "node_26",
+            "node_25",
+            "node_24",
+            "node_23",
+            "node_22",
+            "node_21",
+            "node_20",
+            "node_19",
+            "node_18",
+            "node_17",
+            "node_16",
+            "node_14",
+            "node_13",
+            "node_12",
+            "node_11",
+            "node_10",
+            "node_9",
+            "node_8",
+            "node_7",
+            "node_6",
+            "node_4",
+            "node_3",
+            "node_2",
+            "node_1"
+          ],
+          "thought": [
+            "node_178",
+            "node_177",
+            "node_176",
+            "node_175",
+            "node_174",
+            "node_173",
+            "node_172",
+            "node_171",
+            "node_170",
+            "node_169",
+            "node_168",
+            "node_167",
+            "node_166",
+            "node_165",
+            "node_164",
+            "node_163",
+            "node_162",
+            "node_133",
+            "node_132",
+            "node_131",
+            "node_130",
+            "node_129",
+            "node_128",
+            "node_127",
+            "node_126",
+            "node_125",
+            "node_124",
+            "node_123",
+            "node_122",
+            "node_121",
+            "node_120",
+            "node_119",
+            "node_118",
+            "node_117",
+            "node_91",
+            "node_90",
+            "node_89",
+            "node_88",
+            "node_87",
+            "node_86",
+            "node_85",
+            "node_84",
+            "node_83",
+            "node_82",
+            "node_81",
+            "node_80",
+            "node_79",
+            "node_78",
+            "node_77",
+            "node_76",
+            "node_75",
+            "node_47",
+            "node_46",
+            "node_45",
+            "node_44",
+            "node_43",
+            "node_42",
+            "node_41",
+            "node_40",
+            "node_39",
+            "node_38",
+            "node_37",
+            "node_36",
+            "node_35",
+            "node_34",
+            "node_33",
+            "node_32",
+            "node_31",
+            "node_0"
+          ],
+          "chat": [
+            "node_179",
+            "node_142",
+            "node_106",
+            "node_101",
+            "node_74",
+            "node_15",
+            "node_5"
+          ]
+        }
+      },
+      "chats": [
+        [
+          "小烏龜",
+          "小羊，看你累成這樣，真是辛苦你了。別怕，雖然布萊恩的電鋸聲越來越近，但我這老屋子還算隱蔽。等大家稍作休息恢復體力，我就帶你們走那條只有我知道的秘密通道去尋找『光之源』，只要我們緊跟小熊、團結一致，一定能平安回家的。"
+        ],
+        [
+          "小羊",
+          "小、小烏龜……謝謝你……那電鋸的聲音聽起來好近，我真的好害怕。你一定要說話算話，千萬、千萬不能丟下我不管……我會一直緊緊跟著小熊的。我們快點出發去找『光之源』好不好？我只想趕快許願回到羊群身邊，我再也不想待在這個可怕的地方了……"
+        ],
+        [
+          "小烏龜",
+          "放心吧，小羊，我活了一百年，最看重的就是承諾，絕不會丟下任何一個夥伴。布萊恩的電鋸聲確實越來越近了，這老房子的牆壁都在發抖，我們不能再耽擱。你再稍微堅持一下，我這就去檢查密道的入口。記住，等會兒進了密道，一定要跟緊小熊，不管聽到什麼聲音都不要回頭，『光之源』是我們唯一的希望，我一定會帶大家平安離開的。"
+        ]
+      ],
+      "currently": "小羊正身处【小乌龟家客厅】倾听小乌龟与小熊的发言，但它身体在发抖，因为对Brian的电锯声感到极度恐惧，所以希望请求大家不要丢下它不管。它只希望获得光之源后许愿回到羊群身边。",
+      "action": {
+        "event": {
+          "subject": "小羊",
+          "predicate": "此时",
+          "object": "移動中",
+          "describe": "正在前往目的地 (剩餘14步)",
+          "address": [
+            "the Ville",
+            "森林广场",
+            "广场集会区",
+            "篝火"
+          ],
+          "emoji": "🚶"
+        },
+        "obj_event": {
+          "subject": "篝火",
+          "predicate": "此时",
+          "object": "正在静静地燃烧",
+          "describe": "正在静静地燃烧",
+          "address": [
+            "the Ville",
+            "森林广场",
+            "广场集会区",
+            "篝火"
+          ],
+          "emoji": ""
+        },
+        "start": "20250213-15:15:00",
+        "duration": 10
+      },
+      "coord": [
+        112,
+        45
+      ]
+    },
+    "小猫": {
+      "config_path": "assets\\village\\agents\\小猫\\agent.json",
+      "status": {
+        "poignancy": 135
+      },
+      "schedule": {
+        "create": "20250213-12:05:00",
+        "daily_schedule": [
+          {
+            "idx": 0,
+            "describe": "睡觉",
+            "start": 0,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 1,
+            "describe": "睡觉",
+            "start": 60,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 2,
+            "describe": "睡觉",
+            "start": 120,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 3,
+            "describe": "睡觉",
+            "start": 180,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 4,
+            "describe": "睡觉",
+            "start": 240,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 5,
+            "describe": "睡觉",
+            "start": 300,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 6,
+            "describe": "睡觉",
+            "start": 360,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 7,
+            "describe": "起床，优雅地伸个懒腰并敏锐地观察周围环境",
+            "start": 420,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 8,
+            "describe": "独自理毛，细致地清理每一寸毛发以保持优雅仪态",
+            "start": 480,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 9,
+            "describe": "保持优雅的姿态，在领地边缘巡视并小心隐藏自己的行踪",
+            "start": 540,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 10,
+            "describe": "在森林闲逛，凭借敏锐的直觉警惕并避开伐木工 Brian 设置的捕兽夹",
+            "start": 600,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 11,
+            "describe": "保持距离感地观察森林动向，带着傲娇的心态慢慢走向小乌龟家",
+            "start": 660,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 12,
+            "describe": "到达小乌龟家参加会议，坐在高处居高临下地观察这群愚蠢的动物",
+            "start": 720,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "假装漫不经心地理毛以平复森林逃亡后的心跳，实则竖起耳朵捕捉会议的开场信息",
+                "start": 726,
+                "duration": 10
+              },
+              {
+                "idx": 1,
+                "describe": "对小松鼠的指控投去轻蔑的目光，即便内心仍有余悸，也要维持住高冷的人设",
+                "start": 736,
+                "duration": 5
+              },
+              {
+                "idx": 2,
+                "describe": "眯起眼睛假装打盹，脑海中反复交织刚才森林的险境与关于“光之源”的每一个细节",
+                "start": 741,
+                "duration": 10
+              },
+              {
+                "idx": 3,
+                "describe": "换个更优雅的坐姿，冷眼观察小乌龟和小松鼠的互动，评估它们作为盟友的可靠性",
+                "start": 751,
+                "duration": 10
+              },
+              {
+                "idx": 4,
+                "describe": "在内心深处将“光之源”与回到主人身边的愿望、以及保护小羊的承诺紧紧联系起来",
+                "start": 761,
+                "duration": 10
+              },
+              {
+                "idx": 5,
+                "describe": "保持高冷的沉默，消化刚才与 Brian 对峙的恐惧，准备进入关于躲避 Brian 的对策讨论",
+                "start": 771,
+                "duration": 9
+              }
+            ]
+          },
+          {
+            "idx": 13,
+            "describe": "在会议中表面漫不经心，实则与小松鼠和小乌龟讨论躲避 Brian 的对策",
+            "start": 780,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "继续状似无意地完善利用灌木丛阴影躲避 Brian 的路线建议",
+                "start": 801,
+                "duration": 14
+              },
+              {
+                "idx": 1,
+                "describe": "与小乌龟争论撤离的时机，坚持认为自己的敏锐观察比乌龟的慢节奏更可靠",
+                "start": 815,
+                "duration": 10
+              },
+              {
+                "idx": 2,
+                "describe": "在确认躲避对策后，一边理毛一边用傲娇的语气总结行动要点",
+                "start": 825,
+                "duration": 10
+              },
+              {
+                "idx": 3,
+                "describe": "停止交谈，重新恢复高冷的沉默，继续竖起耳朵关注接下来的话题",
+                "start": 835,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 14,
+            "describe": "继续待在会议现场，竖起耳朵捕捉关于光之源的每一个细节",
+            "start": 840,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "努力平复因冲突而加速的心跳，重新进入伪装状态，听完小松鼠关于寻找光之源的剩余提议",
+                "start": 872,
+                "duration": 5
+              },
+              {
+                "idx": 1,
+                "describe": "借由整理胡须的动作，掩饰听到“许愿”一词时内心的剧烈波动",
+                "start": 877,
+                "duration": 6
+              },
+              {
+                "idx": 2,
+                "describe": "默默记下会议中提到的每一个细节，心中幻想着重回主人身边的场景",
+                "start": 883,
+                "duration": 12
+              },
+              {
+                "idx": 3,
+                "describe": "优雅地站起身并伸个懒腰，表现出对会议已经彻底失去耐心的样子",
+                "start": 895,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 15,
+            "describe": "离开小乌龟家，独自前往河边寻找人类可能留下的踪迹",
+            "start": 900,
+            "duration": 60,
+            "decompose": [
+              {
+                "idx": 0,
+                "describe": "与小熊和小乌龟沿着隐蔽小径快速前行，虽然嘴上依然傲娇，但心中开始整理关于“光之源”的线索并低声与同伴交流",
+                "start": 916,
+                "duration": 15
+              },
+              {
+                "idx": 1,
+                "describe": "示意同伴停下并保持安静，竖起耳朵警觉地环顾四周，确认没有电锯狂布莱恩或其他动物跟踪这支三人小队",
+                "start": 931,
+                "duration": 10
+              },
+              {
+                "idx": 2,
+                "describe": "带领同伴穿过河岸边茂密的灌木丛，凭借敏捷的身手为小熊和小乌龟寻找最易通行的路径，来到水流平缓的开阔地带",
+                "start": 941,
+                "duration": 14
+              },
+              {
+                "idx": 3,
+                "describe": "尽管身处险境，仍不忘迅速整理被树枝弄乱的理毛，随后与同伴一同走向河滩边缘，正式开始搜寻“光之源”",
+                "start": 955,
+                "duration": 5
+              }
+            ]
+          },
+          {
+            "idx": 16,
+            "describe": "在河岸边仔细搜寻，渴望发现与曾经主人相关的蛛丝马迹",
+            "start": 960,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 17,
+            "describe": "在河岸附近隐蔽身形，暗中监视 Brian 的破坏行为并寻找光之源线索",
+            "start": 1020,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 18,
+            "describe": "带着复杂的心情离开河岸，寻找一处安静且视野开阔的高地",
+            "start": 1080,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 19,
+            "describe": "独自坐在高处看月亮，在思念主人的同时保持对周围危险的警觉",
+            "start": 1140,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 20,
+            "describe": "沉浸在对过去的回忆中，同时警惕林间的任何异常响动",
+            "start": 1200,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 21,
+            "describe": "寻找一个隐蔽且安全的地方，最后一次理毛并准备进入睡眠",
+            "start": 1260,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 22,
+            "describe": "睡觉",
+            "start": 1320,
+            "duration": 60,
+            "decompose": {}
+          },
+          {
+            "idx": 23,
+            "describe": "睡觉",
+            "start": 1380,
+            "duration": 60,
+            "decompose": {}
+          }
+        ]
+      },
+      "associate": {
+        "memory": {
+          "event": [
+            "node_224",
+            "node_223",
+            "node_222",
+            "node_221",
+            "node_220",
+            "node_219",
+            "node_217",
+            "node_216",
+            "node_215",
+            "node_214",
+            "node_213",
+            "node_212",
+            "node_211",
+            "node_210",
+            "node_209",
+            "node_208",
+            "node_207",
+            "node_206",
+            "node_205",
+            "node_204",
+            "node_203",
+            "node_202",
+            "node_201",
+            "node_200",
+            "node_199",
+            "node_181",
+            "node_180",
+            "node_179",
+            "node_178",
+            "node_177",
+            "node_176",
+            "node_175",
+            "node_174",
+            "node_173",
+            "node_172",
+            "node_171",
+            "node_170",
+            "node_168",
+            "node_167",
+            "node_166",
+            "node_165",
+            "node_164",
+            "node_163",
+            "node_162",
+            "node_161",
+            "node_160",
+            "node_159",
+            "node_157",
+            "node_156",
+            "node_155",
+            "node_137",
+            "node_136",
+            "node_135",
+            "node_134",
+            "node_133",
+            "node_131",
+            "node_130",
+            "node_129",
+            "node_128",
+            "node_127",
+            "node_126",
+            "node_125",
+            "node_124",
+            "node_123",
+            "node_122",
+            "node_121",
+            "node_120",
+            "node_119",
+            "node_118",
+            "node_117",
+            "node_116",
+            "node_115",
+            "node_114",
+            "node_113",
+            "node_112",
+            "node_111",
+            "node_110",
+            "node_109",
+            "node_108",
+            "node_107",
+            "node_106",
+            "node_105",
+            "node_87",
+            "node_86",
+            "node_85",
+            "node_83",
+            "node_82",
+            "node_81",
+            "node_80",
+            "node_79",
+            "node_78",
+            "node_77",
+            "node_76",
+            "node_75",
+            "node_74",
+            "node_73",
+            "node_72",
+            "node_71",
+            "node_70",
+            "node_69",
+            "node_68",
+            "node_67",
+            "node_66",
+            "node_65",
+            "node_64",
+            "node_63",
+            "node_62",
+            "node_61",
+            "node_60",
+            "node_59",
+            "node_58",
+            "node_57",
+            "node_56",
+            "node_55",
+            "node_54",
+            "node_53",
+            "node_52",
+            "node_51",
+            "node_50",
+            "node_49",
+            "node_48",
+            "node_30",
+            "node_29",
+            "node_28",
+            "node_27",
+            "node_26",
+            "node_25",
+            "node_24",
+            "node_23",
+            "node_22",
+            "node_21",
+            "node_20",
+            "node_19",
+            "node_18",
+            "node_17",
+            "node_16",
+            "node_15",
+            "node_14",
+            "node_13",
+            "node_12",
+            "node_11",
+            "node_10",
+            "node_9",
+            "node_8",
+            "node_7",
+            "node_6",
+            "node_5",
+            "node_4",
+            "node_3",
+            "node_2"
+          ],
+          "thought": [
+            "node_198",
+            "node_197",
+            "node_196",
+            "node_195",
+            "node_194",
+            "node_193",
+            "node_192",
+            "node_191",
+            "node_190",
+            "node_189",
+            "node_188",
+            "node_187",
+            "node_186",
+            "node_185",
+            "node_184",
+            "node_183",
+            "node_182",
+            "node_154",
+            "node_153",
+            "node_152",
+            "node_151",
+            "node_150",
+            "node_149",
+            "node_148",
+            "node_147",
+            "node_146",
+            "node_145",
+            "node_144",
+            "node_143",
+            "node_142",
+            "node_141",
+            "node_140",
+            "node_139",
+            "node_138",
+            "node_104",
+            "node_103",
+            "node_102",
+            "node_101",
+            "node_100",
+            "node_99",
+            "node_98",
+            "node_97",
+            "node_96",
+            "node_95",
+            "node_94",
+            "node_93",
+            "node_92",
+            "node_91",
+            "node_90",
+            "node_89",
+            "node_88",
+            "node_47",
+            "node_46",
+            "node_45",
+            "node_44",
+            "node_43",
+            "node_42",
+            "node_41",
+            "node_40",
+            "node_39",
+            "node_38",
+            "node_37",
+            "node_36",
+            "node_35",
+            "node_34",
+            "node_33",
+            "node_32",
+            "node_31",
+            "node_0"
+          ],
+          "chat": [
+            "node_218",
+            "node_169",
+            "node_158",
+            "node_132",
+            "node_84",
+            "node_1"
+          ]
+        }
+      },
+      "chats": [
+        [
+          "小貓",
+          "喲，大個子，帶著那隻慢吞吞的烏龜是要去哪？我正好覺得那會議無聊透頂，打算去河邊走走。不過……看你這副嚴肅的樣子，難道是發現那個電鋸狂的蹤跡了？切，我可不是在擔心，只是萬一你們這群笨蛋弄丟了路，誰來帶我去『光之源』？喂，別想把我丟下，我跟在後面只是為了監督你們，明白嗎？"
+        ],
+        [
+          "小熊",
+          "小貓，別嘴硬了，我知道你心裡也明白現在有多危險。布萊恩那個瘋子隨時可能追過來，我們必須在被他發現之前趕到河流上游找到『光之源』。既然你要跟著，就別亂跑，跟緊我和小烏龜。記住，只有大家團結在一起，我們才能保護森林，平安回來！"
+        ]
+      ],
+      "currently": "小猫正优雅地坐在【小乌龟家客厅】裏，居高临下地看著大家。它对小松鼠的指控嗤之以鼻，表现得漫不经心，但其实竖著耳朵在听关于光之源的每一个细节。希望如果真的找到光之源就许愿回到曾经的主人身边",
+      "action": {
+        "event": {
+          "subject": "小貓",
+          "predicate": "此时",
+          "object": "移動中",
+          "describe": "正在前往目的地 (剩餘52步)",
+          "address": [
+            "the Ville",
+            "森林广场",
+            "广场集会区",
+            "篝火"
+          ],
+          "emoji": "🚶"
+        },
+        "obj_event": {
+          "subject": "篝火",
+          "predicate": "此时",
+          "object": "正在熊熊燃烧",
+          "describe": "正在熊熊燃烧",
+          "address": [
+            "the Ville",
+            "森林广场",
+            "广场集会区",
+            "篝火"
+          ],
+          "emoji": ""
+        },
+        "start": "20250213-15:41:00",
+        "duration": 14
+      },
+      "coord": [
+        94,
+        63
+      ]
+    }
+  },
+  "step": 45
+}

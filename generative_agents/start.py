@@ -12,7 +12,7 @@ from modules import utils
 
 # 定義模擬中出現的角色列表
 personas = [
-    "Brian", "小兔子", "小松鼠", "小烏龜", "小熊", "小羊", "小貓",
+    "Brian", "小兔子", "小松鼠", "小乌龟", "小熊", "小羊", "小猫",
 ]
 
 
@@ -172,6 +172,10 @@ class SimulateServer:
                 f.write(json.dumps(self.game.conversation, indent=2, ensure_ascii=False))
 
     def load_static(self, path):
+
+        # 报错查询
+        print("====== 正在准备读取文件：", path, " ======")
+
         return utils.load_dict(os.path.join(self.static_root, path))
 
 
